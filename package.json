@@ -1,0 +1,22 @@
+{
+  "name": "pharmaceutical-erp",
+  "version": "1.0.0",
+  "description": "This ia a Pharmaceutical company ERP system",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon src/app.js",
+    "dev": "nodemon src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Md. Rakibul Islam",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
