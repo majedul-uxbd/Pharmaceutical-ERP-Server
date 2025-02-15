@@ -1,4 +1,4 @@
-# DCS
+# Pharmaceutical_ERP
 
 ### This is a server-side of the Pharmaceutical ERP System Application
 
