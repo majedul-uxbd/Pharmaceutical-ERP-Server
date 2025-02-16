@@ -1,0 +1,26 @@
+POST http://localhost:4560/auth/login
+Content-Type: application/json
+
+{
+    "email": "admin@gmail.com",
+    "password": "Test123!"
+}
+
+
+###
+POST http://localhost:4560/auth/signup
+Content-Type: application/json
+
+{
+    "f_name": "Sakib",
+    "l_name": "Hassan",
+    "email": "sakib@gmail.com",
+    "contact":"01745821364",
+    "address": "Rangpur",
+    "password": "Test123!" ,
+    "profile_img":""
+}
+
+###
+POST http://localhost:4560/auth/get-user-data
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJzYWtpYkBnbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTczNzYwNzg4OSwiZXhwIjoxNzQ1MzgzODg5fQ.-Gnj2AtUU8jyW08AGKt82xLjaqPz4yLVrE2eKciM0c4
