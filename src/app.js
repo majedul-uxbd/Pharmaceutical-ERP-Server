@@ -13,6 +13,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 
+const { authRoute } = require("./router/auth/auth.route");
+const { commonRoute } = require("./router/common/common.route");
+
+// Middleware
+app.use("/auth", authRoute);
+app.use("/common", commonRoute);
+
 // app.get("/status", (req, res) => {
 //   res.json({
 //     success: true,

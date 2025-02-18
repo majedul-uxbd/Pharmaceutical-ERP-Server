@@ -10,30 +10,29 @@
  */
 
 const express = require("express");
-const donationRoute = express.Router();
+const commonRoute = express.Router();
 
 const { authenticateToken } = require("../../middleware/auth-token/authenticate-token");
-const { donationDataValidator } = require("../../middleware/donation/donation-data-validator");
-const { addDonationData } = require("../../main/donation/get-module-data");
+const { getModuleData } = require("../../main/donation/get-module-data");
 const { getDonationData } = require("../../main/donation/get-donation-data");
 const { paginationData } = require("../../middleware/pagination-data");
 const { deleteDonationData } = require("../../main/donation/delete-donation-data");
 
-donationRoute.use(authenticateToken);
+// commonRoute.use(authenticateToken);
 
 
 /**
- * @description This API is used to register new users
+ * @description This API is used to get module information
  */
-donationRoute.post("/add-donation",
-    donationDataValidator,
+commonRoute.get("/get-module",
     async (req, res) => {
 
-        addDonationData(req.body.donationData, req.auth)
+        getModuleData()
             .then(data => {
                 return res.status(data.statusCode).send({
                     status: data.status,
-                    message: data.message
+                    message: data.message,
+                    data: data.data
                 })
             })
             .catch(error => {
@@ -45,10 +44,11 @@ donationRoute.post("/add-donation",
     });
 
 
+
 /**
 * @description This API is used to register new users
 */
-donationRoute.post("/get-donation-data",
+commonRoute.post("/get-donation-data",
     paginationData,
     async (req, res) => {
 
@@ -74,7 +74,7 @@ donationRoute.post("/get-donation-data",
 /**
 * @description This API is used to register new users
 */
-donationRoute.post("/delete",
+commonRoute.post("/delete",
     async (req, res) => {
         deleteDonationData(req.body.id)
             .then(data => {
@@ -93,5 +93,5 @@ donationRoute.post("/delete",
     });
 
 module.exports = {
-    donationRoute
+    commonRoute
 }

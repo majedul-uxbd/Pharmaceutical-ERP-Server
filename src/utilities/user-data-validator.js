@@ -10,51 +10,29 @@
  */
 
 const _ = require("lodash");
+
 const VALID_USER_ROLE_TYPE = Object.freeze({
 	Admin: "admin",
 	User: "user"
 });
 
-/**
- * @description Validate user first name
- */
-const isValidUserFirstName = (fName) => {
-	const USERNAME_MAX_LENGTH = 60;
-	const USERNAME_MIN_LENGTH = 2;
-	if (_.isEmpty(fName)) {
-		return false;
-	} else {
-		if (!_.isString(fName)) {
-			return false;
-		} else {
-			// check length
-			if (
-				fName.length > USERNAME_MAX_LENGTH ||
-				fName.length < USERNAME_MIN_LENGTH
-			) {
-				return false;
-			}
-		}
-	}
-	return true;
-};
 
 /**
- * @description Validate user last name
+ * @description Validate username
  */
-const isValidUserLastName = (lName) => {
+const isValidUsername = (username) => {
 	const USERNAME_MAX_LENGTH = 60;
-	const USERNAME_MIN_LENGTH = 2;
-	if (_.isEmpty(lName)) {
+	const USERNAME_MIN_LENGTH = 4;
+	if (_.isEmpty(username)) {
 		return false;
 	} else {
-		if (!_.isString(lName)) {
+		if (!_.isString(username)) {
 			return false;
 		} else {
 			// check length
 			if (
-				lName.length > USERNAME_MAX_LENGTH ||
-				lName.length < USERNAME_MIN_LENGTH
+				username.length > USERNAME_MAX_LENGTH ||
+				username.length < USERNAME_MIN_LENGTH
 			) {
 				return false;
 			}
@@ -240,8 +218,7 @@ const isValidTransactionId = (transactionId) => {
 }
 
 module.exports = {
-	isValidUserFirstName,
-	isValidUserLastName,
+	isValidUsername,
 	isValidUserFullName,
 	isValidUserRole,
 	isValidEmail,

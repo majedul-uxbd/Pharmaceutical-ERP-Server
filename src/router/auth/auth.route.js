@@ -56,6 +56,7 @@ authRoute.post("/login",
                 return res.status(data.statusCode).send({
                     status: data.status,
                     message: data.message,
+                    token: data.data.token,
                     data: data.data
                 })
             })
@@ -67,7 +68,6 @@ authRoute.post("/login",
             })
 
     });
-
 
 
 /**

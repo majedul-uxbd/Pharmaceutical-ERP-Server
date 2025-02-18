@@ -1,0 +1,14 @@
+{
+    "failed": "Failed",
+    "success": "Success",
+    "error": "Error",
+    "get_data_successfully": "Get data successfully",
+    "internal_server_error": "Internal Server Error",
+    "data_not_found": "Data not found",
+    "username_already_exist": "Username already exist",
+    "username_or_password_is_required": "Username or password is required",
+    "invalid_username": "Invalid username",
+    "invalid_password": "Invalid password",
+    "user_not_found": "User not found",
+    "module_name_is_required": "Module name is required"
+}

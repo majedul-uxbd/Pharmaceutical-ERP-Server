@@ -1,9 +1,9 @@
 /**
- * @author Md Majedul Islam 
+ * @author Md. Majedul Islam <https://github.com/majedul-uxbd> 
  * Software Engineer,
  * Ultra-X BD Ltd.
  *
- * @copyright All right reserved Md. Majedul Islam
+ * @copyright All right reserved Ultra-X Asia Pacific
  * 
  * @description 
  * 
@@ -14,21 +14,33 @@ const { pool } = require('../../_DB/db');
 const { setServerResponse } = require('../../utilities/server-response');
 const { API_STATUS_CODE } = require('../../consts/error-status');
 
-const checkUserId = async (email, role) => {
+const checkUserId = async (
+	id,
+	employee_id,
+	designation_id,
+	depot_id,
+	module_id,
+) => {
 	const query = `
   	SELECT
 		*
 	FROM
-		user
+		employees
 	WHERE
-		email = ? AND
-		role = ? AND
-		is_user_active = ${1};
+		id = ? AND
+		employee_id = ? AND
+		designation_id = ? AND
+		depot_id = ? AND
+		module_id = ? AND
+		employee_status = ${1};
   	`;
 
 	const values = [
-		email,
-		role
+		id,
+		employee_id,
+		designation_id,
+		depot_id,
+		module_id
 	]
 
 	try {
@@ -70,15 +82,22 @@ const authenticateToken = async (req, res, next) => {
 					);
 				}
 
-				const { id, email, role } = user;
+				const { id, employee_id, designation_id, designation, depot_id, depot_name, module_id, module_name } = user;
 
-				const isUserExist = await checkUserId(email, role);
+				const isUserExist = await checkUserId(id, employee_id, designation_id, depot_id, module_id);
 				if (isUserExist) {
 					req.auth = {
 						id,
-						email,
-						role,
+						employee_id,
+						designation_id,
+						designation,
+						depot_id,
+						depot_name,
+						module_id,
+						module_name
 					};
+					// console.warn('next:', user);
+
 					next();
 				} else {
 					return res.status(API_STATUS_CODE.UNAUTHORIZED).send(

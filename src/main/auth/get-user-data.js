@@ -16,27 +16,51 @@ const { setServerResponse } = require("../../utilities/server-response");
 const getUserDataQuery = async (authData) => {
     const query = `
     SELECT
-        id,
-        f_name,
-        l_name,
-        contact_no,
-        address,
-        email,
-        role,
-        profile_img
+        e.id,
+        e.employee_id,
+        e.full_name,
+        e.username,
+        e.email,
+        e.contact,
+        e.present_address,
+        e.permanent_address,
+        e.joining_date,
+        e.posting_place,
+        e.permanent_date,
+        e.nid_no,
+        e.department_id,
+        dept.department_name,
+        e.depot_id,
+        df.depot_name,
+        e.module_id,
+        mf.module_name,
+        e.designation_id,
+        d.designation_name,
+        e.profile_pic
     FROM
-        user
+        employees AS e
+    LEFT JOIN department AS dept
+    ON
+        e.department_id = dept.department_id
+    LEFT JOIN designation AS d
+    ON
+        e.designation_id = d.designation_id
+    LEFT JOIN depot_info AS df
+    ON
+        e.depot_id = df.depot_id
+    LEFT JOIN module_info AS mf
+    ON
+        e.module_id = mf.module_id
     WHERE
-        id = ? AND
-        email = ? AND
-        role = ? AND
-        is_user_active = ${1};
+        e.employee_id = ? AND
+        e.designation_id = ? AND
+        e.depot_id = ?;
     `;
 
     const values = [
-        authData.id,
-        authData.email,
-        authData.role
+        authData.employee_id,
+        authData.designation_id,
+        authData.depot_id
     ]
 
     try {
@@ -63,14 +87,14 @@ const getUserData = async (authData) => {
             return Promise.reject(
                 setServerResponse(
                     API_STATUS_CODE.BAD_REQUEST,
-                    'User not found'
+                    'user_not_found'
                 )
             );
         };
         return Promise.resolve(
             setServerResponse(
                 API_STATUS_CODE.OK,
-                'Get data successfully',
+                'get_data_successfully',
                 userData
             )
         );
@@ -78,7 +102,7 @@ const getUserData = async (authData) => {
         return Promise.resolve(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,
-                'Internal Server Error'
+                'internal_server_error'
             )
         );
     }

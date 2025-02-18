@@ -9,8 +9,9 @@
  * 
  */
 const _ = require('lodash');
-const { isValidEmail, isValidPassword } = require('../../utilities/user-data-validator');
+const { isValidPassword, isValidUsername } = require('../../utilities/user-data-validator');
 const { API_STATUS_CODE } = require('../../consts/error-status');
+const { setServerResponse } = require('../../utilities/server-response');
 
 
 /**
@@ -18,29 +19,45 @@ const { API_STATUS_CODE } = require('../../consts/error-status');
  */
 const loginUserValidation = async (req, res, next) => {
     const user = {
-        email: req.body.email,
+        module_id: req.body.module_name,
+        username: req.body.username,
         password: req.body.password
     }
 
-    if (_.isEmpty(user.email) || _.isEmpty(user.password)) {
-        return res.status(API_STATUS_CODE.BAD_REQUEST).send({
-            status: "failed",
-            module: "Email or password is required"
-        });
+    if (_.isEmpty(user.module_id)) {
+        return res.status(API_STATUS_CODE.BAD_REQUEST).send(
+            setServerResponse(
+                API_STATUS_CODE.BAD_REQUEST,
+                'module_name_is_required',
+            )
+        );
+    }
+
+    if (_.isEmpty(user.username) || _.isEmpty(user.password)) {
+        return res.status(API_STATUS_CODE.BAD_REQUEST).send(
+            setServerResponse(
+                API_STATUS_CODE.BAD_REQUEST,
+                'username_or_password_is_required',
+            )
+        );
     } else {
         // Check User Information validity
-        if (!isValidEmail(user.email)) {
-            return res.status(API_STATUS_CODE.BAD_REQUEST).send({
-                status: "failed",
-                module: "Invalid email address"
-            });
+        if (!isValidUsername(user.username)) {
+            return res.status(API_STATUS_CODE.BAD_REQUEST).send(
+                setServerResponse(
+                    API_STATUS_CODE.BAD_REQUEST,
+                    'invalid_username',
+                )
+            );
         }
 
         else if (!isValidPassword(user.password)) {
-            return res.status(API_STATUS_CODE.BAD_REQUEST).send({
-                status: "failed",
-                module: "Invalid password"
-            });
+            return res.status(API_STATUS_CODE.BAD_REQUEST).send(
+                setServerResponse(
+                    API_STATUS_CODE.BAD_REQUEST,
+                    'invalid_password',
+                )
+            );
         }
     }
 
