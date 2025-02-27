@@ -101,7 +101,7 @@ const isValidEmail = (email) => {
  * @description Validate user password
  */
 const isValidPassword = (password) => {
-	const USERNAME_MAX_LENGTH = 50;
+	const USERNAME_MAX_LENGTH = 120;
 	const USERNAME_MIN_LENGTH = 4;
 	// Regex to enforce the following rules:
 	// - At least one lowercase letter
