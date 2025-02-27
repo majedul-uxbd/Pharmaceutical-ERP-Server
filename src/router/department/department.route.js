@@ -14,8 +14,8 @@ const departmentRoute = express.Router();
 
 const { authenticateToken } = require("../../middleware/auth-token/authenticate-token");
 const { departmentDataValidator } = require("../../middleware/donation/department-data-validator");
-const { paginationData } = require("../../middleware/pagination-data");
 const { addDepartmentData } = require("../../main/department/add-department-data");
+const { inactiveDepartment } = require("../../main/department/inactive-department");
 
 departmentRoute.use(authenticateToken);
 
@@ -41,22 +41,17 @@ departmentRoute.post("/add-department",
             })
     });
 
-
 /**
-* @description This API is used to register new users
+* @description This API is used to inactive department
 */
-departmentRoute.post("/get-donation-data",
-    paginationData,
+departmentRoute.post("/active",
     async (req, res) => {
-
-        getDonationData(req.auth, req.body.paginationData)
-            .then(data1 => {
-                // console.log('🚀 ~ file: donation.route.js:69 ~ data1:', data1);
-                const { statusCode, status, message, data } = data1;
+        inactiveDepartment(req.body.id)
+            .then(data => {
+                const { statusCode, status, message } = data;
                 return res.status(statusCode).send({
                     status: status,
-                    message: message,
-                    ...data
+                    message: message
                 })
             })
             .catch(error => {
@@ -67,13 +62,12 @@ departmentRoute.post("/get-donation-data",
             })
     });
 
-
 /**
-* @description This API is used to register new users
+* @description This API is used to inactive department
 */
-departmentRoute.post("/delete",
+departmentRoute.post("/inactive",
     async (req, res) => {
-        deleteDonationData(req.body.id)
+        inactiveDepartment(req.body.id)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({

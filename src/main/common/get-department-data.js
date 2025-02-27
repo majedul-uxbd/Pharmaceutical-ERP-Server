@@ -50,8 +50,6 @@ const getDepartmentDataQuery = async (paginationData) => {
         LEFT JOIN
             employees AS modified_by 
         ON dp.modified_by = modified_by.id
-        WHERE
-            dp.department_status = 1
         LIMIT ? OFFSET ?;
     `;
 

@@ -207,6 +207,7 @@ const isValidDepartmentName = (department_name) => {
  * @description Validate user Transaction Id
  */
 const isValidComment = (comment) => {
+	const COMMENT_MIN_LENGTH = 0;
 	const COMMENT_MAX_LENGTH = 500;
 	if (_.isEmpty(comment)) {
 		return false;
@@ -214,9 +215,10 @@ const isValidComment = (comment) => {
 		if (!_.isString(comment)) {
 			return false;
 		} else {
-			if (
-				comment.length > COMMENT_MAX_LENGTH
-			) {
+			if (comment.length >= COMMENT_MIN_LENGTH) {
+				return true;
+			}
+			else if (comment.length > COMMENT_MAX_LENGTH) {
 				return false;
 			}
 		}

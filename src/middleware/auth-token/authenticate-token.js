@@ -66,7 +66,7 @@ const authenticateToken = async (req, res, next) => {
 	if (authHeader === null) {
 		return res.status(API_STATUS_CODE.UNAUTHORIZED).send({
 			status: 'failed',
-			message: 'unauthorized-user'
+			message: 'unauthorized_user'
 		})
 	} else {
 		try {
@@ -77,7 +77,7 @@ const authenticateToken = async (req, res, next) => {
 					return res.status(API_STATUS_CODE.UNAUTHORIZED).send(
 						setServerResponse(
 							API_STATUS_CODE.UNAUTHORIZED,
-							'Invalid token'
+							'invalid_token'
 						)
 					);
 				}
@@ -103,7 +103,7 @@ const authenticateToken = async (req, res, next) => {
 					return res.status(API_STATUS_CODE.UNAUTHORIZED).send(
 						setServerResponse(
 							API_STATUS_CODE.UNAUTHORIZED,
-							'Invalid user'
+							'invalid_user'
 						)
 					);
 				}
@@ -112,7 +112,7 @@ const authenticateToken = async (req, res, next) => {
 			return res.status(API_STATUS_CODE.UNAUTHORIZED).send(
 				setServerResponse(
 					API_STATUS_CODE.UNAUTHORIZED,
-					'Invalid user'
+					'invalid_user'
 				)
 			);
 		}
