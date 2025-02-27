@@ -10,5 +10,7 @@
     "invalid_username": "Invalid username",
     "invalid_password": "Invalid password",
     "user_not_found": "User not found",
-    "module_name_is_required": "Module name is required"
+    "module_name_is_required": "Module name is required",
+    "department_name_already_exists": "Department name already exists",
+    "department_is_created_successfully": "Department is created successfully"
 }

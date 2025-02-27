@@ -176,13 +176,13 @@ const isValidUserOccupation = (occupation) => {
 }
 
 /**
- * @description Validate user donation field
+ * @description Validate department ID
  */
-const isValidUserDonationField = (donation_field) => {
-	if (_.isEmpty(donation_field)) {
+const isValidDepartmentId = (department_id) => {
+	if (_.isEmpty(department_id)) {
 		return false;
 	} else {
-		if (!_.isString(donation_field)) {
+		if (!_.isString(department_id)) {
 			return false;
 		}
 	}
@@ -190,13 +190,13 @@ const isValidUserDonationField = (donation_field) => {
 }
 
 /**
- * @description Validate user amount
+ * @description Validate department name
  */
-const isValidUserAmount = (amount) => {
-	if (_.isEmpty(amount)) {
+const isValidDepartmentName = (department_name) => {
+	if (_.isEmpty(department_name)) {
 		return false;
 	} else {
-		if (!_.isString(amount)) {
+		if (!_.isString(department_name)) {
 			return false;
 		}
 	}
@@ -206,12 +206,19 @@ const isValidUserAmount = (amount) => {
 /**
  * @description Validate user Transaction Id
  */
-const isValidTransactionId = (transactionId) => {
-	if (_.isEmpty(transactionId)) {
+const isValidComment = (comment) => {
+	const COMMENT_MAX_LENGTH = 500;
+	if (_.isEmpty(comment)) {
 		return false;
 	} else {
-		if (!_.isString(transactionId)) {
+		if (!_.isString(comment)) {
 			return false;
+		} else {
+			if (
+				comment.length > COMMENT_MAX_LENGTH
+			) {
+				return false;
+			}
 		}
 	}
 	return true;
@@ -226,7 +233,7 @@ module.exports = {
 	isValidPassword,
 	isValidUserContact,
 	isValidUserOccupation,
-	isValidUserDonationField,
-	isValidUserAmount,
-	isValidTransactionId,
+	isValidDepartmentId,
+	isValidDepartmentName,
+	isValidComment,
 };

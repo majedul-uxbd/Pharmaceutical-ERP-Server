@@ -15,10 +15,12 @@ app.use(cors());
 
 const { authRoute } = require("./router/auth/auth.route");
 const { commonRoute } = require("./router/common/common.route");
+const { departmentRoute } = require("./router/department/department.route");
 
 // Middleware
 app.use("/auth", authRoute);
 app.use("/common", commonRoute);
+app.use("/department", departmentRoute);
 
 // app.get("/status", (req, res) => {
 //   res.json({

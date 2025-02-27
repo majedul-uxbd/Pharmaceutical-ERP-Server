@@ -13,10 +13,10 @@ const express = require("express");
 const commonRoute = express.Router();
 
 const { authenticateToken } = require("../../middleware/auth-token/authenticate-token");
-const { getModuleData } = require("../../main/donation/get-module-data");
-const { getDonationData } = require("../../main/donation/get-donation-data");
+const { getModuleData } = require("../../main/common/get-module-data");
+const { getDepartmentData } = require("../../main/common/get-department-data");
 const { paginationData } = require("../../middleware/pagination-data");
-const { deleteDonationData } = require("../../main/donation/delete-donation-data");
+const { deleteDonationData, getDesignationData } = require("../../main/common/get-designation-data");
 
 // commonRoute.use(authenticateToken);
 
@@ -46,20 +46,19 @@ commonRoute.get("/get-module",
 
 
 /**
-* @description This API is used to register new users
+* @description This API is used to get Department Information
 */
-commonRoute.post("/get-donation-data",
+commonRoute.post("/get-department-data",
     paginationData,
     async (req, res) => {
 
-        getDonationData(req.auth, req.body.paginationData)
+        getDepartmentData(req.body.paginationData)
             .then(data1 => {
-                // console.log('🚀 ~ file: donation.route.js:69 ~ data1:', data1);
                 const { statusCode, status, message, data } = data1;
                 return res.status(statusCode).send({
                     status: status,
                     message: message,
-                    ...data
+                    data: data
                 })
             })
             .catch(error => {
@@ -72,16 +71,20 @@ commonRoute.post("/get-donation-data",
 
 
 /**
-* @description This API is used to register new users
+* @description This API is used to get Department Information
 */
-commonRoute.post("/delete",
+commonRoute.post("/get-designation-data",
+    paginationData,
     async (req, res) => {
-        deleteDonationData(req.body.id)
-            .then(data => {
-                const { statusCode, status, message } = data;
+
+        getDesignationData(req.body.paginationData)
+            .then(data1 => {
+                // console.log('🚀 ~ file: designation.route.js:69 ~ data1:', data1);
+                const { statusCode, status, message, data } = data1;
                 return res.status(statusCode).send({
                     status: status,
-                    message: message
+                    message: message,
+                    data: data
                 })
             })
             .catch(error => {

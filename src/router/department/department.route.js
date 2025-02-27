@@ -10,26 +10,23 @@
  */
 
 const express = require("express");
-const donationRoute = express.Router();
+const departmentRoute = express.Router();
 
 const { authenticateToken } = require("../../middleware/auth-token/authenticate-token");
-const { donationDataValidator } = require("../../middleware/donation/donation-data-validator");
-const { addDonationData } = require("../../main/donation/get-module-data");
-const { getDonationData } = require("../../main/donation/get-donation-data");
+const { departmentDataValidator } = require("../../middleware/donation/department-data-validator");
 const { paginationData } = require("../../middleware/pagination-data");
-const { deleteDonationData } = require("../../main/donation/delete-donation-data");
+const { addDepartmentData } = require("../../main/department/add-department-data");
 
-donationRoute.use(authenticateToken);
+departmentRoute.use(authenticateToken);
 
 
 /**
- * @description This API is used to register new users
+ * @description This API is used to create new department
  */
-donationRoute.post("/add-donation",
-    donationDataValidator,
+departmentRoute.post("/add-department",
+    departmentDataValidator,
     async (req, res) => {
-
-        addDonationData(req.body.donationData, req.auth)
+        addDepartmentData(req.auth, req.body.departmentData)
             .then(data => {
                 return res.status(data.statusCode).send({
                     status: data.status,
@@ -48,7 +45,7 @@ donationRoute.post("/add-donation",
 /**
 * @description This API is used to register new users
 */
-donationRoute.post("/get-donation-data",
+departmentRoute.post("/get-donation-data",
     paginationData,
     async (req, res) => {
 
@@ -74,7 +71,7 @@ donationRoute.post("/get-donation-data",
 /**
 * @description This API is used to register new users
 */
-donationRoute.post("/delete",
+departmentRoute.post("/delete",
     async (req, res) => {
         deleteDonationData(req.body.id)
             .then(data => {
@@ -93,5 +90,5 @@ donationRoute.post("/delete",
     });
 
 module.exports = {
-    donationRoute
+    departmentRoute
 }
