@@ -10,11 +10,11 @@
  */
 
 const _ = require('lodash');
-const { pool } = require("../../_DB/db");
-const { API_STATUS_CODE } = require("../../consts/error-status")
-const { setServerResponse } = require("../../utilities/server-response")
+const { setServerResponse } = require('../../utilities/server-response');
+const { API_STATUS_CODE } = require('../../consts/error-status');
+const { pool } = require('../../_DB/db');
 
-const isDepartmentAlreadyInactivated = async (id) => {
+const isDepartmentStatusActive = async (id) => {
     const _query = `
         SELECT
             department_status
@@ -25,25 +25,26 @@ const isDepartmentAlreadyInactivated = async (id) => {
     `;
     try {
         const [result] = await pool.query(_query, [id]);
-        console.log('🚀 ~ isDepartmentAlreadyInactivated ~ result:', result);
         if (result.length > 0) {
-            if (result[0].department_status === 0) {
+            if (result[0].department_status === 1) {
                 return true;
             } else {
                 return false;
             }
         } return 0;
     } catch (error) {
+        // console.log('🚀 ~ isDepartmentStatusInactive ~ error:', error);
         return Promise.reject(error);
     }
 }
 
-const inactiveDepartmentStatusQuery = async (id) => {
+
+const activeDepartmentStatus = async (id) => {
     const _query = `
         UPDATE
             department
         SET
-            department_status = ${0}
+            department_status = ${1}
         WHERE
             id = ?;
     `;
@@ -57,7 +58,8 @@ const inactiveDepartmentStatusQuery = async (id) => {
     }
 }
 
-const inactiveDepartment = async (id) => {
+
+const activeDepartment = async (id) => {
     if (_.isNil(id)) {
         return Promise.reject(
             setServerResponse(
@@ -65,10 +67,10 @@ const inactiveDepartment = async (id) => {
                 'department_id_is_required'
             )
         )
-    }
+    };
     try {
-        const isAlreadyInactivated = await isDepartmentAlreadyInactivated(id);
-        if (isAlreadyInactivated === 0) {
+        const isActive = await isDepartmentStatusActive(id);
+        if (isActive === 0) {
             return Promise.reject(
                 setServerResponse(
                     API_STATUS_CODE.BAD_REQUEST,
@@ -76,26 +78,26 @@ const inactiveDepartment = async (id) => {
                 )
             )
         }
-        if (isAlreadyInactivated === true) {
+        if (isActive === true) {
             return Promise.reject(
                 setServerResponse(
                     API_STATUS_CODE.BAD_REQUEST,
-                    'department_is_already_inactivate'
+                    'department_is_already_active'
                 )
             )
         }
-        const inactiveStatus = await inactiveDepartmentStatusQuery(id);
 
-        if (inactiveStatus === true) {
+        const isUpdated = await activeDepartmentStatus(id);
+        if (isUpdated === true) {
             return Promise.resolve(
                 setServerResponse(
                     API_STATUS_CODE.OK,
-                    'department_is_inactivated_successfully'
+                    'department_is_activated_successfully'
                 )
             )
         }
     } catch (error) {
-        console.warn('🚀 ~ inactiveDepartment ~ error:', error);
+        // console.log('🚀 ~ activeDepartment ~ error:', error);
         return Promise.resolve(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,
@@ -105,4 +107,6 @@ const inactiveDepartment = async (id) => {
     }
 }
 
-module.exports = { inactiveDepartment }
+module.exports = {
+    activeDepartment
+}

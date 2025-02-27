@@ -16,6 +16,7 @@ const { authenticateToken } = require("../../middleware/auth-token/authenticate-
 const { departmentDataValidator } = require("../../middleware/donation/department-data-validator");
 const { addDepartmentData } = require("../../main/department/add-department-data");
 const { inactiveDepartment } = require("../../main/department/inactive-department");
+const { activeDepartment } = require("../../main/department/active-department");
 
 departmentRoute.use(authenticateToken);
 
@@ -46,7 +47,7 @@ departmentRoute.post("/add-department",
 */
 departmentRoute.post("/active",
     async (req, res) => {
-        inactiveDepartment(req.body.id)
+        activeDepartment(req.body.id)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({
