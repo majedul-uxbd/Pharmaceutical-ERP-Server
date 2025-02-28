@@ -17,6 +17,7 @@ const { departmentDataValidator } = require("../../middleware/donation/departmen
 const { addDepartmentData } = require("../../main/department/add-department-data");
 const { inactiveDepartment } = require("../../main/department/inactive-department");
 const { activeDepartment } = require("../../main/department/active-department");
+const { updateDepartmentData } = require("../../main/department/update-department-data");
 
 departmentRoute.use(authenticateToken);
 
@@ -43,7 +44,7 @@ departmentRoute.post("/add-department",
     });
 
 /**
-* @description This API is used to inactive department
+* @description This API is used to active department
 */
 departmentRoute.post("/active",
     async (req, res) => {
@@ -69,6 +70,28 @@ departmentRoute.post("/active",
 departmentRoute.post("/inactive",
     async (req, res) => {
         inactiveDepartment(req.body.id)
+            .then(data => {
+                const { statusCode, status, message } = data;
+                return res.status(statusCode).send({
+                    status: status,
+                    message: message
+                })
+            })
+            .catch(error => {
+                return res.status(error.statusCode).send({
+                    status: error.status,
+                    message: error.message,
+                })
+            })
+    });
+
+/**
+* @description This API is used to update departmentData
+*/
+departmentRoute.post("/update",
+    departmentDataValidator,
+    async (req, res) => {
+        updateDepartmentData(req.auth, req.body.departmentData)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({

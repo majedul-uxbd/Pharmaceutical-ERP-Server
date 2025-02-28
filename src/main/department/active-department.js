@@ -58,7 +58,12 @@ const activeDepartmentStatus = async (id) => {
     }
 }
 
-
+/**
+ * 
+ * @param {number} id 
+ * @description This function is used to active department
+ * @returns 
+ */
 const activeDepartment = async (id) => {
     if (_.isNil(id)) {
         return Promise.reject(

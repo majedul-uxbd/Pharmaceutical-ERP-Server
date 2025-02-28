@@ -15,9 +15,21 @@ const { isValidDepartmentId, isValidDepartmentName, isValidComment } = require('
 
 const departmentDataValidator = async (req, res, next) => {
     const departmentData = {
+        id: req.body.id,
         department_id: req.body.department_id,
         department_name: req.body.department_name,
         comment: req.body.comment,
+    }
+
+    if (req.originalUrl === '/department/update') {
+        if (_.isNil(departmentData.id)) {
+            return res.status(API_STATUS_CODE.BAD_REQUEST).send({
+                status: "failed",
+                message: "department_id_is_required",
+            });
+        }
+    } else {
+        delete departmentData.id;
     }
 
     if (!isValidDepartmentId(departmentData.department_id)) {
@@ -41,9 +53,10 @@ const departmentDataValidator = async (req, res, next) => {
 
     // console.warn('🚀 ~ departmentDataValidator ~ departmentData:', departmentData);
     req.body.departmentData = departmentData;
-
     next();
 }
+
+
 
 module.exports = {
     departmentDataValidator

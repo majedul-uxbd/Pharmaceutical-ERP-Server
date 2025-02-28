@@ -10,11 +10,12 @@
  */
 
 const _ = require('lodash');
+const { format } = require('date-fns');
 const { pool } = require("../../_DB/db");
 const { API_STATUS_CODE } = require("../../consts/error-status")
 const { setServerResponse } = require("../../utilities/server-response")
 
-const isDepartmentAlreadyInactivated = async (id) => {
+const isDepartmentInactiveQuery = async (id) => {
     const _query = `
         SELECT
             department_status
@@ -37,17 +38,29 @@ const isDepartmentAlreadyInactivated = async (id) => {
     }
 }
 
-const inactiveDepartmentStatusQuery = async (id) => {
+const updateDepartmentDataQuery = async (authData, departmentData) => {
     const _query = `
         UPDATE
             department
         SET
-            department_status = ${0}
+            department_id = ?,
+            department_name = ?,
+            comment = ?,
+            modified_by= ?,
+            modified_at = ?
         WHERE
             id = ?;
     `;
+    const _values = [
+        departmentData.department_id,
+        departmentData.department_name,
+        departmentData.comment,
+        authData.employee_id,
+        departmentData.modifiedAt,
+        departmentData.id
+    ]
     try {
-        const [result] = await pool.query(_query, [id]);
+        const [result] = await pool.query(_query, _values);
         if (result.affectedRows > 0) {
             return true;
         } return false;
@@ -57,23 +70,31 @@ const inactiveDepartmentStatusQuery = async (id) => {
 }
 
 /**
- * 
- * @param {number} id 
- * @description This function is used to inactive department
+ * @param {{
+ * id: number,
+ * employee_id: string,
+ * designation_id: string,
+ * designation: string,
+ * depot_id: string,
+ * depot_name: string,
+ * module_id: string,
+ * module_name: string
+ * }} authData 
+ * @param {{
+ * id:number,
+ * department_id:string,
+ * department_name:string,
+ * comment:string
+ * }} departmentData }
+ * @description This function is used to update department data
  * @returns 
  */
-const inactiveDepartment = async (id) => {
-    if (_.isNil(id)) {
-        return Promise.reject(
-            setServerResponse(
-                API_STATUS_CODE.BAD_REQUEST,
-                'department_id_is_required'
-            )
-        )
-    }
+const updateDepartmentData = async (authData, departmentData) => {
+    const modifiedAt = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
+    departmentData = { ...departmentData, modifiedAt: modifiedAt };
     try {
-        const isAlreadyInactivated = await isDepartmentAlreadyInactivated(id);
-        if (isAlreadyInactivated === 0) {
+        const isInactive = await isDepartmentInactiveQuery(departmentData.id);
+        if (isInactive === 0) {
             return Promise.reject(
                 setServerResponse(
                     API_STATUS_CODE.BAD_REQUEST,
@@ -81,26 +102,26 @@ const inactiveDepartment = async (id) => {
                 )
             )
         }
-        if (isAlreadyInactivated === true) {
+        if (isInactive === true) {
             return Promise.reject(
                 setServerResponse(
                     API_STATUS_CODE.BAD_REQUEST,
-                    'department_is_already_inactivate'
+                    'inactive_department_can_not_be_updated'
                 )
             )
         }
-        const inactiveStatus = await inactiveDepartmentStatusQuery(id);
+        const inactiveStatus = await updateDepartmentDataQuery(authData, departmentData);
 
         if (inactiveStatus === true) {
             return Promise.resolve(
                 setServerResponse(
                     API_STATUS_CODE.OK,
-                    'department_is_inactivated_successfully'
+                    'department_data_is_updated_successfully'
                 )
             )
         }
     } catch (error) {
-        console.warn('🚀 ~ inactiveDepartment ~ error:', error);
+        // console.warn('🚀 ~ updateDepartmentData ~ error:', error);
         return Promise.resolve(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,
@@ -110,4 +131,6 @@ const inactiveDepartment = async (id) => {
     }
 }
 
-module.exports = { inactiveDepartment }
+module.exports = {
+    updateDepartmentData
+}

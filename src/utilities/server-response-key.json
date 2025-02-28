@@ -24,7 +24,7 @@
     "department_is_already_inactivate": "Department is already inactivate",
     "department_is_inactivated_successfully": "Department is inactivated successfully",
     "department_is_already_active": "Department is already active",
-    "department_is_activated_successfully": "Department is activated successfully"
-
-
+    "department_is_activated_successfully": "Department is activated successfully",
+    "inactive_department_can_not_be_updated": "Inactive department can not be updated",
+    "department_data_is_updated_successfully": "Department data is updated successfully"
 }
