@@ -204,6 +204,29 @@ const isValidDepartmentName = (department_name) => {
 }
 
 /**
+ * @description Validate short name
+ */
+const isValidDesignationShortName = (short_name) => {
+	const SHORT_NAME_MIN_LENGTH = 1;
+	const SHORT_NAME_MAX_LENGTH = 45;
+	if (_.isEmpty(short_name)) {
+		return false;
+	} else {
+		if (!_.isString(short_name)) {
+			return false;
+		} else {
+			if (short_name.length >= SHORT_NAME_MIN_LENGTH) {
+				return true;
+			}
+			else if (short_name.length > SHORT_NAME_MAX_LENGTH) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+/**
  * @description Validate user Transaction Id
  */
 const isValidComment = (comment) => {
@@ -237,5 +260,6 @@ module.exports = {
 	isValidUserOccupation,
 	isValidDepartmentId,
 	isValidDepartmentName,
+	isValidDesignationShortName,
 	isValidComment,
 };

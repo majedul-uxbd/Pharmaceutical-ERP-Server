@@ -26,5 +26,15 @@
     "department_is_already_active": "Department is already active",
     "department_is_activated_successfully": "Department is activated successfully",
     "inactive_department_can_not_be_updated": "Inactive department can not be updated",
-    "department_data_is_updated_successfully": "Department data is updated successfully"
+    "department_data_is_updated_successfully": "Department data is updated successfully",
+    "designation_name_already_exists": "Designation name already exists",
+    "designation_is_created_successfully": "Designation is created successfully",
+    "designation_id_is_required": "Designation ID is required",
+    "designation_is_not_found": "Designation is not found",
+    "designation_is_already_inactivate": "Designation is already inactivate",
+    "designation_is_inactivated_successfully": "Designation is inactivated successfully",
+    "designation_is_already_active": "Designation is already active",
+    "designation_is_activated_successfully": "Designation is activated successfully",
+    "inactive_designation_can_not_be_updated": "Inactive department can not be updated",
+    "designation_data_is_updated_successfully": "Designation data is updated successfully"
 }

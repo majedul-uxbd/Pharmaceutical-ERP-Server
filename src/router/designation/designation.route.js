@@ -10,25 +10,27 @@
  */
 
 const express = require("express");
-const departmentRoute = express.Router();
+const designationRoute = express.Router();
 
 const { authenticateToken } = require("../../middleware/auth-token/authenticate-token");
+const { departmentDataValidator } = require("../../middleware/department/department-data-validator");
 const { addDepartmentData } = require("../../main/department/add-department-data");
 const { inactiveDepartment } = require("../../main/department/inactive-department");
 const { activeDepartment } = require("../../main/department/active-department");
 const { updateDepartmentData } = require("../../main/department/update-department-data");
-const { departmentDataValidator } = require("../../middleware/department/department-data-validator");
+const { designationDataValidator } = require("../../middleware/designation/designation-data-validator");
+const { addDesignationData } = require("../../main/designation/add-designation-data");
 
-departmentRoute.use(authenticateToken);
+designationRoute.use(authenticateToken);
 
 
 /**
- * @description This API is used to create new department
+ * @description This API is used to create new designation
  */
-departmentRoute.post("/add-department",
-    departmentDataValidator,
+designationRoute.post("/add-designation",
+    designationDataValidator,
     async (req, res) => {
-        addDepartmentData(req.auth, req.body.departmentData)
+        addDesignationData(req.auth, req.body.designationData)
             .then(data => {
                 return res.status(data.statusCode).send({
                     status: data.status,
@@ -46,7 +48,7 @@ departmentRoute.post("/add-department",
 /**
 * @description This API is used to active department
 */
-departmentRoute.post("/active",
+designationRoute.post("/active",
     async (req, res) => {
         activeDepartment(req.body.id)
             .then(data => {
@@ -67,7 +69,7 @@ departmentRoute.post("/active",
 /**
 * @description This API is used to inactive department
 */
-departmentRoute.post("/inactive",
+designationRoute.post("/inactive",
     async (req, res) => {
         inactiveDepartment(req.body.id)
             .then(data => {
@@ -88,7 +90,7 @@ departmentRoute.post("/inactive",
 /**
 * @description This API is used to update departmentData
 */
-departmentRoute.post("/update",
+designationRoute.post("/update",
     departmentDataValidator,
     async (req, res) => {
         updateDepartmentData(req.auth, req.body.departmentData)
@@ -108,5 +110,5 @@ departmentRoute.post("/update",
     });
 
 module.exports = {
-    departmentRoute
+    designationRoute
 }
