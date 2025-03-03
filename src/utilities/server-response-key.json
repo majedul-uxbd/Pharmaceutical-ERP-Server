@@ -36,5 +36,7 @@
     "designation_is_already_active": "Designation is already active",
     "designation_is_activated_successfully": "Designation is activated successfully",
     "inactive_designation_can_not_be_updated": "Inactive department can not be updated",
-    "designation_data_is_updated_successfully": "Designation data is updated successfully"
+    "designation_data_is_updated_successfully": "Designation data is updated successfully",
+    "zone_name_already_exists": "Zone name already exists",
+    "zone_is_created_successfully": "Zone is created successfully"
 }

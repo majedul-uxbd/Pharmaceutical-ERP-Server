@@ -10,7 +10,7 @@
  */
 
 const express = require("express");
-const designationRoute = express.Router();
+const zoneRoute = express.Router();
 
 const { authenticateToken } = require("../../middleware/auth-token/authenticate-token");
 const { designationDataValidator } = require("../../middleware/designation/designation-data-validator");
@@ -20,19 +20,22 @@ const { inactiveDesignation } = require("../../main/designation/inactive-departm
 const { getDesignationData } = require("../../main/designation/get-designation-data");
 const { paginationData } = require("../../middleware/pagination-data");
 const { updateDesignationData } = require("../../main/designation/update-designation-data");
+const { getZoneData } = require("../../main/zone/get-zone-data");
+const { zoneDataValidator } = require("../../middleware/zone/zone-data-validator");
+const { addZoneData } = require("../../main/zone/add-zone-data");
 
-designationRoute.use(authenticateToken);
+zoneRoute.use(authenticateToken);
 
 
 
 /**
 * @description This API is used to get Department Information
 */
-designationRoute.post("/get-designation-data",
+zoneRoute.post("/get-zone-data",
     paginationData,
     async (req, res) => {
 
-        getDesignationData(req.body.paginationData)
+        getZoneData(req.body.paginationData)
             .then(data1 => {
                 // console.log('🚀 ~ file: designation.route.js:69 ~ data1:', data1);
                 const { statusCode, status, message, data } = data1;
@@ -52,12 +55,12 @@ designationRoute.post("/get-designation-data",
 
 
 /**
- * @description This API is used to create new designation
+ * @description This API is used to create new zone
  */
-designationRoute.post("/add-designation",
-    designationDataValidator,
+zoneRoute.post("/add-zone",
+    zoneDataValidator,
     async (req, res) => {
-        addDesignationData(req.auth, req.body.designationData)
+        addZoneData(req.auth, req.body.zoneData)
             .then(data => {
                 return res.status(data.statusCode).send({
                     status: data.status,
@@ -75,7 +78,7 @@ designationRoute.post("/add-designation",
 /**
 * @description This API is used to active department
 */
-designationRoute.post("/active",
+zoneRoute.post("/active",
     async (req, res) => {
         activeDesignation(req.body.id)
             .then(data => {
@@ -96,7 +99,7 @@ designationRoute.post("/active",
 /**
 * @description This API is used to inactive designation
 */
-designationRoute.post("/inactive",
+zoneRoute.post("/inactive",
     async (req, res) => {
         inactiveDesignation(req.body.id)
             .then(data => {
@@ -117,7 +120,7 @@ designationRoute.post("/inactive",
 /**
 * @description This API is used to update designationData
 */
-designationRoute.post("/update",
+zoneRoute.post("/update",
     designationDataValidator,
     async (req, res) => {
         updateDesignationData(req.auth, req.body.designationData)
@@ -137,5 +140,5 @@ designationRoute.post("/update",
     });
 
 module.exports = {
-    designationRoute
+    zoneRoute
 }
