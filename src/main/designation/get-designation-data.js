@@ -18,7 +18,7 @@ const getNumberOfRowsQuery = async () => {
     SELECT
         count(*) totalRows
     FROM
-        department;
+        designation;
     `;
 
     try {
@@ -30,26 +30,29 @@ const getNumberOfRowsQuery = async () => {
 }
 
 
-const getDepartmentDataQuery = async (paginationData) => {
+const getDesignationDataQuery = async (paginationData) => {
     const query = `
         SELECT
-            dp.id,
-            dp.department_name,
-            dp.department_id,
-            dp.comment,
+            ds.id,
+            ds.designation_name,
+            ds.designation_id,
+            ds.short_name,
+            ds.description,
+            ds.comment,
             created_by.full_name AS created_by,
             modified_by.full_name AS modified_by,
-            dp.department_status,
-            dp.created_at,
-            dp.modified_at
+            ds.designation_status,
+            ds.created_at,
+            ds.modified_at
         FROM
-            department AS dp
+            designation AS ds
         LEFT JOIN
             employees AS created_by 
-        ON dp.created_by = created_by.id
+        ON ds.created_by = created_by.id
         LEFT JOIN
             employees AS modified_by 
-        ON dp.modified_by = modified_by.id
+        ON ds.modified_by = modified_by.id
+        ORDER BY ds.id DESC
         LIMIT ? OFFSET ?;
     `;
 
@@ -68,14 +71,14 @@ const getDepartmentDataQuery = async (paginationData) => {
 
 /**
  * @param {Object} paginationData - An object containing the pagination details.
- * @description This function will return the Department Information
+ * @description This function will return the Designation Information
  * @returns
  */
-const getDepartmentData = async (paginationData) => {
+const getDesignationData = async (paginationData) => {
     let totalRows;
     try {
         totalRows = await getNumberOfRowsQuery();
-        const departmentData = await getDepartmentDataQuery(paginationData);
+        const departmentData = await getDesignationDataQuery(paginationData);
         const result = {
             metadata: {
                 totalRows: totalRows,
@@ -90,7 +93,7 @@ const getDepartmentData = async (paginationData) => {
             )
         );
     } catch (error) {
-        console.log('🚀 ~ file: get-donation-data.js:188 ~ getDepartmentData ~ error:', error);
+        console.log('🚀 ~ file: get-donation-data.js:188 ~ getDesignationData ~ error:', error);
         return Promise.resolve(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,
@@ -102,5 +105,5 @@ const getDepartmentData = async (paginationData) => {
 
 
 module.exports = {
-    getDepartmentData
+    getDesignationData
 }

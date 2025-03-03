@@ -14,14 +14,43 @@ const designationRoute = express.Router();
 
 const { authenticateToken } = require("../../middleware/auth-token/authenticate-token");
 const { departmentDataValidator } = require("../../middleware/department/department-data-validator");
-const { addDepartmentData } = require("../../main/department/add-department-data");
-const { inactiveDepartment } = require("../../main/department/inactive-department");
-const { activeDepartment } = require("../../main/department/active-department");
 const { updateDepartmentData } = require("../../main/department/update-department-data");
 const { designationDataValidator } = require("../../middleware/designation/designation-data-validator");
 const { addDesignationData } = require("../../main/designation/add-designation-data");
+const { activeDesignation } = require("../../main/designation/active-designation");
+const { inactiveDesignation } = require("../../main/designation/inactive-department");
+const { getDesignationData } = require("../../main/designation/get-designation-data");
+const { paginationData } = require("../../middleware/pagination-data");
+const { updateDesignationData } = require("../../main/designation/update-designation-data");
 
 designationRoute.use(authenticateToken);
+
+
+
+/**
+* @description This API is used to get Department Information
+*/
+designationRoute.post("/get-designation-data",
+    paginationData,
+    async (req, res) => {
+
+        getDesignationData(req.body.paginationData)
+            .then(data1 => {
+                // console.log('🚀 ~ file: designation.route.js:69 ~ data1:', data1);
+                const { statusCode, status, message, data } = data1;
+                return res.status(statusCode).send({
+                    status: status,
+                    message: message,
+                    data: data
+                })
+            })
+            .catch(error => {
+                return res.status(error.statusCode).send({
+                    status: error.status,
+                    message: error.message,
+                })
+            })
+    });
 
 
 /**
@@ -50,7 +79,7 @@ designationRoute.post("/add-designation",
 */
 designationRoute.post("/active",
     async (req, res) => {
-        activeDepartment(req.body.id)
+        activeDesignation(req.body.id)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({
@@ -67,11 +96,11 @@ designationRoute.post("/active",
     });
 
 /**
-* @description This API is used to inactive department
+* @description This API is used to inactive designation
 */
 designationRoute.post("/inactive",
     async (req, res) => {
-        inactiveDepartment(req.body.id)
+        inactiveDesignation(req.body.id)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({
@@ -88,12 +117,12 @@ designationRoute.post("/inactive",
     });
 
 /**
-* @description This API is used to update departmentData
+* @description This API is used to update designationData
 */
 designationRoute.post("/update",
-    departmentDataValidator,
+    designationDataValidator,
     async (req, res) => {
-        updateDepartmentData(req.auth, req.body.departmentData)
+        updateDesignationData(req.auth, req.body.designationData)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({

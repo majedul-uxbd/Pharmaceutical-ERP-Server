@@ -18,8 +18,34 @@ const { inactiveDepartment } = require("../../main/department/inactive-departmen
 const { activeDepartment } = require("../../main/department/active-department");
 const { updateDepartmentData } = require("../../main/department/update-department-data");
 const { departmentDataValidator } = require("../../middleware/department/department-data-validator");
+const { getDepartmentData } = require("../../main/department/get-department-data");
+const { paginationData } = require("../../middleware/pagination-data");
 
 departmentRoute.use(authenticateToken);
+
+/**
+* @description This API is used to get Department Information
+*/
+departmentRoute.post("/get-department-data",
+    paginationData,
+    async (req, res) => {
+
+        getDepartmentData(req.body.paginationData)
+            .then(data1 => {
+                const { statusCode, status, message, data } = data1;
+                return res.status(statusCode).send({
+                    status: status,
+                    message: message,
+                    data: data
+                })
+            })
+            .catch(error => {
+                return res.status(error.statusCode).send({
+                    status: error.status,
+                    message: error.message,
+                })
+            })
+    });
 
 
 /**
