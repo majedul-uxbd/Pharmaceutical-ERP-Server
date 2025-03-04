@@ -35,8 +35,16 @@
     "designation_is_inactivated_successfully": "Designation is inactivated successfully",
     "designation_is_already_active": "Designation is already active",
     "designation_is_activated_successfully": "Designation is activated successfully",
-    "inactive_designation_can_not_be_updated": "Inactive department can not be updated",
+    "inactive_designation_can_not_be_updated": "Inactive designation can not be updated",
     "designation_data_is_updated_successfully": "Designation data is updated successfully",
     "zone_name_already_exists": "Zone name already exists",
-    "zone_is_created_successfully": "Zone is created successfully"
+    "zone_is_created_successfully": "Zone is created successfully",
+    "zone_id_is_required": "Zone ID is required",
+    "zone_is_not_found": "Zone is not found",
+    "zone_is_already_inactivate": "Zone is already inactivate",
+    "zone_is_inactivated_successfully": "Zone is inactivated successfully",
+    "zone_is_already_active": "Zone is already active",
+    "zone_is_activated_successfully": "Zone is activated successfully",
+    "inactive_zone_can_not_be_updated": "Inactive zone can not be updated",
+    "zone_data_is_updated_successfully": "Zone data is updated successfully"
 }

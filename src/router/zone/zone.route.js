@@ -13,16 +13,13 @@ const express = require("express");
 const zoneRoute = express.Router();
 
 const { authenticateToken } = require("../../middleware/auth-token/authenticate-token");
-const { designationDataValidator } = require("../../middleware/designation/designation-data-validator");
-const { addDesignationData } = require("../../main/designation/add-designation-data");
-const { activeDesignation } = require("../../main/designation/active-designation");
-const { inactiveDesignation } = require("../../main/designation/inactive-department");
-const { getDesignationData } = require("../../main/designation/get-designation-data");
 const { paginationData } = require("../../middleware/pagination-data");
-const { updateDesignationData } = require("../../main/designation/update-designation-data");
 const { getZoneData } = require("../../main/zone/get-zone-data");
 const { zoneDataValidator } = require("../../middleware/zone/zone-data-validator");
 const { addZoneData } = require("../../main/zone/add-zone-data");
+const { activeZone } = require("../../main/zone/active-zone");
+const { inactiveZone } = require("../../main/zone/inactive-zone");
+const { updateZoneData } = require("../../main/zone/update-zone-data");
 
 zoneRoute.use(authenticateToken);
 
@@ -76,11 +73,11 @@ zoneRoute.post("/add-zone",
     });
 
 /**
-* @description This API is used to active department
+* @description This API is used to active zone
 */
 zoneRoute.post("/active",
     async (req, res) => {
-        activeDesignation(req.body.id)
+        activeZone(req.body.id)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({
@@ -97,11 +94,11 @@ zoneRoute.post("/active",
     });
 
 /**
-* @description This API is used to inactive designation
+* @description This API is used to inactive Zone
 */
 zoneRoute.post("/inactive",
     async (req, res) => {
-        inactiveDesignation(req.body.id)
+        inactiveZone(req.body.id)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({
@@ -118,12 +115,12 @@ zoneRoute.post("/inactive",
     });
 
 /**
-* @description This API is used to update designationData
+* @description This API is used to update zoneData
 */
 zoneRoute.post("/update",
-    designationDataValidator,
+    zoneDataValidator,
     async (req, res) => {
-        updateDesignationData(req.auth, req.body.designationData)
+        updateZoneData(req.body.zoneData)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({

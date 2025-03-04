@@ -20,15 +20,14 @@ const zoneDataValidator = async (req, res, next) => {
         zone_code: req.body.zone_code,
         zone_name: req.body.zone_name,
         depot_id: req.body.depot_name,
-        description: req.body.description,
         comment: req.body.comment,
     }
 
-    if (req.originalUrl === '/designation/update') {
+    if (req.originalUrl === '/zone/update') {
         if (_.isNil(zoneData.id)) {
             return res.status(API_STATUS_CODE.BAD_REQUEST).send({
                 status: "failed",
-                message: "Designation ID is required",
+                message: "Zone ID is required",
             });
         }
     } else {

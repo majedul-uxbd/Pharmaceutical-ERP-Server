@@ -14,19 +14,19 @@ const { setServerResponse } = require('../../utilities/server-response');
 const { API_STATUS_CODE } = require('../../consts/error-status');
 const { pool } = require('../../_DB/db');
 
-const isDesignationStatusActive = async (id) => {
+const isZoneStatusActive = async (id) => {
     const _query = `
         SELECT
-            designation_status
+            zone_status
         FROM
-            designation
+            zone
         WHERE
             id = ?;
     `;
     try {
         const [result] = await pool.query(_query, [id]);
         if (result.length > 0) {
-            if (result[0].designation_status === 1) {
+            if (result[0].zone_status === 1) {
                 return true;
             } else {
                 return false;
@@ -39,12 +39,12 @@ const isDesignationStatusActive = async (id) => {
 }
 
 
-const activeDesignationStatus = async (id) => {
+const activeZoneStatus = async (id) => {
     const _query = `
         UPDATE
-            designation
+            zone
         SET
-            designation_status = ${1}
+            zone_status = ${1}
         WHERE
             id = ?;
     `;
@@ -61,25 +61,25 @@ const activeDesignationStatus = async (id) => {
 /**
  * 
  * @param {number} id 
- * @description This function is used to active designation
+ * @description This function is used to active zone
  * @returns 
  */
-const activeDesignation = async (id) => {
+const activeZone = async (id) => {
     if (_.isNil(id)) {
         return Promise.reject(
             setServerResponse(
                 API_STATUS_CODE.BAD_REQUEST,
-                'designation_id_is_required'
+                'zone_id_is_required'
             )
         )
     };
     try {
-        const isActive = await isDesignationStatusActive(id);
+        const isActive = await isZoneStatusActive(id);
         if (isActive === 0) {
             return Promise.reject(
                 setServerResponse(
                     API_STATUS_CODE.BAD_REQUEST,
-                    'designation_is_not_found'
+                    'zone_is_not_found'
                 )
             )
         }
@@ -87,17 +87,17 @@ const activeDesignation = async (id) => {
             return Promise.reject(
                 setServerResponse(
                     API_STATUS_CODE.BAD_REQUEST,
-                    'designation_is_already_active'
+                    'zone_is_already_active'
                 )
             )
         }
 
-        const isUpdated = await activeDesignationStatus(id);
+        const isUpdated = await activeZoneStatus(id);
         if (isUpdated === true) {
             return Promise.resolve(
                 setServerResponse(
                     API_STATUS_CODE.OK,
-                    'designation_is_activated_successfully'
+                    'zone_is_activated_successfully'
                 )
             )
         }
@@ -113,5 +113,5 @@ const activeDesignation = async (id) => {
 }
 
 module.exports = {
-    activeDesignation
+    activeZone
 }

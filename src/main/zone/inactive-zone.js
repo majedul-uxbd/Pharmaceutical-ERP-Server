@@ -14,19 +14,19 @@ const { pool } = require("../../_DB/db");
 const { API_STATUS_CODE } = require("../../consts/error-status")
 const { setServerResponse } = require("../../utilities/server-response")
 
-const isDesignationAlreadyInactivated = async (id) => {
+const isZoneAlreadyInactivated = async (id) => {
     const _query = `
         SELECT
-            designation_status
+            zone_status
         FROM
-            designation
+            zone
         WHERE
             id = ?;
     `;
     try {
         const [result] = await pool.query(_query, [id]);
         if (result.length > 0) {
-            if (result[0].designation_status === 0) {
+            if (result[0].zone_status === 0) {
                 return true;
             } else {
                 return false;
@@ -37,12 +37,12 @@ const isDesignationAlreadyInactivated = async (id) => {
     }
 }
 
-const inactiveDesignationStatusQuery = async (id) => {
+const inactiveZoneStatusQuery = async (id) => {
     const _query = `
         UPDATE
-            designation
+            zone
         SET
-            designation_status = ${0}
+            zone_status = ${0}
         WHERE
             id = ?;
     `;
@@ -59,25 +59,25 @@ const inactiveDesignationStatusQuery = async (id) => {
 /**
  * 
  * @param {number} id 
- * @description This function is used to inactive designation
+ * @description This function is used to inactive zone
  * @returns 
  */
-const inactiveDesignation = async (id) => {
+const inactiveZone = async (id) => {
     if (_.isNil(id)) {
         return Promise.reject(
             setServerResponse(
                 API_STATUS_CODE.BAD_REQUEST,
-                'designation_id_is_required'
+                'zone_id_is_required'
             )
         )
     }
     try {
-        const isAlreadyInactivated = await isDesignationAlreadyInactivated(id);
+        const isAlreadyInactivated = await isZoneAlreadyInactivated(id);
         if (isAlreadyInactivated === 0) {
             return Promise.reject(
                 setServerResponse(
                     API_STATUS_CODE.BAD_REQUEST,
-                    'designation_is_not_found'
+                    'zone_is_not_found'
                 )
             )
         }
@@ -85,22 +85,22 @@ const inactiveDesignation = async (id) => {
             return Promise.reject(
                 setServerResponse(
                     API_STATUS_CODE.BAD_REQUEST,
-                    'designation_is_already_inactivate'
+                    'zone_is_already_inactivate'
                 )
             )
         }
-        const inactiveStatus = await inactiveDesignationStatusQuery(id);
+        const inactiveStatus = await inactiveZoneStatusQuery(id);
 
         if (inactiveStatus === true) {
             return Promise.resolve(
                 setServerResponse(
                     API_STATUS_CODE.OK,
-                    'designation_is_inactivated_successfully'
+                    'zone_is_inactivated_successfully'
                 )
             )
         }
     } catch (error) {
-        console.warn('🚀 ~ inactiveDesignation ~ error:', error);
+        console.warn('🚀 ~ inactiveZone ~ error:', error);
         return Promise.resolve(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,
@@ -111,5 +111,5 @@ const inactiveDesignation = async (id) => {
 }
 
 module.exports = {
-    inactiveDesignation
+    inactiveZone
 }

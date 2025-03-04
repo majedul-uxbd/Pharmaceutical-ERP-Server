@@ -15,12 +15,12 @@ const { pool } = require("../../_DB/db");
 const { API_STATUS_CODE } = require("../../consts/error-status")
 const { setServerResponse } = require("../../utilities/server-response")
 
-const isDesignationInactiveQuery = async (id) => {
+const isZoneInactiveQuery = async (id) => {
     const _query = `
         SELECT
-            designation_status
+            zone_status
         FROM
-            designation
+            zone
         WHERE
             id = ?;
     `;
@@ -28,7 +28,7 @@ const isDesignationInactiveQuery = async (id) => {
         const [result] = await pool.query(_query, [id]);
 
         if (result.length > 0) {
-            if (result[0].designation_status === 0) {
+            if (result[0].zone_status === 0) {
                 return true;
             } else {
                 return false;
@@ -39,30 +39,26 @@ const isDesignationInactiveQuery = async (id) => {
     }
 }
 
-const updateDesignationDataQuery = async (authData, designationData) => {
+const updateZoneDataQuery = async (zoneData) => {
     const _query = `
         UPDATE
-            designation
+            zone
         SET
-            designation_id = ?,
-            designation_name = ?,
-            short_name = ?,
-            description = ?,
+            depot_id = ?,
+            zone_name = ?,
+            zone_code = ?,
             comment = ?,
-            modified_by= ?,
             modified_at = ?
         WHERE
             id = ?;
     `;
     const _values = [
-        designationData.designation_id,
-        designationData.designation_name,
-        designationData.short_name,
-        designationData.description,
-        designationData.comment,
-        authData.employee_id,
-        designationData.modifiedAt,
-        designationData.id
+        zoneData.depot_id,
+        zoneData.zone_name,
+        zoneData.zone_code,
+        zoneData.comment,
+        zoneData.modifiedAt,
+        zoneData.id
     ]
     try {
         const [result] = await pool.query(_query, _values);
@@ -80,25 +76,26 @@ const updateDesignationDataQuery = async (authData, designationData) => {
  * }} authData 
  * @param {{
  * id:number,
- * designation_id:string,
- * designation_name:string,
+ * zone_name:string,
+* depot_id:string,
+ * zone_code:string,
  * short_name:string,
- * description:string,
  * comment:string
- * }} designationData
- * @description This function is used to update designation data
+ * }} zoneData
+ * @description This function is used to update zone data
  * @returns 
  */
-const updateDesignationData = async (authData, designationData) => {
+const updateZoneData = async (zoneData) => {
     const modifiedAt = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
-    designationData = { ...designationData, modifiedAt: modifiedAt };
+    zoneData = { ...zoneData, modifiedAt: modifiedAt };
+
     try {
-        const isInactive = await isDesignationInactiveQuery(designationData.id);
+        const isInactive = await isZoneInactiveQuery(zoneData.id);
         if (isInactive === 0) {
             return Promise.reject(
                 setServerResponse(
                     API_STATUS_CODE.BAD_REQUEST,
-                    'designation_is_not_found'
+                    'zone_is_not_found'
                 )
             )
         }
@@ -106,22 +103,22 @@ const updateDesignationData = async (authData, designationData) => {
             return Promise.reject(
                 setServerResponse(
                     API_STATUS_CODE.BAD_REQUEST,
-                    'inactive_designation_can_not_be_updated'
+                    'inactive_zone_can_not_be_updated'
                 )
             )
         }
-        const inactiveStatus = await updateDesignationDataQuery(authData, designationData);
+        const isUpdated = await updateZoneDataQuery(zoneData);
 
-        if (inactiveStatus === true) {
+        if (isUpdated === true) {
             return Promise.resolve(
                 setServerResponse(
                     API_STATUS_CODE.OK,
-                    'designation_data_is_updated_successfully'
+                    'zone_data_is_updated_successfully'
                 )
             )
         }
     } catch (error) {
-        // console.warn('🚀 ~ updateDesignationData ~ error:', error);
+        console.warn('🚀 ~ updateZoneData ~ error:', error);
         return Promise.resolve(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,
@@ -132,5 +129,5 @@ const updateDesignationData = async (authData, designationData) => {
 }
 
 module.exports = {
-    updateDesignationData
+    updateZoneData
 }
