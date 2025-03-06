@@ -9,7 +9,6 @@
  * 
  */
 
-const { reject } = require("lodash");
 const { pool } = require("../../_DB/db");
 const { setServerResponse } = require("../../utilities/server-response");
 const { API_STATUS_CODE } = require("../../consts/error-status");
@@ -21,11 +20,12 @@ const isDepartmentNameAlreadyExist = async (departmentData) => {
         FROM 
             department
         WHERE
-            department_name = ? OR department_id = ?;
+            department_name = ? OR department_id = ? OR department_code = ?;
     `;
     const _values = [
         departmentData.department_name,
         departmentData.department_id,
+        departmentData.department_code,
     ]
 
     try {
@@ -34,7 +34,7 @@ const isDepartmentNameAlreadyExist = async (departmentData) => {
             return true;
         } return false;
     } catch (error) {
-        return Promise / reject(error);
+        return Promise.reject(error);
     }
 }
 
@@ -44,14 +44,16 @@ const addDepartmentDataQuery = async (authData, departmentData) => {
             department
             (
                 department_id,
+                department_code,
                 department_name,
                 comment,
                 created_by
             )
-        VALUES (?, ?, ?, ?);
+        VALUES (?, ?, ?, ?, ?);
     `;
     const _values = [
         departmentData.department_id,
+        departmentData.department_code,
         departmentData.department_name,
         departmentData.comment,
         authData.employee_id
@@ -63,7 +65,6 @@ const addDepartmentDataQuery = async (authData, departmentData) => {
             return true;
         } return false;
     } catch (error) {
-        // console.warn('🚀 ~ addDepartmentDataQuery ~ error:', error);
         return Promise.reject(error);
     }
 }
@@ -71,17 +72,11 @@ const addDepartmentDataQuery = async (authData, departmentData) => {
 /**
  * 
  * @param {{
- * id: number,
  * employee_id: string,
- * designation_id: string,
- * designation: string,
- * depot_id: string,
- * depot_name: string,
- * module_id: string,
- * module_name: string
  * }} authData 
  * @param {{
  * department_id:string,
+ * department_code:string,
  * department_name:string,
  * comment:string
  * }} departmentData 
@@ -95,7 +90,7 @@ const addDepartmentData = async (authData, departmentData) => {
             return Promise.reject(
                 setServerResponse(
                     API_STATUS_CODE.CONFLICT,
-                    'department_name_already_exists'
+                    'department_data_already_exists'
                 )
             )
         }
@@ -109,7 +104,6 @@ const addDepartmentData = async (authData, departmentData) => {
             )
         }
     } catch (error) {
-        // console.warn('🚀 ~ addDepartmentData ~ error:', error);
         return Promise.reject(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,

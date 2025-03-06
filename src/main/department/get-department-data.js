@@ -34,8 +34,9 @@ const getDepartmentDataQuery = async (paginationData) => {
     const query = `
         SELECT
             dp.id,
-            dp.department_name,
             dp.department_id,
+            dp.department_code,
+            dp.department_name,
             dp.comment,
             created_by.full_name AS created_by,
             modified_by.full_name AS modified_by,
@@ -91,7 +92,6 @@ const getDepartmentData = async (paginationData) => {
             )
         );
     } catch (error) {
-        console.log('🚀 ~ file: get-donation-data.js:188 ~ getDepartmentData ~ error:', error);
         return Promise.resolve(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,
