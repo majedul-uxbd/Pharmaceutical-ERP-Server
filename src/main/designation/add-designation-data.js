@@ -21,11 +21,12 @@ const isDesignationNameAlreadyExist = async (designationData) => {
         FROM 
             designation
         WHERE
-            designation_name = ? OR designation_id = ?;
+            designation_name = ? OR designation_id = ? OR designation_code = ?;
     `;
     const _values = [
         designationData.designation_name,
         designationData.designation_id,
+        designationData.designation_code
     ]
 
     try {
@@ -34,7 +35,7 @@ const isDesignationNameAlreadyExist = async (designationData) => {
             return true;
         } return false;
     } catch (error) {
-        return Promise / reject(error);
+        return Promise.reject(error);
     }
 }
 
@@ -44,8 +45,8 @@ const addDesignationDataQuery = async (authData, designationData) => {
             designation
             (
                 designation_id,
+                designation_code,
                 designation_name,
-                short_name,
                 description,
                 comment,
                 created_by
@@ -54,8 +55,8 @@ const addDesignationDataQuery = async (authData, designationData) => {
     `;
     const _values = [
         designationData.designation_id,
+        designationData.designation_code,
         designationData.designation_name,
-        designationData.short_name,
         designationData.description,
         designationData.comment,
         authData.employee_id
@@ -67,7 +68,6 @@ const addDesignationDataQuery = async (authData, designationData) => {
             return true;
         } return false;
     } catch (error) {
-        // console.warn('🚀 ~ adddesignationDataQuery ~ error:', error);
         return Promise.reject(error);
     }
 }
@@ -79,8 +79,8 @@ const addDesignationDataQuery = async (authData, designationData) => {
  * }} authData 
  * @param {{
  * designation_id:string,
+ * designation_code:string,
  * designation_name:string,
- * short_name:string,
  * description:string,
  * comment:string
  * }} designationData 
@@ -95,7 +95,7 @@ const addDesignationData = async (authData, designationData) => {
             return Promise.reject(
                 setServerResponse(
                     API_STATUS_CODE.CONFLICT,
-                    'designation_name_already_exists'
+                    'designation_data_already_exists'
                 )
             )
         }
@@ -109,7 +109,6 @@ const addDesignationData = async (authData, designationData) => {
             )
         }
     } catch (error) {
-        // console.warn('🚀 ~ addDesignationData ~ error:', error);
         return Promise.reject(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,

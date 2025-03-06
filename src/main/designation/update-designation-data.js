@@ -15,6 +15,27 @@ const { pool } = require("../../_DB/db");
 const { API_STATUS_CODE } = require("../../consts/error-status")
 const { setServerResponse } = require("../../utilities/server-response")
 
+const getDesignationDataQuery = async (id) => {
+    const _query = `
+        SELECT
+            designation_id,
+            designation_code,
+            designation_name
+        FROM 
+            designation
+        WHERE
+            id != ?;
+    `;
+    try {
+        const [result] = await pool.query(_query, id);
+        if (result.length > 0) {
+            return result;
+        } return false;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
 const isDesignationInactiveQuery = async (id) => {
     const _query = `
         SELECT
@@ -45,8 +66,8 @@ const updateDesignationDataQuery = async (authData, designationData) => {
             designation
         SET
             designation_id = ?,
+            designation_code = ?,
             designation_name = ?,
-            short_name = ?,
             description = ?,
             comment = ?,
             modified_by= ?,
@@ -56,8 +77,8 @@ const updateDesignationDataQuery = async (authData, designationData) => {
     `;
     const _values = [
         designationData.designation_id,
+        designationData.designation_code,
         designationData.designation_name,
-        designationData.short_name,
         designationData.description,
         designationData.comment,
         authData.employee_id,
@@ -81,6 +102,7 @@ const updateDesignationDataQuery = async (authData, designationData) => {
  * @param {{
  * id:number,
  * designation_id:string,
+ * designation_code:string,
  * designation_name:string,
  * short_name:string,
  * description:string,
@@ -93,6 +115,30 @@ const updateDesignationData = async (authData, designationData) => {
     const modifiedAt = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
     designationData = { ...designationData, modifiedAt: modifiedAt };
     try {
+        const dbDesData = await getDesignationDataQuery(designationData.id);
+        if (dbDesData === false) {
+            return Promise.reject(
+                setServerResponse(
+                    API_STATUS_CODE.BAD_REQUEST,
+                    'designation_is_not_found'
+                )
+            )
+        }
+        const matchedDepartment = dbDesData.find(
+            (designation) =>
+                designation.designation_id === designationData.designation_id ||
+                designation.designation_code === designationData.designation_code ||
+                designation.designation_name === designationData.designation_name
+        );
+
+        if (matchedDepartment) {
+            return Promise.reject(
+                setServerResponse(
+                    API_STATUS_CODE.BAD_REQUEST,
+                    'designation_data_already_exists'
+                )
+            )
+        }
         const isInactive = await isDesignationInactiveQuery(designationData.id);
         if (isInactive === 0) {
             return Promise.reject(

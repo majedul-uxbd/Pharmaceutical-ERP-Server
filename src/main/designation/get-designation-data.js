@@ -34,9 +34,9 @@ const getDesignationDataQuery = async (paginationData) => {
     const query = `
         SELECT
             ds.id,
-            ds.designation_name,
             ds.designation_id,
-            ds.short_name,
+            ds.designation_code,
+            ds.designation_name,
             ds.description,
             ds.comment,
             created_by.full_name AS created_by,

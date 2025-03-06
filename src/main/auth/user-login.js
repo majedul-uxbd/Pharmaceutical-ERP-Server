@@ -44,7 +44,8 @@ const userLoginQuery = async (user) => {
     ON e.depot_id = df.depot_id
     WHERE
         e.username = ? AND
-        e.module_id = ?;
+        e.module_id = ? AND
+        e.employee_status = ${1};
 	`;
     const values = [
         user.username,
