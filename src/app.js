@@ -18,6 +18,7 @@ const { commonRoute } = require("./router/common/common.route");
 const { departmentRoute } = require("./router/department/department.route");
 const { designationRoute } = require("./router/designation/designation.route");
 const { zoneRoute } = require("./router/zone/zone.route");
+const { regionRoute } = require("./router/region/region.route");
 
 // Middleware
 app.use("/auth", authRoute);
@@ -25,6 +26,7 @@ app.use("/common", commonRoute);
 app.use("/department", departmentRoute);
 app.use("/designation", designationRoute);
 app.use("/zone", zoneRoute);
+app.use("/region", regionRoute);
 
 // app.get("/status", (req, res) => {
 //   res.json({

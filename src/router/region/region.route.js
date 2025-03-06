@@ -10,31 +10,35 @@
  */
 
 const express = require("express");
-const zoneRoute = express.Router();
+const regionRoute = express.Router();
 
 const { authenticateToken } = require("../../middleware/auth-token/authenticate-token");
 const { paginationData } = require("../../middleware/pagination-data");
-const { getZoneData } = require("../../main/zone/get-zone-data");
 const { zoneDataValidator } = require("../../middleware/zone/zone-data-validator");
 const { addZoneData } = require("../../main/zone/add-zone-data");
 const { activeZone } = require("../../main/zone/active-zone");
 const { inactiveZone } = require("../../main/zone/inactive-zone");
 const { updateZoneData } = require("../../main/zone/update-zone-data");
+const { getRegionData } = require("../../main/region/get-region-data");
+const { regionDataValidator } = require("../../middleware/region/region-data-validator");
+const { addRegionData } = require("../../main/region/add-region-data");
+const { inactiveRegion } = require("../../main/region/inactive-region");
+const { activeRegion } = require("../../main/region/active-region");
+const { updateRegionData } = require("../../main/region/update-region-data");
 
-zoneRoute.use(authenticateToken);
+regionRoute.use(authenticateToken);
 
 
 
 /**
-* @description This API is used to get Zone Information
+* @description This API is used to get Region Information
 */
-zoneRoute.post("/get-zone-data",
+regionRoute.post("/get-region-data",
     paginationData,
     async (req, res) => {
 
-        getZoneData(req.body.paginationData)
+        getRegionData(req.body.paginationData)
             .then(data1 => {
-                // console.log('🚀 ~ file: designation.route.js:69 ~ data1:', data1);
                 const { statusCode, status, message, data } = data1;
                 return res.status(statusCode).send({
                     status: status,
@@ -52,12 +56,12 @@ zoneRoute.post("/get-zone-data",
 
 
 /**
- * @description This API is used to create new zone
+ * @description This API is used to create new region
  */
-zoneRoute.post("/add-zone",
-    zoneDataValidator,
+regionRoute.post("/add-region",
+    regionDataValidator,
     async (req, res) => {
-        addZoneData(req.auth, req.body.zoneData)
+        addRegionData(req.body.regionData)
             .then(data => {
                 return res.status(data.statusCode).send({
                     status: data.status,
@@ -73,11 +77,11 @@ zoneRoute.post("/add-zone",
     });
 
 /**
-* @description This API is used to active zone
+* @description This API is used to active Region
 */
-zoneRoute.post("/active",
+regionRoute.post("/active",
     async (req, res) => {
-        activeZone(req.body.id)
+        activeRegion(req.body.id)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({
@@ -94,11 +98,11 @@ zoneRoute.post("/active",
     });
 
 /**
-* @description This API is used to inactive Zone
+* @description This API is used to inactive Region
 */
-zoneRoute.post("/inactive",
+regionRoute.post("/inactive",
     async (req, res) => {
-        inactiveZone(req.body.id)
+        inactiveRegion(req.body.id)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({
@@ -115,12 +119,12 @@ zoneRoute.post("/inactive",
     });
 
 /**
-* @description This API is used to update zoneData
+* @description This API is used to update region data
 */
-zoneRoute.post("/update",
-    zoneDataValidator,
+regionRoute.post("/update",
+    regionDataValidator,
     async (req, res) => {
-        updateZoneData(req.body.zoneData)
+        updateRegionData(req.body.regionData)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({
@@ -137,5 +141,5 @@ zoneRoute.post("/update",
     });
 
 module.exports = {
-    zoneRoute
+    regionRoute
 }

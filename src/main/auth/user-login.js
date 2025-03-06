@@ -1,5 +1,5 @@
 /**
- * @author Md. Majedul Islam <https://github.com/majedul-uxbd> 
+ * @author Md. Majedul Islam
  * Software Engineer,
  * Ultra-X BD Ltd.
  *
@@ -8,13 +8,14 @@
  * @description 
  * 
  */
+
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { pool } = require('../../_DB/db');
 const { setServerResponse } = require("../../utilities/server-response");
 const { API_STATUS_CODE } = require("../../consts/error-status");
 
-// TODO: // Modify userLoginQuery function
+
 const userLoginQuery = async (user) => {
     const query = `
 	SELECT
@@ -75,6 +76,15 @@ const generateToken = (userInfo) => {
     return token;
 }
 
+/**
+ * @param {{
+ * module_id: string,
+ * username: string,
+ * password: string
+ * }} user 
+ * @description This function is used to get user data and token
+ * @returns 
+ */
 const userLogin = async (user) => {
     let userInfo;
 
