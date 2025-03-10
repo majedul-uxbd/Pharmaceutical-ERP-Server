@@ -18,8 +18,8 @@ const getZoneDataQuery = async () => {
     const query = `
         SELECT
             id,
-            zone_name,
-            zone_code
+            zone_code,
+            zone_name
         FROM
             zone;
     `;
@@ -48,7 +48,6 @@ const getZoneData = async () => {
             )
         );
     } catch (error) {
-        console.warn('🚀 ~ getZoneData ~ error:', error);
         return Promise.reject(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,

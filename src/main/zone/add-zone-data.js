@@ -43,14 +43,16 @@ const addZoneDataQuery = async (authData, zoneData) => {
         INSERT INTO
             zone
             (
+                zone_id,
                 zone_code,
                 zone_name,
                 depot_id,
                 comment
             )
-        VALUES (?, ?, ?, ?);
+        VALUES (?, ?, ?, ?, ?);
     `;
     const _values = [
+        zoneData.zone_id,
         zoneData.zone_code,
         zoneData.zone_name,
         zoneData.depot_id,
@@ -74,6 +76,7 @@ const addZoneDataQuery = async (authData, zoneData) => {
  * employee_id: string,
  * }} authData 
  * @param {{
+ * zone_id:string,
  * zone_code:string,
  * zone_name:string,
  * depot_id:string,

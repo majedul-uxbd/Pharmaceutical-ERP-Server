@@ -34,8 +34,9 @@ const getZoneDataQuery = async (paginationData) => {
     const query = `
         SELECT
             z.id,
-            z.zone_name,
+            z.zone_id,
             z.zone_code,
+            z.zone_name,
             z.comment,
             z.zone_status,
             di.depot_name,

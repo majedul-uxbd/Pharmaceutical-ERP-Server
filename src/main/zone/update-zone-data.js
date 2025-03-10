@@ -45,8 +45,9 @@ const updateZoneDataQuery = async (zoneData) => {
             zone
         SET
             depot_id = ?,
-            zone_name = ?,
+            zone_id = ?,
             zone_code = ?,
+            zone_name = ?,
             comment = ?,
             modified_at = ?
         WHERE
@@ -54,8 +55,9 @@ const updateZoneDataQuery = async (zoneData) => {
     `;
     const _values = [
         zoneData.depot_id,
-        zoneData.zone_name,
+        zoneData.zone_id,
         zoneData.zone_code,
+        zoneData.zone_name,
         zoneData.comment,
         zoneData.modifiedAt,
         zoneData.id
@@ -76,10 +78,10 @@ const updateZoneDataQuery = async (zoneData) => {
  * }} authData 
  * @param {{
  * id:number,
- * zone_name:string,
-* depot_id:string,
+ * depot_id:string,
+ * zone_id:string,
  * zone_code:string,
- * short_name:string,
+ * zone_name:string,
  * comment:string
  * }} zoneData
  * @description This function is used to update zone data
@@ -118,7 +120,7 @@ const updateZoneData = async (zoneData) => {
             )
         }
     } catch (error) {
-        console.warn('🚀 ~ updateZoneData ~ error:', error);
+        // console.warn('🚀 ~ updateZoneData ~ error:', error);
         return Promise.resolve(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,

@@ -18,8 +18,8 @@ const getRegionDataQuery = async () => {
     const query = `
         SELECT
             id,
-            region_name,
-            region_code
+            region_code,
+            region_name
         FROM
             region;
     `;
@@ -48,7 +48,6 @@ const getRegionData = async () => {
             )
         );
     } catch (error) {
-        console.warn('🚀 ~ getRegionData ~ error:', error);
         return Promise.reject(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,
