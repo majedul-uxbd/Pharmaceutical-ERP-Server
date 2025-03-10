@@ -18,14 +18,14 @@ const { API_STATUS_CODE } = require("../../consts/error-status");
 const isZoneExistQuery = async (regionData) => {
     const _query = `
         SELECT
-            zone_code
+            zone_id
         FROM 
             zone
         WHERE
-            zone_code = ?;
+            zone_id = ?;
     `;
     const _values = [
-        regionData.zone_code,
+        regionData.zone_id,
     ]
     // console.log({ _query, _values })
     try {
@@ -46,11 +46,12 @@ const isRegionNameAlreadyExist = async (regionData) => {
         FROM 
             region
         WHERE
-            region_name = ? OR region_code = ?;
+            region_name = ? OR region_code = ? OR region_id = ?;
     `;
     const _values = [
         regionData.region_name,
         regionData.region_code,
+        regionData.region_id,
     ]
 
     try {
@@ -68,17 +69,19 @@ const addRegionDataQuery = async (regionData) => {
         INSERT INTO
             region
             (
+                region_id,
                 region_code,
                 region_name,
-                zone_code,
+                zone_id,
                 comment
             )
-        VALUES (?, ?, ?, ?);
+        VALUES (?, ?, ?, ?, ?);
     `;
     const _values = [
+        regionData.region_id,
         regionData.region_code,
         regionData.region_name,
-        regionData.zone_code,
+        regionData.zone_id,
         regionData.comment,
     ]
 
@@ -96,9 +99,10 @@ const addRegionDataQuery = async (regionData) => {
 /**
  * 
  * @param {{
+ * region_id:string,
  * region_code:string,
  * region_name:string,
- * zone_code:string,
+ * zone_id:string,
  * comment:string
  * }} regionData 
  * @description This function is used to create a new region
@@ -135,7 +139,7 @@ const addRegionData = async (regionData) => {
             )
         }
     } catch (error) {
-        console.warn('🚀 ~ addRegionData ~ error:', error);
+        // console.warn('🚀 ~ addRegionData ~ error:', error);
         return Promise.reject(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,

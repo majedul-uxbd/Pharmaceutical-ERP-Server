@@ -34,8 +34,9 @@ const getRegionDataQuery = async (paginationData) => {
     const query = `
         SELECT
             re.id,
-            re.region_name,
+            re.region_id,
             re.region_code,
+            re.region_name,
             re.comment,
             re.region_status,
             zone.zone_name,
@@ -45,7 +46,7 @@ const getRegionDataQuery = async (paginationData) => {
             region AS re
         LEFT JOIN zone
         ON
-            re.zone_code = zone.zone_code
+            re.zone_id = zone.zone_id
         ORDER BY
             re.id
         DESC

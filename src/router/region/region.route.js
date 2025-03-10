@@ -14,11 +14,6 @@ const regionRoute = express.Router();
 
 const { authenticateToken } = require("../../middleware/auth-token/authenticate-token");
 const { paginationData } = require("../../middleware/pagination-data");
-const { zoneDataValidator } = require("../../middleware/zone/zone-data-validator");
-const { addZoneData } = require("../../main/zone/add-zone-data");
-const { activeZone } = require("../../main/zone/active-zone");
-const { inactiveZone } = require("../../main/zone/inactive-zone");
-const { updateZoneData } = require("../../main/zone/update-zone-data");
 const { getRegionData } = require("../../main/region/get-region-data");
 const { regionDataValidator } = require("../../middleware/region/region-data-validator");
 const { addRegionData } = require("../../main/region/add-region-data");

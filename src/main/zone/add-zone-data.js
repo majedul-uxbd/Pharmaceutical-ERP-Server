@@ -21,11 +21,12 @@ const isZoneNameAlreadyExist = async (zoneData) => {
         FROM 
             zone
         WHERE
-            zone_name = ? OR zone_code = ?;
+            zone_name = ? OR zone_code = ? OR zone_id = ?;
     `;
     const _values = [
         zoneData.zone_name,
         zoneData.zone_code,
+        zoneData.zone_id,
     ]
 
     try {

@@ -18,7 +18,7 @@ const getZoneDataQuery = async () => {
     const query = `
         SELECT
             id,
-            zone_code,
+            zone_id,
             zone_name
         FROM
             zone;

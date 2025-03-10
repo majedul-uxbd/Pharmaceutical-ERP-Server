@@ -15,12 +15,12 @@ const { isValidDepartmentId, isValidDepartmentName, isValidComment, isValidDesig
 const { setServerResponse } = require('../../utilities/server-response');
 
 const regionDataValidator = async (req, res, next) => {
-    console.log({ data: req.body });
     const regionData = {
         id: req.body.id,
+        region_id: req.body.region_id,
         region_code: req.body.region_code,
         region_name: req.body.region_name,
-        zone_code: req.body.zone_name,
+        zone_id: req.body.zone_name,
         comment: req.body.comment,
     }
 
@@ -37,6 +37,14 @@ const regionDataValidator = async (req, res, next) => {
         delete regionData.id;
     }
 
+    if (!isValidDepartmentId(regionData.region_id)) {
+        return res.status(API_STATUS_CODE.BAD_REQUEST).send(
+            setServerResponse(
+                API_STATUS_CODE.BAD_REQUEST,
+                'invalid_region_id',
+            )
+        );
+    }
     if (!isValidDepartmentId(regionData.region_code)) {
         return res.status(API_STATUS_CODE.BAD_REQUEST).send(
             setServerResponse(
@@ -53,11 +61,11 @@ const regionDataValidator = async (req, res, next) => {
             )
         );
     }
-    if (!isValidDepartmentId(regionData.zone_code)) {
+    if (!isValidDepartmentId(regionData.zone_id)) {
         return res.status(API_STATUS_CODE.BAD_REQUEST).send(
             setServerResponse(
                 API_STATUS_CODE.BAD_REQUEST,
-                'invalid_zone_code',
+                'invalid_zone_name',
             )
         );
     }

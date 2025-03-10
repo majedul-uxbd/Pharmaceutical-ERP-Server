@@ -44,7 +44,8 @@ const updateRegionDataQuery = async (regionData) => {
         UPDATE
             region
         SET
-            zone_code = ?,
+            zone_id = ?,
+            region_id = ?,
             region_name = ?,
             region_code = ?,
             comment = ?,
@@ -53,7 +54,8 @@ const updateRegionDataQuery = async (regionData) => {
             id = ?;
     `;
     const _values = [
-        regionData.zone_code,
+        regionData.zone_id,
+        regionData.region_id,
         regionData.region_name,
         regionData.region_code,
         regionData.comment,
@@ -73,9 +75,10 @@ const updateRegionDataQuery = async (regionData) => {
 /**
  * @param {{
  * id: string,
+ * region_id:string,
  * region_code:string,
  * region_name:string,
- * zone_code:string,
+ * zone_id:string,
  * comment:string
  * }} regionData 
  * @description This function is used to update region data
@@ -84,8 +87,6 @@ const updateRegionDataQuery = async (regionData) => {
 const updateRegionData = async (regionData) => {
     const modifiedAt = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
     regionData = { ...regionData, modifiedAt: modifiedAt };
-    console.warn('🚀 ~ updateRegionData ~ regionData:', regionData);
-
 
     try {
         const isInactive = await isRegionInactiveQuery(regionData.id);
