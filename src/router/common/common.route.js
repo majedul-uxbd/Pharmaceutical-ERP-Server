@@ -17,6 +17,7 @@ const { getDepotData } = require("../../main/common/get-deport-data");
 const { authenticateToken } = require("../../middleware/auth-token/authenticate-token");
 const { getZoneData } = require("../../main/common/get-zone-data");
 const { getRegionData } = require("../../main/common/get-region-data");
+const { getMarketData } = require("../../main/common/get-market-data");
 
 // commonRoute.use(authenticateToken);
 
@@ -97,6 +98,29 @@ commonRoute.get("/get-region",
     async (req, res) => {
 
         getRegionData()
+            .then(data => {
+                return res.status(data.statusCode).send({
+                    status: data.status,
+                    message: data.message,
+                    data: data.data
+                })
+            })
+            .catch(error => {
+                return res.status(error.statusCode).send({
+                    status: error.status,
+                    message: error.message,
+                })
+            })
+    });
+
+/**
+* @description This API is used to get market information
+*/
+commonRoute.get("/get-market",
+    authenticateToken,
+    async (req, res) => {
+
+        getMarketData()
             .then(data => {
                 return res.status(data.statusCode).send({
                     status: data.status,

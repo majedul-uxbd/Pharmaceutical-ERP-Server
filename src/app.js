@@ -19,6 +19,7 @@ const { departmentRoute } = require("./router/department/department.route");
 const { designationRoute } = require("./router/designation/designation.route");
 const { zoneRoute } = require("./router/zone/zone.route");
 const { regionRoute } = require("./router/region/region.route");
+const { marketRoute } = require("./router/market/market.route");
 
 // Middleware
 app.use("/auth", authRoute);
@@ -27,6 +28,7 @@ app.use("/department", departmentRoute);
 app.use("/designation", designationRoute);
 app.use("/zone", zoneRoute);
 app.use("/region", regionRoute);
+app.use("/market", marketRoute);
 
 // app.get("/status", (req, res) => {
 //   res.json({
