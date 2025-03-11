@@ -75,10 +75,11 @@ const getUserDataQuery = async (authData) => {
 }
 
 /**
- * @param {Object} authData - An object containing the authentication details of the user.
- * @param {number} authData.id - The unique ID of the user.
- * @param {string} authData.email - The email address of the user.
- * @param {string} authData.role - The role of the user (e.g., 'admin', 'user').
+ * @param {{
+* employee_id: string,
+* designation_id: string,
+* depot_id: string,
+* }} authData 
  */
 const getUserData = async (authData) => {
     try {
