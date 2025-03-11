@@ -20,7 +20,7 @@ const marketDataValidator = async (req, res, next) => {
         market_id: req.body.market_id,
         market_code: req.body.market_code,
         market_name: req.body.market_name,
-        zone_id: req.body.zone_name,
+        region_id: req.body.region_name,
         comment: req.body.comment,
     }
 
@@ -36,22 +36,27 @@ const marketDataValidator = async (req, res, next) => {
     } else {
         delete marketData.id;
     }
+    if (req.originalUrl === '/market/add-market') {
+        if (!isValidDepartmentId(marketData.market_id)) {
+            return res.status(API_STATUS_CODE.BAD_REQUEST).send(
+                setServerResponse(
+                    API_STATUS_CODE.BAD_REQUEST,
+                    'invalid_market_id',
+                )
+            );
+        }
+        if (!isValidDepartmentId(marketData.market_code)) {
+            return res.status(API_STATUS_CODE.BAD_REQUEST).send(
+                setServerResponse(
+                    API_STATUS_CODE.BAD_REQUEST,
+                    'invalid_market_code',
+                )
+            );
+        }
+    } else {
+        delete marketData.market_id;
+        delete marketData.market_code;
 
-    if (!isValidDepartmentId(marketData.market_id)) {
-        return res.status(API_STATUS_CODE.BAD_REQUEST).send(
-            setServerResponse(
-                API_STATUS_CODE.BAD_REQUEST,
-                'invalid_market_id',
-            )
-        );
-    }
-    if (!isValidDepartmentId(marketData.market_code)) {
-        return res.status(API_STATUS_CODE.BAD_REQUEST).send(
-            setServerResponse(
-                API_STATUS_CODE.BAD_REQUEST,
-                'invalid_market_code',
-            )
-        );
     }
     if (!isValidDepartmentName(marketData.market_name)) {
         return res.status(API_STATUS_CODE.BAD_REQUEST).send(
@@ -61,7 +66,7 @@ const marketDataValidator = async (req, res, next) => {
             )
         );
     }
-    if (!isValidDepartmentId(marketData.zone_id)) {
+    if (!isValidDepartmentId(marketData.region_id)) {
         return res.status(API_STATUS_CODE.BAD_REQUEST).send(
             setServerResponse(
                 API_STATUS_CODE.BAD_REQUEST,

@@ -21,7 +21,9 @@ const getDepotDataQuery = async () => {
             depot_name,
             depot_id
         FROM
-            depot_info;
+            depot_info
+        WHERE
+            depot_status = ${1};
     `;
     try {
         const [result] = await pool.query(query);
@@ -48,7 +50,6 @@ const getDepotData = async () => {
             )
         );
     } catch (error) {
-        console.warn('🚀 ~ getDepotData ~ error:', error);
         return Promise.reject(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,

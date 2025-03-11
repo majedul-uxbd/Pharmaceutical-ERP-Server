@@ -45,9 +45,7 @@ const updateRegionDataQuery = async (regionData) => {
             region
         SET
             zone_id = ?,
-            region_id = ?,
             region_name = ?,
-            region_code = ?,
             comment = ?,
             modified_at = ?
         WHERE
@@ -55,9 +53,7 @@ const updateRegionDataQuery = async (regionData) => {
     `;
     const _values = [
         regionData.zone_id,
-        regionData.region_id,
         regionData.region_name,
-        regionData.region_code,
         regionData.comment,
         regionData.modifiedAt,
         regionData.id
@@ -75,8 +71,6 @@ const updateRegionDataQuery = async (regionData) => {
 /**
  * @param {{
  * id: string,
- * region_id:string,
- * region_code:string,
  * region_name:string,
  * zone_id:string,
  * comment:string
@@ -117,7 +111,6 @@ const updateRegionData = async (regionData) => {
             )
         }
     } catch (error) {
-        console.warn('🚀 ~ updateRegionData ~ error:', error);
         return Promise.resolve(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,

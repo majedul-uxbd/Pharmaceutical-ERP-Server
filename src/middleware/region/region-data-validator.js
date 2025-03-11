@@ -37,21 +37,26 @@ const regionDataValidator = async (req, res, next) => {
         delete regionData.id;
     }
 
-    if (!isValidDepartmentId(regionData.region_id)) {
-        return res.status(API_STATUS_CODE.BAD_REQUEST).send(
-            setServerResponse(
-                API_STATUS_CODE.BAD_REQUEST,
-                'invalid_region_id',
-            )
-        );
-    }
-    if (!isValidDepartmentId(regionData.region_code)) {
-        return res.status(API_STATUS_CODE.BAD_REQUEST).send(
-            setServerResponse(
-                API_STATUS_CODE.BAD_REQUEST,
-                'invalid_region_code',
-            )
-        );
+    if (req.originalUrl === '/region/add-region') {
+        if (!isValidDepartmentId(regionData.region_id)) {
+            return res.status(API_STATUS_CODE.BAD_REQUEST).send(
+                setServerResponse(
+                    API_STATUS_CODE.BAD_REQUEST,
+                    'invalid_region_id',
+                )
+            );
+        }
+        if (!isValidDepartmentId(regionData.region_code)) {
+            return res.status(API_STATUS_CODE.BAD_REQUEST).send(
+                setServerResponse(
+                    API_STATUS_CODE.BAD_REQUEST,
+                    'invalid_region_code',
+                )
+            );
+        }
+    } else {
+        delete regionData.region_id;
+        delete regionData.region_code;
     }
     if (!isValidDepartmentName(regionData.region_name)) {
         return res.status(API_STATUS_CODE.BAD_REQUEST).send(

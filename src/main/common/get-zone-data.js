@@ -21,7 +21,9 @@ const getZoneDataQuery = async () => {
             zone_id,
             zone_name
         FROM
-            zone;
+            zone
+        WHERE
+            zone_status = ${1};
     `;
     try {
         const [result] = await pool.query(query);

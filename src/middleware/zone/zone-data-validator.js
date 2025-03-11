@@ -37,22 +37,26 @@ const zoneDataValidator = async (req, res, next) => {
     } else {
         delete zoneData.id;
     }
-
-    if (!isValidDepartmentId(zoneData.zone_id)) {
-        return res.status(API_STATUS_CODE.BAD_REQUEST).send(
-            setServerResponse(
-                API_STATUS_CODE.BAD_REQUEST,
-                "zone_id_is_required"
-            )
-        );
-    }
-    if (!isValidDepartmentId(zoneData.zone_code)) {
-        return res.status(API_STATUS_CODE.BAD_REQUEST).send(
-            setServerResponse(
-                API_STATUS_CODE.BAD_REQUEST,
-                "invalid_zone_code"
-            )
-        );
+    if (req.originalUrl === '/zone/add-zone') {
+        if (!isValidDepartmentId(zoneData.zone_id)) {
+            return res.status(API_STATUS_CODE.BAD_REQUEST).send(
+                setServerResponse(
+                    API_STATUS_CODE.BAD_REQUEST,
+                    "zone_id_is_required"
+                )
+            );
+        }
+        if (!isValidDepartmentId(zoneData.zone_code)) {
+            return res.status(API_STATUS_CODE.BAD_REQUEST).send(
+                setServerResponse(
+                    API_STATUS_CODE.BAD_REQUEST,
+                    "invalid_zone_code"
+                )
+            );
+        }
+    } else {
+        delete zoneData.zone_id;
+        delete zoneData.zone_code;
     }
     if (!isValidDepartmentName(zoneData.zone_name)) {
         return res.status(API_STATUS_CODE.BAD_REQUEST).send(

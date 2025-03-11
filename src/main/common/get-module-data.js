@@ -23,7 +23,9 @@ const getModuleDataQuery = async () => {
             description,
             created_at
         FROM
-            module_info;
+            module_info
+        WHERE
+            module_status = ${1};
     `;
     try {
         const [result] = await pool.query(query);
@@ -50,7 +52,6 @@ const getModuleData = async () => {
             )
         );
     } catch (error) {
-        console.warn('🚀 ~ getModuleData ~ error:', error);
         return Promise.reject(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,

@@ -14,15 +14,12 @@ const marketRoute = express.Router();
 
 const { authenticateToken } = require("../../middleware/auth-token/authenticate-token");
 const { paginationData } = require("../../middleware/pagination-data");
-const { getZoneData } = require("../../main/zone/get-zone-data");
-const { zoneDataValidator } = require("../../middleware/zone/zone-data-validator");
-const { addZoneData } = require("../../main/zone/add-zone-data");
-const { activeZone } = require("../../main/zone/active-zone");
-const { inactiveZone } = require("../../main/zone/inactive-zone");
-const { updateZoneData } = require("../../main/zone/update-zone-data");
 const { getMarketData } = require("../../main/market/get-market-data");
 const { marketDataValidator } = require("../../middleware/market/market-data-validator");
 const { addMarketData } = require("../../main/market/add-market-data");
+const { activeMarket } = require("../../main/market/active-market");
+const { inactiveMarket } = require("../../main/market/inactive-market");
+const { updateMarketData } = require("../../main/market/update-market-data");
 
 marketRoute.use(authenticateToken);
 
@@ -79,7 +76,7 @@ marketRoute.post("/add-market",
 */
 marketRoute.post("/active",
     async (req, res) => {
-        activeZone(req.body.id)
+        activeMarket(req.body.id)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({
@@ -100,7 +97,7 @@ marketRoute.post("/active",
 */
 marketRoute.post("/inactive",
     async (req, res) => {
-        inactiveZone(req.body.id)
+        inactiveMarket(req.body.id)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({
@@ -117,12 +114,12 @@ marketRoute.post("/inactive",
     });
 
 /**
-* @description This API is used to update zoneData
+* @description This API is used to update marketData
 */
 marketRoute.post("/update",
-    zoneDataValidator,
+    marketDataValidator,
     async (req, res) => {
-        updateZoneData(req.body.zoneData)
+        updateMarketData(req.body.marketData)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({

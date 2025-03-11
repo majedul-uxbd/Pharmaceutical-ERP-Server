@@ -15,12 +15,12 @@ const { pool } = require("../../_DB/db");
 const { API_STATUS_CODE } = require("../../consts/error-status")
 const { setServerResponse } = require("../../utilities/server-response")
 
-const isRegionInactiveQuery = async (id) => {
+const isMarketInactiveQuery = async (id) => {
     const _query = `
         SELECT
-            region_status
+            market_status
         FROM
-            region
+            market
         WHERE
             id = ?;
     `;
@@ -28,7 +28,7 @@ const isRegionInactiveQuery = async (id) => {
         const [result] = await pool.query(_query, [id]);
 
         if (result.length > 0) {
-            if (result[0].region_status === 0) {
+            if (result[0].market_status === 0) {
                 return true;
             } else {
                 return false;
@@ -39,28 +39,24 @@ const isRegionInactiveQuery = async (id) => {
     }
 }
 
-const updateRegionDataQuery = async (regionData) => {
+const updateMarketDataQuery = async (marketData) => {
     const _query = `
         UPDATE
-            region
+            market
         SET
-            zone_id = ?,
             region_id = ?,
-            region_name = ?,
-            region_code = ?,
+            market_name = ?,
             comment = ?,
             modified_at = ?
         WHERE
             id = ?;
     `;
     const _values = [
-        regionData.zone_id,
-        regionData.region_id,
-        regionData.region_name,
-        regionData.region_code,
-        regionData.comment,
-        regionData.modifiedAt,
-        regionData.id
+        marketData.region_id,
+        marketData.market_name,
+        marketData.comment,
+        marketData.modifiedAt,
+        marketData.id
     ]
     try {
         const [result] = await pool.query(_query, _values);
@@ -75,26 +71,24 @@ const updateRegionDataQuery = async (regionData) => {
 /**
  * @param {{
  * id: string,
+ * market_name:string,
  * region_id:string,
- * region_code:string,
- * region_name:string,
- * zone_id:string,
  * comment:string
- * }} regionData 
- * @description This function is used to update region data
+ * }} marketData 
+ * @description This function is used to update market data
  * @returns 
  */
-const updateRegionData = async (regionData) => {
+const updateMarketData = async (marketData) => {
     const modifiedAt = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
-    regionData = { ...regionData, modifiedAt: modifiedAt };
+    marketData = { ...marketData, modifiedAt: modifiedAt };
 
     try {
-        const isInactive = await isRegionInactiveQuery(regionData.id);
+        const isInactive = await isMarketInactiveQuery(marketData.id);
         if (isInactive === 0) {
             return Promise.reject(
                 setServerResponse(
                     API_STATUS_CODE.BAD_REQUEST,
-                    'region_is_not_found'
+                    'market_is_not_found'
                 )
             )
         }
@@ -102,22 +96,21 @@ const updateRegionData = async (regionData) => {
             return Promise.reject(
                 setServerResponse(
                     API_STATUS_CODE.BAD_REQUEST,
-                    'inactive_region_can_not_be_updated'
+                    'inactive_market_can_not_be_updated'
                 )
             )
         }
-        const isUpdated = await updateRegionDataQuery(regionData);
+        const isUpdated = await updateMarketDataQuery(marketData);
 
         if (isUpdated === true) {
             return Promise.resolve(
                 setServerResponse(
                     API_STATUS_CODE.OK,
-                    'region_data_is_updated_successfully'
+                    'market_data_is_updated_successfully'
                 )
             )
         }
     } catch (error) {
-        console.warn('🚀 ~ updateRegionData ~ error:', error);
         return Promise.resolve(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,
@@ -128,5 +121,5 @@ const updateRegionData = async (regionData) => {
 }
 
 module.exports = {
-    updateRegionData
+    updateMarketData
 }

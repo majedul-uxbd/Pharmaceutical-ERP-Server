@@ -70,7 +70,7 @@ const addMarketDataQuery = async (marketData) => {
                 market_id,
                 market_code,
                 market_name,
-                zone_id,
+                region_id,
                 comment
             )
         VALUES (?, ?, ?, ?, ?);
@@ -79,7 +79,7 @@ const addMarketDataQuery = async (marketData) => {
         marketData.market_id,
         marketData.market_code,
         marketData.market_name,
-        marketData.zone_id,
+        marketData.region_id,
         marketData.comment,
     ]
 
@@ -137,7 +137,7 @@ const addMarketData = async (marketData) => {
             )
         }
     } catch (error) {
-        // console.warn('🚀 ~ addMarketData ~ error:', error);
+        console.warn('🚀 ~ addMarketData ~ error:', error);
         return Promise.reject(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,

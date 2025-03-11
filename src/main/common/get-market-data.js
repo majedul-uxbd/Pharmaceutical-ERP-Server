@@ -21,7 +21,9 @@ const getMarketDataQuery = async () => {
             market_id,
             market_name
         FROM
-            market;
+            market
+        WHERE
+            market_status = ${1};
     `;
     try {
         const [result] = await pool.query(query);

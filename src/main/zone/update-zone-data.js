@@ -45,8 +45,6 @@ const updateZoneDataQuery = async (zoneData) => {
             zone
         SET
             depot_id = ?,
-            zone_id = ?,
-            zone_code = ?,
             zone_name = ?,
             comment = ?,
             modified_at = ?
@@ -55,8 +53,6 @@ const updateZoneDataQuery = async (zoneData) => {
     `;
     const _values = [
         zoneData.depot_id,
-        zoneData.zone_id,
-        zoneData.zone_code,
         zoneData.zone_name,
         zoneData.comment,
         zoneData.modifiedAt,
@@ -79,8 +75,6 @@ const updateZoneDataQuery = async (zoneData) => {
  * @param {{
  * id:number,
  * depot_id:string,
- * zone_id:string,
- * zone_code:string,
  * zone_name:string,
  * comment:string
  * }} zoneData
@@ -120,7 +114,7 @@ const updateZoneData = async (zoneData) => {
             )
         }
     } catch (error) {
-        // console.warn('🚀 ~ updateZoneData ~ error:', error);
+        console.warn('🚀 ~ updateZoneData ~ error:', error);
         return Promise.resolve(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,

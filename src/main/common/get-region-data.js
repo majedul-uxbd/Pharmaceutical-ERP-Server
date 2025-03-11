@@ -18,10 +18,12 @@ const getRegionDataQuery = async () => {
     const query = `
         SELECT
             id,
-            region_code,
+            region_id,
             region_name
         FROM
-            region;
+            region
+        WHERE
+            region_status = ${1};
     `;
     try {
         const [result] = await pool.query(query);
