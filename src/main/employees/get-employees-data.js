@@ -48,6 +48,7 @@ const getEmployeesDataQuery = async (paginationData) => {
             dept.department_name,
             dep.depot_name,
             modl.module_name,
+            em.employee_status,
             em.created_at,
             em.modified_at
         FROM

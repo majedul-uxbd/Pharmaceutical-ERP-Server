@@ -30,7 +30,7 @@ const getRegionIdAndCodeCountQuery = async () => {
         if (result.length > 0) {
             // Increment region_id by 1
             let regionId = parseInt(result[0].region_id, 10) + 1; // Convert to number, add 1
-            regionId = regionId.toString().padStart(5, '0'); // Ensure it has 5 digits (e.g., '00001')
+            regionId = regionId.toString();
 
             // Increment region_code by 1
             let regionCode = result[0].region_code;

@@ -30,7 +30,7 @@ const getMarketIdAndCodeCountQuery = async () => {
         if (result.length > 0) {
             // Increment market_id by 1
             let marketId = parseInt(result[0].market_id, 10) + 1; // Convert to number, add 1
-            marketId = marketId.toString().padStart(5, '0'); // Ensure it has 5 digits (e.g., '00001')
+            marketId = marketId.toString();
 
             // Increment market_code by 1
             let marketCode = result[0].market_code;

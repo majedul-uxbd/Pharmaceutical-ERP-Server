@@ -1,5 +1,5 @@
 ### Get Module Data
-POST http://localhost:4560/common/get-module
+GET http://localhost:4560/common/get-module
 
 
 

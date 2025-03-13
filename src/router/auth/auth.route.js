@@ -15,6 +15,7 @@ const authRoute = express.Router();
 const { loginUserValidation } = require("../../middleware/auth/login-validator");
 const { authenticateToken } = require("../../middleware/auth-token/authenticate-token");
 const { getUserData } = require("../../main/auth/get-user-data");
+const { userLogin } = require("../../main/auth/user-login");
 
 
 /**

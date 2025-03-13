@@ -16,7 +16,7 @@ const { authenticateToken } = require("../../middleware/auth-token/authenticate-
 const { designationDataValidator } = require("../../middleware/designation/designation-data-validator");
 const { addDesignationData } = require("../../main/designation/add-designation-data");
 const { activeDesignation } = require("../../main/designation/active-designation");
-const { inactiveDesignation } = require("../../main/designation/inactive-department");
+const { inactiveDesignation } = require("../../main/designation/inactive-designation");
 const { getDesignationData } = require("../../main/designation/get-designation-data");
 const { paginationData } = require("../../middleware/pagination-data");
 const { updateDesignationData } = require("../../main/designation/update-designation-data");
@@ -73,7 +73,7 @@ designationRoute.post("/add-designation",
     });
 
 /**
-* @description This API is used to active department
+* @description This API is used to active designation
 */
 designationRoute.post("/active",
     async (req, res) => {
