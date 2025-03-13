@@ -1,0 +1,32 @@
+### Get Module Data
+GET http://localhost:4560/common/get-module
+
+
+
+### Get Department Data
+POST http://localhost:4560/common/get-department-data
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3Mzc3NzkzMzMsImV4cCI6MTc0NTU1NTMzM30.GDXmTCQRkQselV-kdwQg22wk4SOA7xauFzQKDJN_KDY
+Content-Type: application/json
+
+{
+    "paginationData":{
+        "itemsPerPage": "5",
+        "currentPageNumber":0 ,
+        "sortOrder": "asc",
+        "filterBy": ""
+    }
+}
+
+### Get Department Data
+POST http://localhost:4560/common/get-designation-data
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3Mzc3NzkzMzMsImV4cCI6MTc0NTU1NTMzM30.GDXmTCQRkQselV-kdwQg22wk4SOA7xauFzQKDJN_KDY
+Content-Type: application/json
+
+{
+    "paginationData":{
+        "itemsPerPage": "5",
+        "currentPageNumber":0 ,
+        "sortOrder": "asc",
+        "filterBy": ""
+    }
+}

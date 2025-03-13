@@ -13,6 +13,27 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 
+const { authRoute } = require("./router/auth/auth.route");
+const { commonRoute } = require("./router/common/common.route");
+const { departmentRoute } = require("./router/department/department.route");
+const { designationRoute } = require("./router/designation/designation.route");
+const { zoneRoute } = require("./router/zone/zone.route");
+const { regionRoute } = require("./router/region/region.route");
+const { marketRoute } = require("./router/market/market.route");
+const { idCountRoute } = require("./router/id-count/id-count.route");
+const { employeeRoute } = require("./router/employees/employees.route");
+
+// Middleware
+app.use("/auth", authRoute);
+app.use("/common", commonRoute);
+app.use("/department", departmentRoute);
+app.use("/designation", designationRoute);
+app.use("/zone", zoneRoute);
+app.use("/region", regionRoute);
+app.use("/market", marketRoute);
+app.use("/id-count", idCountRoute);
+app.use("/employees", employeeRoute);
+
 // app.get("/status", (req, res) => {
 //   res.json({
 //     success: true,

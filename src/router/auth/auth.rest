@@ -2,7 +2,8 @@ POST http://localhost:4560/auth/login
 Content-Type: application/json
 
 {
-    "email": "admin@gmail.com",
+    "module_name":"03",
+    "username": "rakib41",
     "password": "Test123!"
 }
 

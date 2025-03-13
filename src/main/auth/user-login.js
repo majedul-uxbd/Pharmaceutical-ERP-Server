@@ -1,5 +1,5 @@
 /**
- * @author Md. Majedul Islam <https://github.com/majedul-uxbd> 
+ * @author Md. Majedul Islam
  * Software Engineer,
  * Ultra-X BD Ltd.
  *
@@ -8,29 +8,48 @@
  * @description 
  * 
  */
+
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { pool } = require('../../_DB/db');
 const { setServerResponse } = require("../../utilities/server-response");
 const { API_STATUS_CODE } = require("../../consts/error-status");
 
-const userLoginQuery = async (email) => {
+
+const userLoginQuery = async (user) => {
     const query = `
 	SELECT
-		id,
-        f_name,
-        l_name,
-        email,
-        role,
-        password,
-        profile_img
-	FROM
-		user
-	WHERE
-		email = ?;
+        e.id,
+        e.employee_id,
+        e.full_name,
+        e.joining_date,
+        e.depot_id,
+        df.depot_name,
+        e.module_id,
+        mf.module_name,
+        e.designation_id,
+        d.designation_name,
+        e.password,
+        e.profile_pic
+    FROM
+        employees AS e
+    LEFT JOIN
+        designation AS d  
+    ON e.designation_id = d.designation_id
+    LEFT JOIN
+        module_info AS mf
+    ON e.module_id = mf.module_id
+    LEFT JOIN
+        depot_info AS df
+    ON e.depot_id = df.depot_id
+    WHERE
+        e.username = ? AND
+        e.module_id = ? AND
+        e.employee_status = ${1};
 	`;
     const values = [
-        email
+        user.username,
+        user.module_id
     ];
 
     try {
@@ -44,8 +63,13 @@ const userLoginQuery = async (email) => {
 const generateToken = (userInfo) => {
     const token = jwt.sign({
         id: userInfo.id,
-        email: userInfo.email,
-        role: userInfo.role
+        employee_id: userInfo.employee_id,
+        designation_id: userInfo.designation_id,
+        designation: userInfo.designation_name,
+        depot_id: userInfo.depot_id,
+        depot_name: userInfo.depot_name,
+        module_id: userInfo.module_id,
+        module_name: userInfo.module_name,
     }, process.env.ACCESS_TOKEN_SECRET, {
         expiresIn: '90d'
     });
@@ -53,23 +77,32 @@ const generateToken = (userInfo) => {
     return token;
 }
 
+/**
+ * @param {{
+ * module_id: string,
+ * username: string,
+ * password: string
+ * }} user 
+ * @description This function is used to get user data and token
+ * @returns 
+ */
 const userLogin = async (user) => {
     let userInfo;
 
-    if (!user.email || !user.password) {
+    if (!user.username || !user.password) {
         Promise.reject(
-            setServerResponse(API_STATUS_CODE.BAD_REQUEST, 'Email or password is required')
+            setServerResponse(API_STATUS_CODE.BAD_REQUEST, 'username_or_password_is_required')
         );
     }
     try {
-        userInfo = await userLoginQuery(user.email);
+        userInfo = await userLoginQuery(user);
     } catch (error) {
         return Promise.reject(error);
     }
 
     if (!userInfo) {
         return Promise.reject(
-            setServerResponse(API_STATUS_CODE.BAD_REQUEST, 'Invalid email or password')
+            setServerResponse(API_STATUS_CODE.BAD_REQUEST, 'username_or_password_is_required')
         );
     }
 
@@ -79,14 +112,13 @@ const userLogin = async (user) => {
     } catch (error) {
         // console.log("🚀 ~ userLogin ~ error:", error)
         return Promise.reject(
-            setServerResponse(API_STATUS_CODE.BAD_REQUEST, 'Invalid password')
-
+            setServerResponse(API_STATUS_CODE.BAD_REQUEST, 'invalid_password')
         );
     }
 
     if (!isPasswordCorrect) {
         return Promise.reject(
-            setServerResponse(API_STATUS_CODE.BAD_REQUEST, 'Invalid password')
+            setServerResponse(API_STATUS_CODE.BAD_REQUEST, 'invalid_password')
         );
     }
 
@@ -95,15 +127,17 @@ const userLogin = async (user) => {
     const userData = {
         token: token,
         id: userInfo.id,
-        f_name: userInfo.f_name,
-        l_name: userInfo.l_name,
-        email: userInfo.email,
-        role: userInfo.role,
-        profile_img: userInfo.profile_img
+        employee_id: userInfo.employee_id,
+        full_name: userInfo.full_name,
+        designation_id: userInfo.designation_id,
+        designation: userInfo.designation_name,
+        depot_id: userInfo.depot_id,
+        depot_name: userInfo.depot_name,
+        module_id: userInfo.module_id,
+        module_name: userInfo.module_name,
+        profile_pic: userInfo.profile_pic
     }
     // console.warn('🚀 ~ file: user-login.js:105 ~ userLogin ~ userData:', userData);
-
-
     return Promise.resolve(
         setServerResponse(
             API_STATUS_CODE.ACCEPTED,

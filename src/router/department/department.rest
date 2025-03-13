@@ -1,0 +1,28 @@
+### Create Department
+POST http://localhost:4560/department/add-department
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1wbG95ZWVfaWQiOiIwMDAwMSIsImRlc2lnbmF0aW9uX2lkIjoiMjQiLCJkZXNpZ25hdGlvbiI6IkV4ZWN1dGl2ZSIsImRlcG90X2lkIjoiMDUiLCJkZXBvdF9uYW1lIjoiQ2hhdHRvZ3JhbSBTYWxlcyBEZXBvdCIsIm1vZHVsZV9pZCI6IjAzIiwibW9kdWxlX25hbWUiOiJIUiBNYW5hZ2VtZW50IFN5c3RlbSIsImlhdCI6MTc0MDYzOTIxMiwiZXhwIjoxNzQ4NDE1MjEyfQ.4dxzDawIbeEkWKZj2nwBU9yVlT_gcTg-TSnmacaasGM
+Content-Type: application/json
+
+{
+    "department_id":"04",
+    "department_name":"IT Department",
+    "comment":""
+}
+
+### Active department
+POST http://localhost:4560/department/active
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1wbG95ZWVfaWQiOiIwMDAwMSIsImRlc2lnbmF0aW9uX2lkIjoiMjQiLCJkZXNpZ25hdGlvbiI6IkV4ZWN1dGl2ZSIsImRlcG90X2lkIjoiMDUiLCJkZXBvdF9uYW1lIjoiQ2hhdHRvZ3JhbSBTYWxlcyBEZXBvdCIsIm1vZHVsZV9pZCI6IjAzIiwibW9kdWxlX25hbWUiOiJIUiBNYW5hZ2VtZW50IFN5c3RlbSIsImlhdCI6MTc0MDYzOTIxMiwiZXhwIjoxNzQ4NDE1MjEyfQ.4dxzDawIbeEkWKZj2nwBU9yVlT_gcTg-TSnmacaasGM
+Content-Type: application/json
+
+{
+    "id":9
+}
+
+### Inactive department
+POST http://localhost:4560/department/inactive
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1wbG95ZWVfaWQiOiIwMDAwMSIsImRlc2lnbmF0aW9uX2lkIjoiMjQiLCJkZXNpZ25hdGlvbiI6IkV4ZWN1dGl2ZSIsImRlcG90X2lkIjoiMDUiLCJkZXBvdF9uYW1lIjoiQ2hhdHRvZ3JhbSBTYWxlcyBEZXBvdCIsIm1vZHVsZV9pZCI6IjAzIiwibW9kdWxlX25hbWUiOiJIUiBNYW5hZ2VtZW50IFN5c3RlbSIsImlhdCI6MTc0MDYzOTIxMiwiZXhwIjoxNzQ4NDE1MjEyfQ.4dxzDawIbeEkWKZj2nwBU9yVlT_gcTg-TSnmacaasGM
+Content-Type: application/json
+
+{
+    "id":8
+}

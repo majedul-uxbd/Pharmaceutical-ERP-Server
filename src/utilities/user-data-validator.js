@@ -10,51 +10,29 @@
  */
 
 const _ = require("lodash");
+
 const VALID_USER_ROLE_TYPE = Object.freeze({
 	Admin: "admin",
 	User: "user"
 });
 
-/**
- * @description Validate user first name
- */
-const isValidUserFirstName = (fName) => {
-	const USERNAME_MAX_LENGTH = 60;
-	const USERNAME_MIN_LENGTH = 2;
-	if (_.isEmpty(fName)) {
-		return false;
-	} else {
-		if (!_.isString(fName)) {
-			return false;
-		} else {
-			// check length
-			if (
-				fName.length > USERNAME_MAX_LENGTH ||
-				fName.length < USERNAME_MIN_LENGTH
-			) {
-				return false;
-			}
-		}
-	}
-	return true;
-};
 
 /**
- * @description Validate user last name
+ * @description Validate username
  */
-const isValidUserLastName = (lName) => {
+const isValidUsername = (username) => {
 	const USERNAME_MAX_LENGTH = 60;
-	const USERNAME_MIN_LENGTH = 2;
-	if (_.isEmpty(lName)) {
+	const USERNAME_MIN_LENGTH = 4;
+	if (_.isEmpty(username)) {
 		return false;
 	} else {
-		if (!_.isString(lName)) {
+		if (!_.isString(username)) {
 			return false;
 		} else {
 			// check length
 			if (
-				lName.length > USERNAME_MAX_LENGTH ||
-				lName.length < USERNAME_MIN_LENGTH
+				username.length > USERNAME_MAX_LENGTH ||
+				username.length < USERNAME_MIN_LENGTH
 			) {
 				return false;
 			}
@@ -123,7 +101,7 @@ const isValidEmail = (email) => {
  * @description Validate user password
  */
 const isValidPassword = (password) => {
-	const USERNAME_MAX_LENGTH = 50;
+	const USERNAME_MAX_LENGTH = 120;
 	const USERNAME_MIN_LENGTH = 4;
 	// Regex to enforce the following rules:
 	// - At least one lowercase letter
@@ -198,13 +176,13 @@ const isValidUserOccupation = (occupation) => {
 }
 
 /**
- * @description Validate user donation field
+ * @description Validate department ID
  */
-const isValidUserDonationField = (donation_field) => {
-	if (_.isEmpty(donation_field)) {
+const isValidDepartmentId = (department_id) => {
+	if (_.isEmpty(department_id)) {
 		return false;
 	} else {
-		if (!_.isString(donation_field)) {
+		if (!_.isString(department_id)) {
 			return false;
 		}
 	}
@@ -212,14 +190,37 @@ const isValidUserDonationField = (donation_field) => {
 }
 
 /**
- * @description Validate user amount
+ * @description Validate department name
  */
-const isValidUserAmount = (amount) => {
-	if (_.isEmpty(amount)) {
+const isValidDepartmentName = (department_name) => {
+	if (_.isEmpty(department_name)) {
 		return false;
 	} else {
-		if (!_.isString(amount)) {
+		if (!_.isString(department_name)) {
 			return false;
+		}
+	}
+	return true;
+}
+
+/**
+ * @description Validate short name
+ */
+const isValidDesignationShortName = (short_name) => {
+	const SHORT_NAME_MIN_LENGTH = 1;
+	const SHORT_NAME_MAX_LENGTH = 45;
+	if (_.isEmpty(short_name)) {
+		return false;
+	} else {
+		if (!_.isString(short_name)) {
+			return false;
+		} else {
+			if (short_name.length >= SHORT_NAME_MIN_LENGTH) {
+				return true;
+			}
+			else if (short_name.length > SHORT_NAME_MAX_LENGTH) {
+				return false;
+			}
 		}
 	}
 	return true;
@@ -228,20 +229,28 @@ const isValidUserAmount = (amount) => {
 /**
  * @description Validate user Transaction Id
  */
-const isValidTransactionId = (transactionId) => {
-	if (_.isEmpty(transactionId)) {
+const isValidComment = (comment) => {
+	const COMMENT_MIN_LENGTH = 0;
+	const COMMENT_MAX_LENGTH = 500;
+	if (_.isEmpty(comment)) {
 		return false;
 	} else {
-		if (!_.isString(transactionId)) {
+		if (!_.isString(comment)) {
 			return false;
+		} else {
+			if (comment.length >= COMMENT_MIN_LENGTH) {
+				return true;
+			}
+			else if (comment.length > COMMENT_MAX_LENGTH) {
+				return false;
+			}
 		}
 	}
 	return true;
 }
 
 module.exports = {
-	isValidUserFirstName,
-	isValidUserLastName,
+	isValidUsername,
 	isValidUserFullName,
 	isValidUserRole,
 	isValidEmail,
@@ -249,7 +258,8 @@ module.exports = {
 	isValidPassword,
 	isValidUserContact,
 	isValidUserOccupation,
-	isValidUserDonationField,
-	isValidUserAmount,
-	isValidTransactionId,
+	isValidDepartmentId,
+	isValidDepartmentName,
+	isValidDesignationShortName,
+	isValidComment,
 };
