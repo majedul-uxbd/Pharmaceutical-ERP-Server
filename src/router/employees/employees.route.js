@@ -16,8 +16,14 @@ const { paginationData } = require("../../middleware/pagination-data");
 const { getEmployeesData } = require("../../main/employees/get-employees-data");
 const { activeEmployees } = require("../../main/employees/active-employee");
 const { inactiveEmployees } = require("../../main/employees/inactive-employee");
+const { authenticateToken } = require("../../middleware/auth-token/authenticate-token");
+
+employeeRoute.use(authenticateToken);
 
 
+/**
+* @description This API is used to get Employee information
+*/
 employeeRoute.post('/get-employees-data',
     paginationData,
     async (req, res) => {
@@ -28,6 +34,28 @@ employeeRoute.post('/get-employees-data',
                     status: status,
                     message: message,
                     data: data
+                })
+            })
+            .catch(error => {
+                return res.status(error.statusCode).send({
+                    status: error.status,
+                    message: error.message,
+                })
+            })
+    }
+);
+
+/**
+* @description This API is used to get Employee information
+*/
+employeeRoute.post('/add-employees',
+    async (req, res) => {
+        addEmployees()
+            .then(data1 => {
+                const { statusCode, status, message } = data1;
+                return res.status(statusCode).send({
+                    status: status,
+                    message: message
                 })
             })
             .catch(error => {

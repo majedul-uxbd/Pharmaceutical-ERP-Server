@@ -8,11 +8,6 @@ const app = express();
 const cors = require('cors');
 const path = require("path");
 
-// Common Middlewares
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(cors());
-
 const { authRoute } = require("./router/auth/auth.route");
 const { commonRoute } = require("./router/common/common.route");
 const { departmentRoute } = require("./router/department/department.route");
@@ -22,6 +17,11 @@ const { regionRoute } = require("./router/region/region.route");
 const { marketRoute } = require("./router/market/market.route");
 const { idCountRoute } = require("./router/id-count/id-count.route");
 const { employeeRoute } = require("./router/employees/employees.route");
+
+// Common Middlewares
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(cors());
 
 // Middleware
 app.use("/auth", authRoute);

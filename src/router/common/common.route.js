@@ -18,6 +18,7 @@ const { authenticateToken } = require("../../middleware/auth-token/authenticate-
 const { getZoneData } = require("../../main/common/get-zone-data");
 const { getRegionData } = require("../../main/common/get-region-data");
 const { getMarketData } = require("../../main/common/get-market-data");
+const { getPostingData } = require("../../main/common/get-posting-data");
 
 // commonRoute.use(authenticateToken);
 
@@ -45,6 +46,29 @@ commonRoute.get("/get-module",
     });
 
 /**
+* @description This API is used to get Posting information
+*/
+commonRoute.get("/get-posting",
+    authenticateToken,
+    async (req, res) => {
+
+        getPostingData()
+            .then(data => {
+                return res.status(data.statusCode).send({
+                    status: data.status,
+                    message: data.message,
+                    data: data.data
+                })
+            })
+            .catch(error => {
+                return res.status(error.statusCode).send({
+                    status: error.status,
+                    message: error.message,
+                })
+            })
+    });
+
+/**
  * @description This API is used to get depot information
  */
 commonRoute.get("/get-depot",
@@ -52,6 +76,29 @@ commonRoute.get("/get-depot",
     async (req, res) => {
 
         getDepotData()
+            .then(data => {
+                return res.status(data.statusCode).send({
+                    status: data.status,
+                    message: data.message,
+                    data: data.data
+                })
+            })
+            .catch(error => {
+                return res.status(error.statusCode).send({
+                    status: error.status,
+                    message: error.message,
+                })
+            })
+    });
+
+/**
+ * @description This API is used to get department information
+ */
+commonRoute.get("/get-department",
+    authenticateToken,
+    async (req, res) => {
+
+        getDepartmentData()
             .then(data => {
                 return res.status(data.statusCode).send({
                     status: data.status,

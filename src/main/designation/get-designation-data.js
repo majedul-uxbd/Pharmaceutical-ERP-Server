@@ -48,7 +48,7 @@ const getDesignationDataQuery = async (paginationData) => {
             designation AS ds
         LEFT JOIN
             employees AS created_by 
-        ON ds.created_by = created_by.id
+        ON ds.created_by = created_by.employee_id
         LEFT JOIN
             employees AS modified_by 
         ON ds.modified_by = modified_by.id
@@ -93,7 +93,6 @@ const getDesignationData = async (paginationData) => {
             )
         );
     } catch (error) {
-        console.log('🚀 ~ file: get-donation-data.js:188 ~ getDesignationData ~ error:', error);
         return Promise.resolve(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,
