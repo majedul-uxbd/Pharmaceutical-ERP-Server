@@ -17,6 +17,8 @@ const { getEmployeesData } = require("../../main/employees/get-employees-data");
 const { activeEmployees } = require("../../main/employees/active-employee");
 const { inactiveEmployees } = require("../../main/employees/inactive-employee");
 const { authenticateToken } = require("../../middleware/auth-token/authenticate-token");
+const { employeeDataValidator } = require("../../middleware/employee/employee-data-validator");
+const { addEmployee } = require("../../main/employees/add-employee");
 
 employeeRoute.use(authenticateToken);
 
@@ -48,9 +50,10 @@ employeeRoute.post('/get-employees-data',
 /**
 * @description This API is used to get Employee information
 */
-employeeRoute.post('/add-employees',
+employeeRoute.post('/add-employee',
+    employeeDataValidator,
     async (req, res) => {
-        addEmployees()
+        addEmployee(req.auth, req.body.employeeData)
             .then(data1 => {
                 const { statusCode, status, message } = data1;
                 return res.status(statusCode).send({

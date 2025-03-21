@@ -60,6 +60,8 @@
     "invalid_region_name": "Invalid region name",
     "invalid_zone_code": "Invalid zone code",
     "invalid_depot_id": "Invalid depot ID",
+    "invalid_module_name": "Invalid module name",
+    "invalid_depot_name": "Invalid depot name",
     "region_name_already_exists": "Region name already exists",
     "region_is_created_successfully": "Region is created successfully",
     "region_is_not_found": "Region is not found",
@@ -87,5 +89,15 @@
     "employee_is_already_inactivate": "Employee is already inactivate",
     "employee_is_inactivated_successfully": "Employee is inactivated successfully",
     "employee_is_already_active": "Employee is already active",
-    "employee_is_activated_successfully": "Employee is activated successfully"
+    "employee_is_activated_successfully": "Employee is activated successfully",
+    "invalid_employee_id": "Invalid employee ID",
+    "invalid_employee_fullname": "Invalid employee full name",
+    "invalid_employee_email": "Invalid employee email",
+    "invalid_employee_contact": "Invalid employee contact",
+    "invalid_employee_present_address": "Invalid employee present_address",
+    "invalid_employee_permanent_address": "Invalid employee permanent_address",
+    "invalid_employee_joining_date": "Invalid employee joining date",
+    "invalid_employee_permanent_date": "Invalid employee permanent date",
+    "invalid_employee_posting_place": "Invalid employee posting place",
+    "invalid_employee_nid_no": "Invalid employee NID no"
 }

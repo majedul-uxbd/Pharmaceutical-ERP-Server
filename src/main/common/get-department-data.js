@@ -1,0 +1,64 @@
+/**
+ * @author Md Majedul Islam 
+ * Software Engineer,
+ * Ultra-X BD Ltd.
+ *
+ * @copyright All right reserved Md. Majedul Islam
+ * 
+ * @description 
+ * 
+ */
+
+const { pool } = require("../../_DB/db");
+const { API_STATUS_CODE } = require("../../consts/error-status");
+const { setServerResponse } = require("../../utilities/server-response");
+
+
+const getDepartmentDataQuery = async () => {
+    const query = `
+        SELECT
+            id,
+            department_name,
+            department_id
+        FROM
+            department
+        WHERE
+            department_status = ${1};
+    `;
+    try {
+        const [result] = await pool.query(query);
+        return result;
+    } catch (error) {
+        // console.log("🚀 ~ userLoginQuery ~ error:", error)
+        return Promise.reject(error);
+    }
+}
+
+
+/**
+ * @description This function is used to get department information from the database
+ */
+const getDepartmentData = async () => {
+    try {
+        const departmentData = await getDepartmentDataQuery();
+
+        return Promise.resolve(
+            setServerResponse(
+                API_STATUS_CODE.OK,
+                "get_data_successfully",
+                departmentData
+            )
+        );
+    } catch (error) {
+        return Promise.reject(
+            setServerResponse(
+                API_STATUS_CODE.INTERNAL_SERVER_ERROR,
+                "internal_server_error"
+            )
+        );
+    }
+}
+
+module.exports = {
+    getDepartmentData
+}

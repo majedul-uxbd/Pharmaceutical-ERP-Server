@@ -18,10 +18,34 @@ const { getZoneIdCount } = require("../../main/id-count/get-zone-id-count");
 const { getDepartmentIdCount } = require("../../main/id-count/get-department-id-count");
 const { getDesignationIdCount } = require("../../main/id-count/get-designation-id-count");
 const { authenticateToken } = require("../../middleware/auth-token/authenticate-token");
+const { getEmployeeIdCount } = require("../../main/id-count/get-employee-id-count");
 
 idCountRoute.use(authenticateToken);
 
 
+
+/**
+ * @description This API is used to get the Employee id and code count
+ */
+idCountRoute.get('/get-employee-id-count',
+    async (req, res) => {
+        getEmployeeIdCount()
+            .then(data1 => {
+                const { statusCode, status, message, data } = data1;
+                return res.status(statusCode).send({
+                    status: status,
+                    message: message,
+                    data: data
+                });
+            })
+            .catch(error => {
+                return res.status(error.statusCode).send({
+                    status: error.status,
+                    message: error.message,
+                });
+            });
+    }
+)
 
 /**
  * @description This API is used to get the department id and code count
