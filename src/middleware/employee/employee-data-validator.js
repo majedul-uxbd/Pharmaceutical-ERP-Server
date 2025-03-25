@@ -137,6 +137,9 @@ const employeeDataValidator = async (req, res, next) => {
                 )
             );
         }
+    } else {
+        employeeData.permanent_date = null;
+
     }
 
     if (!isValidCommonDate(employeeData.module_id)) {
@@ -175,6 +178,7 @@ const employeeDataValidator = async (req, res, next) => {
         );
     }
 
+    // console.warn('🚀 ~ employeeDataValidator ~ employeeData:', employeeData);
     req.body.employeeData = employeeData;
     next();
 }

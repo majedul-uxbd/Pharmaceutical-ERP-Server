@@ -99,5 +99,7 @@
     "invalid_employee_joining_date": "Invalid employee joining date",
     "invalid_employee_permanent_date": "Invalid employee permanent date",
     "invalid_employee_posting_place": "Invalid employee posting place",
-    "invalid_employee_nid_no": "Invalid employee NID no"
+    "invalid_employee_nid_no": "Invalid employee NID no",
+    "employee_already_exist": "Employee already exist",
+    "employee_is_created_successfully": "Employee is created successfully"
 }
