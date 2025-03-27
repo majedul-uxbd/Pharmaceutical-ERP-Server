@@ -42,7 +42,7 @@ const getEmployeesDataQuery = async (paginationData) => {
             em.present_address,
             em.permanent_address,
             em.joining_date,
-            em.posting_place,
+            ps.place_name,
             em.permanent_date,
             des.designation_name,
             dept.department_name,
@@ -59,6 +59,9 @@ const getEmployeesDataQuery = async (paginationData) => {
         LEFT JOIN
             department AS dept 
         ON em.department_id = dept.department_id
+        LEFT JOIN
+            posting_place AS ps
+        ON em.posting_place = ps.place_id
         LEFT JOIN
             depot_info AS dep
         ON em.depot_id = dep.depot_id

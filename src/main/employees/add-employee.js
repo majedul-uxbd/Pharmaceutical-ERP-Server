@@ -95,10 +95,10 @@ const insertEmployeeData = async (authData, employeeData) => {
 
 /**
  * 
- * @param {
+ * @param {{
  * employee_id: string
- * } authData 
- * @param {Object} employeeData 
+ * }} authData 
+ * @param {{Object}} employeeData 
  */
 const addEmployee = async (authData, employeeData) => {
     try {

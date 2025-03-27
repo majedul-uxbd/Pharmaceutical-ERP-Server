@@ -100,7 +100,7 @@ const inactiveEmployees = async (id) => {
             )
         }
     } catch (error) {
-        console.warn('🚀 ~ inactiveEmployees ~ error:', error);
+        // console.warn('🚀 ~ inactiveEmployees ~ error:', error);
         return Promise.resolve(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,
