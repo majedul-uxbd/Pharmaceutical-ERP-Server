@@ -63,7 +63,8 @@ const addDepartmentDataQuery = async (authData, departmentData) => {
         const [result] = await pool.query(_query, _values);
         if (result.affectedRows > 0) {
             return true;
-        } return false;
+        }
+        return false;
     } catch (error) {
         return Promise.reject(error);
     }
@@ -81,7 +82,6 @@ const addDepartmentDataQuery = async (authData, departmentData) => {
  * comment:string
  * }} departmentData 
  * @description This function is used to create a new department
- * @returns 
  */
 const addDepartmentData = async (authData, departmentData) => {
     try {

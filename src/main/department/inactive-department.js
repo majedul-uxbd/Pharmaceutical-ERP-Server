@@ -100,7 +100,7 @@ const inactiveDepartment = async (id) => {
             )
         }
     } catch (error) {
-        console.warn('🚀 ~ inactiveDepartment ~ error:', error);
+        // console.warn('🚀 ~ inactiveDepartment ~ error:', error);
         return Promise.resolve(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,
@@ -110,4 +110,6 @@ const inactiveDepartment = async (id) => {
     }
 }
 
-module.exports = { inactiveDepartment }
+module.exports = {
+    inactiveDepartment
+}

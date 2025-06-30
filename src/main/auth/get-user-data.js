@@ -80,6 +80,7 @@ const getUserDataQuery = async (authData) => {
 * designation_id: string,
 * depot_id: string,
 * }} authData 
+@description This function retrieves user data based on the provided authentication data.
  */
 const getUserData = async (authData) => {
     try {

@@ -84,7 +84,6 @@ const generateToken = (userInfo) => {
  * password: string
  * }} user 
  * @description This function is used to get user data and token
- * @returns 
  */
 const userLogin = async (user) => {
     let userInfo;

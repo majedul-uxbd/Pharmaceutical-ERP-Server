@@ -105,7 +105,6 @@ const updateDepartmentDataQuery = async (authData, departmentData) => {
  * comment:string
  * }} departmentData }
  * @description This function is used to update department data
- * @returns 
  */
 const updateDepartmentData = async (authData, departmentData) => {
     const modifiedAt = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
@@ -152,9 +151,9 @@ const updateDepartmentData = async (authData, departmentData) => {
                 )
             )
         }
-        const inactiveStatus = await updateDepartmentDataQuery(authData, departmentData);
+        const isUpdated = await updateDepartmentDataQuery(authData, departmentData);
 
-        if (inactiveStatus === true) {
+        if (isUpdated === true) {
             return Promise.resolve(
                 setServerResponse(
                     API_STATUS_CODE.OK,

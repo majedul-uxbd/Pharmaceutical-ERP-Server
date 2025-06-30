@@ -52,7 +52,7 @@ const getModuleData = async () => {
             )
         );
     } catch (error) {
-        console.warn('🚀 ~ getModuleData ~ error:', error);
+        // console.warn('🚀 ~ getModuleData ~ error:', error);
         return Promise.reject(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,

@@ -71,7 +71,6 @@ const getDepartmentDataQuery = async (paginationData) => {
 /**
  * @param {Object} paginationData - An object containing the pagination details.
  * @description This function will return the Department Information
- * @returns
  */
 const getDepartmentData = async (paginationData) => {
     let totalRows;
