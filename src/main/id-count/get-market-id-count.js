@@ -21,7 +21,7 @@ const getMarketIdAndCodeCountQuery = async () => {
         FROM 
             market
         ORDER BY 
-            market_id DESC
+            CAST(market_id AS UNSIGNED) DESC
         LIMIT 1;
     `;
 

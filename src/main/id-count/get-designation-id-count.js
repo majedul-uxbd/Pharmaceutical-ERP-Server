@@ -20,7 +20,7 @@ const getDesignationIdAndCodeCountQuery = async () => {
         FROM 
             designation
         ORDER BY 
-            designation_id DESC
+            CAST(designation_id AS UNSIGNED) DESC
         LIMIT 1;
     `;
 
@@ -43,6 +43,9 @@ const getDesignationIdAndCodeCountQuery = async () => {
             return ({ designation_id: designationId });
         }
     } catch (error) {
+        console.log('🚀 ------------------------------------------------------------🚀');
+        console.log('🚀 ~ :46 ~ getDesignationIdAndCodeCountQuery ~ error:', error);
+        console.log('🚀 ------------------------------------------------------------🚀');
         return Promise.reject(error);
     }
 }

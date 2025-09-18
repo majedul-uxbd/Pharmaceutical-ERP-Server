@@ -101,5 +101,7 @@
     "invalid_employee_posting_place": "Invalid employee posting place",
     "invalid_employee_nid_no": "Invalid employee NID no",
     "employee_already_exist": "Employee already exist",
-    "employee_is_created_successfully": "Employee is created successfully"
+    "employee_is_created_successfully": "Employee is created successfully",
+    "user_role_is_not_defined": "User role is not defined",
+    "access_denied_insufficient_permissions": "Access denied. Insufficient permissions"
 }

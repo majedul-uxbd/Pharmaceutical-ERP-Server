@@ -20,8 +20,8 @@ const getEmployeeIdAndCodeCountQuery = async () => {
         FROM 
             employees
         ORDER BY 
-            employee_id DESC
-        LIMIT 1;
+            CAST(id AS UNSIGNED) DESC
+        LIMIT 5;
     `;
 
     try {
@@ -39,7 +39,6 @@ const getEmployeeIdAndCodeCountQuery = async () => {
             return ({ employee_id: employeeId });
         } else {
             const employeeId = 'E00001';
-
             return ({ employee_id: employeeId });
         }
     } catch (error) {

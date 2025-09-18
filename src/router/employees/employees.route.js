@@ -19,6 +19,7 @@ const { inactiveEmployees } = require("../../main/employees/inactive-employee");
 const { authenticateToken } = require("../../middleware/auth-token/authenticate-token");
 const { employeeDataValidator } = require("../../middleware/employee/employee-data-validator");
 const { addEmployee } = require("../../main/employees/add-employee");
+const { updateEmployeeData } = require("../../main/employees/update-employee-data");
 
 employeeRoute.use(authenticateToken);
 
@@ -97,6 +98,28 @@ employeeRoute.post("/active",
 employeeRoute.post("/inactive",
     async (req, res) => {
         inactiveEmployees(req.body.id)
+            .then(data => {
+                const { statusCode, status, message } = data;
+                return res.status(statusCode).send({
+                    status: status,
+                    message: message
+                })
+            })
+            .catch(error => {
+                return res.status(error.statusCode).send({
+                    status: error.status,
+                    message: error.message,
+                })
+            })
+    });
+
+/**
+* @description This API is used to update Employee information
+*/
+employeeRoute.post("/update",
+    employeeDataValidator,
+    async (req, res) => {
+        updateEmployeeData(req.auth, req.body.employeeData)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({

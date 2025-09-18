@@ -20,7 +20,7 @@ const getDepartmentIdAndCodeCountQuery = async () => {
         FROM 
             department
         ORDER BY 
-            department_id DESC
+            CAST(department_id AS UNSIGNED) DESC
         LIMIT 1;
     `;
 
