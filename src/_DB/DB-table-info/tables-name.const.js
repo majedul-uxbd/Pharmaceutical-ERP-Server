@@ -16,8 +16,8 @@ const TABLES = Object.freeze({
     TBL_Employees: 'employees',
     TBL_BANK_INFORMATION: 'bank_information',
     TBL_DEPARTMENT: 'department',
-    TBL_DEPORT_INFO: 'deport_info',
-    TBL_designation: 'designation',
+    TBL_DEPORT_INFO: 'depot_info',
+    TBL_DESIGNATION: 'designation',
     TBL_EMPLOYEE_BANK_INFORMATION: 'employee_bank_information',
     TBL_EMPLOYEE_SALARY_STRUCTURE: 'emp_salary_structure',
     TBL_MARKET: 'market',
@@ -28,7 +28,7 @@ const TABLES = Object.freeze({
     TBL_SALARY_DEDUCTION_ELEMENT: 'salary_deduction_element',
     TBL_SALARY_GROUP: 'salary_group',
     TBL_SALARY_HEAD: 'salary_head',
-    ZONE: 'zone'
+    TBL_ZONE: 'zone'
 });
 
 module.exports = {

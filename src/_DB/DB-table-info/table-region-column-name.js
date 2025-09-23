@@ -16,10 +16,10 @@
  */
 const TABLE_REGION_COLUMNS_NAME = Object.freeze({
     ID: 'id ',
-    PLACE_NAME: 'zone_id',
-    PLACE_ID: 'region_id',
-    COMMENT: 'region_code',
-    COMMENT: 'region_name',
+    ZONE_ID: 'zone_id',
+    REGION_ID: 'region_id',
+    REGION_CODE: 'region_code',
+    REGION_NAME: 'region_name',
     COMMENT: 'comment',
     CREATED_BY: 'created_by',
     MODIFIED_BY: 'modified_by',

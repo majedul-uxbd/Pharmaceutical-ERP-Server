@@ -10,6 +10,8 @@
  */
 
 const { pool } = require("../../_DB/db");
+const { TABLE_DEPARTMENT_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-department-column-name");
+const { TABLES } = require("../../_DB/DB-table-info/tables-name.const");
 const { API_STATUS_CODE } = require("../../consts/error-status");
 const { setServerResponse } = require("../../utilities/server-response");
 
@@ -17,13 +19,13 @@ const { setServerResponse } = require("../../utilities/server-response");
 const getDepartmentDataQuery = async () => {
     const query = `
         SELECT
-            id,
-            department_name,
-            department_id
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.ID},
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_ID},
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_NAME}
         FROM
-            department
+            ${TABLES.TBL_DEPARTMENT}
         WHERE
-            department_status = ${1};
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.ACTIVE_STATUS} = ${1};
     `;
     try {
         const [result] = await pool.query(query);

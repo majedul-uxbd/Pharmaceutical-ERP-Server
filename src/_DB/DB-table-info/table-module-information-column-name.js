@@ -16,9 +16,9 @@
  */
 const TABLE_MODULE_INFORMATION_COLUMNS_NAME = Object.freeze({
     ID: 'id ',
-    REGION_ID: 'module_name',
-    MARKET_ID: 'module_id ',
-    MARKET_CODE: 'description ',
+    MODULE_ID: 'module_id ',
+    MODULE_NAME: 'module_name',
+    DESCRIPTION: 'description ',
     CREATED_BY: 'created_by',
     MODIFIED_BY: 'modified_by',
     ACTIVE_STATUS: 'active_status',

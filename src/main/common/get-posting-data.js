@@ -10,6 +10,8 @@
  */
 
 const { pool } = require("../../_DB/db");
+const { TABLE_POSTING_PLACE_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-posting-place-column-name");
+const { TABLES } = require("../../_DB/DB-table-info/tables-name.const");
 const { API_STATUS_CODE } = require("../../consts/error-status");
 const { setServerResponse } = require("../../utilities/server-response");
 
@@ -17,13 +19,13 @@ const { setServerResponse } = require("../../utilities/server-response");
 const getPostingDataQuery = async () => {
     const query = `
         SELECT
-            id,
-            place_id,
-            place_name
+            ${TABLE_POSTING_PLACE_COLUMNS_NAME.ID},
+            ${TABLE_POSTING_PLACE_COLUMNS_NAME.PLACE_ID},
+            ${TABLE_POSTING_PLACE_COLUMNS_NAME.PLACE_NAME}
         FROM
-            posting_place
+            ${TABLES.TBL_POSTING_INFO}
         WHERE
-            place_status = ${1};
+            ${TABLE_POSTING_PLACE_COLUMNS_NAME.ACTIVE_STATUS} = ${1};
     `;
     try {
         const [result] = await pool.query(query);

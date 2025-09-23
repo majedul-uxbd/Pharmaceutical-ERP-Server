@@ -10,6 +10,8 @@
  */
 
 const { pool } = require("../../_DB/db");
+const { TABLE_DEPOT_INFO_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-depot-info-column-name");
+const { TABLES } = require("../../_DB/DB-table-info/tables-name.const");
 const { API_STATUS_CODE } = require("../../consts/error-status");
 const { setServerResponse } = require("../../utilities/server-response");
 
@@ -17,13 +19,13 @@ const { setServerResponse } = require("../../utilities/server-response");
 const getDepotDataQuery = async () => {
     const query = `
         SELECT
-            id,
-            depot_name,
-            depot_id
+            ${TABLE_DEPOT_INFO_COLUMNS_NAME.ID},
+            ${TABLE_DEPOT_INFO_COLUMNS_NAME.DEPOT_ID},
+            ${TABLE_DEPOT_INFO_COLUMNS_NAME.DEPOT_NAME}
         FROM
-            depot_info
+            ${TABLES.TBL_DEPORT_INFO}
         WHERE
-            depot_status = ${1};
+            ${TABLE_DEPOT_INFO_COLUMNS_NAME.ACTIVE_STATUS} = ${1};
     `;
     try {
         const [result] = await pool.query(query);

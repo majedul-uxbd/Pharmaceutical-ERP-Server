@@ -10,6 +10,8 @@
  */
 
 const { pool } = require("../../_DB/db");
+const { TABLE_ZONE_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-zone-column-name");
+const { TABLES } = require("../../_DB/DB-table-info/tables-name.const");
 const { API_STATUS_CODE } = require("../../consts/error-status");
 const { setServerResponse } = require("../../utilities/server-response");
 
@@ -17,13 +19,13 @@ const { setServerResponse } = require("../../utilities/server-response");
 const getZoneDataQuery = async () => {
     const query = `
         SELECT
-            id,
-            zone_id,
-            zone_name
+            ${TABLE_ZONE_COLUMNS_NAME.ID},
+            ${TABLE_ZONE_COLUMNS_NAME.ZONE_ID},
+            ${TABLE_ZONE_COLUMNS_NAME.ZONE_NAME}
         FROM
-            zone
+            ${TABLES.TBL_ZONE}
         WHERE
-            zone_status = ${1};
+            ${TABLE_ZONE_COLUMNS_NAME.ACTIVE_STATUS} = ${1};
     `;
     try {
         const [result] = await pool.query(query);

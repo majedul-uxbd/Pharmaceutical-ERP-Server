@@ -10,6 +10,8 @@
  */
 
 const { pool } = require("../../_DB/db");
+const { TABLE_REGION_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-region-column-name");
+const { TABLES } = require("../../_DB/DB-table-info/tables-name.const");
 const { API_STATUS_CODE } = require("../../consts/error-status");
 const { setServerResponse } = require("../../utilities/server-response");
 
@@ -17,13 +19,13 @@ const { setServerResponse } = require("../../utilities/server-response");
 const getRegionDataQuery = async () => {
     const query = `
         SELECT
-            id,
-            region_id,
-            region_name
+            ${TABLE_REGION_COLUMNS_NAME.ID},
+            ${TABLE_REGION_COLUMNS_NAME.REGION_ID},
+            ${TABLE_REGION_COLUMNS_NAME.REGION_NAME}
         FROM
-            region
+            ${TABLES.TBL_REGION}
         WHERE
-            region_status = ${1};
+            ${TABLE_REGION_COLUMNS_NAME.ACTIVE_STATUS} = ${1};
     `;
     try {
         const [result] = await pool.query(query);

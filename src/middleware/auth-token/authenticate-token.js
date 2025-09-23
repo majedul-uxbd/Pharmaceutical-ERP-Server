@@ -13,6 +13,8 @@ const jwt = require('jsonwebtoken');
 const { pool } = require('../../_DB/db');
 const { setServerResponse } = require('../../utilities/server-response');
 const { API_STATUS_CODE } = require('../../consts/error-status');
+const { TABLES } = require('../../_DB/DB-table-info/tables-name.const');
+const { TABLE_EMPLOYEES_COLUMNS_NAME } = require('../../_DB/DB-table-info/table-employee-column-name');
 
 const checkUserId = async (
 	id,
@@ -25,14 +27,14 @@ const checkUserId = async (
   	SELECT
 		*
 	FROM
-		employees
+		${TABLES.TBL_Employees}
 	WHERE
-		id = ? AND
-		employee_id = ? AND
-		designation_id = ? AND
-		depot_id = ? AND
-		module_id = ? AND
-		employee_status = ${1};
+		${TABLE_EMPLOYEES_COLUMNS_NAME.ID} = ? AND
+		${TABLE_EMPLOYEES_COLUMNS_NAME.EMPLOYEE_ID} = ? AND
+		${TABLE_EMPLOYEES_COLUMNS_NAME.DESIGNATION_ID} = ? AND
+		${TABLE_EMPLOYEES_COLUMNS_NAME.DEPORT_ID} = ? AND
+		${TABLE_EMPLOYEES_COLUMNS_NAME.MODULE_ID} = ? AND
+		${TABLE_EMPLOYEES_COLUMNS_NAME.ACTIVE_STATUS} = ${1};
   	`;
 
 	const values = [

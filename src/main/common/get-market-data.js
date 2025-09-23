@@ -10,6 +10,8 @@
  */
 
 const { pool } = require("../../_DB/db");
+const { TABLE_MARKET_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-market-column-name");
+const { TABLES } = require("../../_DB/DB-table-info/tables-name.const");
 const { API_STATUS_CODE } = require("../../consts/error-status");
 const { setServerResponse } = require("../../utilities/server-response");
 
@@ -17,13 +19,13 @@ const { setServerResponse } = require("../../utilities/server-response");
 const getMarketDataQuery = async () => {
     const query = `
         SELECT
-            id,
-            market_id,
-            market_name
+            ${TABLE_MARKET_COLUMNS_NAME.ID},
+            ${TABLE_MARKET_COLUMNS_NAME.MARKET_ID},
+            ${TABLE_MARKET_COLUMNS_NAME.MARKET_NAME}
         FROM
-            market
+            ${TABLES.TBL_MARKET}
         WHERE
-            market_status = ${1};
+            ${TABLE_MARKET_COLUMNS_NAME.ACTIVE_STATUS} = ${1};
     `;
     try {
         const [result] = await pool.query(query);

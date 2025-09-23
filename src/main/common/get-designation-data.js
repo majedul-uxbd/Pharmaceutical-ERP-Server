@@ -10,6 +10,8 @@
  */
 
 const { pool } = require("../../_DB/db");
+const { TABLE_DESIGNATION_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-designation-column-name");
+const { TABLES } = require("../../_DB/DB-table-info/tables-name.const");
 const { API_STATUS_CODE } = require("../../consts/error-status");
 const { setServerResponse } = require("../../utilities/server-response");
 
@@ -17,13 +19,13 @@ const { setServerResponse } = require("../../utilities/server-response");
 const getDesignationDataQuery = async () => {
     const query = `
         SELECT
-            id,
-            designation_name,
-            designation_id
+            ${TABLE_DESIGNATION_COLUMNS_NAME.ID},
+            ${TABLE_DESIGNATION_COLUMNS_NAME.DESIGNATION_ID},
+            ${TABLE_DESIGNATION_COLUMNS_NAME.DESIGNATION_NAME}
         FROM
-            designation
+            ${TABLES.TBL_DESIGNATION}
         WHERE
-            designation_status = ${1};
+            ${TABLE_DESIGNATION_COLUMNS_NAME.ACTIVE_STATUS} = ${1};
     `;
     try {
         const [result] = await pool.query(query);

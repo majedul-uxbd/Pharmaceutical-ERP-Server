@@ -34,7 +34,7 @@ const TABLE_EMPLOYEES_COLUMNS_NAME = Object.freeze({
     MODIFIED_BY: 'modified_by',
     DESIGNATION_ID: 'designation_id',
     DEPARTMENT_ID: 'department_id',
-    EMPLOYEE_STATUS: 'employee_status',
+    ACTIVE_STATUS: 'active_status',
     PROFILE_PIC: 'profile_pic',
     CREATED_AT: 'created_at',
     MODIFIED_AT: 'modified_at'

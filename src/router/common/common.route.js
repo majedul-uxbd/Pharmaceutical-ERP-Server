@@ -30,7 +30,6 @@ const { getDesignationData } = require("../../main/common/get-designation-data")
  */
 commonRoute.get("/get-module",
     async (req, res) => {
-
         getModuleData()
             .then(data => {
                 return res.status(data.statusCode).send({
@@ -53,7 +52,6 @@ commonRoute.get("/get-module",
 commonRoute.get("/get-posting",
     authenticateToken,
     async (req, res) => {
-
         getPostingData()
             .then(data => {
                 return res.status(data.statusCode).send({
@@ -76,7 +74,6 @@ commonRoute.get("/get-posting",
 commonRoute.get("/get-depot",
     authenticateToken,
     async (req, res) => {
-
         getDepotData()
             .then(data => {
                 return res.status(data.statusCode).send({
@@ -99,7 +96,6 @@ commonRoute.get("/get-depot",
 commonRoute.get("/get-department",
     authenticateToken,
     async (req, res) => {
-
         getDepartmentData()
             .then(data => {
                 return res.status(data.statusCode).send({
