@@ -9,7 +9,6 @@
  * 
  */
 
-const { reject } = require("lodash");
 const { pool } = require("../../_DB/db");
 const { setServerResponse } = require("../../utilities/server-response");
 const { API_STATUS_CODE } = require("../../consts/error-status");
@@ -53,15 +52,9 @@ const isRegionNameAlreadyExist = async (regionData) => {
         regionData.region_code,
         regionData.region_id,
     ]
-    console.log('🚀 -------------------------------------------------------🚀');
-    console.log('🚀 ~ :56 ~ isRegionNameAlreadyExist ~ _values:', _values);
-    console.log('🚀 -------------------------------------------------------🚀');
 
     try {
         const [result] = await pool.query(_query, _values);
-        console.log('🚀 -----------------------------------------------------🚀');
-        console.log('🚀 ~ :59 ~ isRegionNameAlreadyExist ~ result:', result);
-        console.log('🚀 -----------------------------------------------------🚀');
         if (result.length > 0) {
             return true;
         } return false;
