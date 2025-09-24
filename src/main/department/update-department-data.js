@@ -20,7 +20,7 @@ const { TABLE_DEPARTMENT_COLUMNS_NAME } = require('../../_DB/DB-table-info/table
 const getDepartmentDataQuery = async (id) => {
     const _query = `
         SELECT
-            ${TABLE_DEPARTMENT_COLUMNS_NAME.ID},
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_ID},
             ${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_CODE},
             ${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_NAME}
         FROM 
@@ -66,7 +66,6 @@ const updateDepartmentDataQuery = async (authData, departmentData) => {
         UPDATE
             ${TABLES.TBL_DEPARTMENT}
         SET
-            ${TABLE_DEPARTMENT_COLUMNS_NAME.ID} = ?,
             ${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_CODE} = ?,
             ${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_NAME} = ?,
             ${TABLE_DEPARTMENT_COLUMNS_NAME.COMMENT} = ?,
@@ -76,7 +75,7 @@ const updateDepartmentDataQuery = async (authData, departmentData) => {
             ${TABLE_DEPARTMENT_COLUMNS_NAME.ID} = ?;
     `;
     const _values = [
-        departmentData.department_id,
+        // departmentData.department_id,
         departmentData.department_code,
         departmentData.department_name,
         departmentData.comment,

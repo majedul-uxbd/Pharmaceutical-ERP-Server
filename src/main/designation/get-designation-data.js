@@ -10,6 +10,9 @@
  */
 
 const { pool } = require("../../_DB/db");
+const { TABLE_DESIGNATION_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-designation-column-name");
+const { TABLE_EMPLOYEES_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-employee-column-name");
+const { TABLES } = require("../../_DB/DB-table-info/tables-name.const");
 const { API_STATUS_CODE } = require("../../consts/error-status");
 const { setServerResponse } = require("../../utilities/server-response");
 
@@ -18,7 +21,7 @@ const getNumberOfRowsQuery = async () => {
     SELECT
         count(*) totalRows
     FROM
-        designation;
+        ${TABLES.TBL_DESIGNATION};
     `;
 
     try {
@@ -33,26 +36,26 @@ const getNumberOfRowsQuery = async () => {
 const getDesignationDataQuery = async (paginationData) => {
     const query = `
         SELECT
-            ds.id,
-            ds.designation_id,
-            ds.designation_code,
-            ds.designation_name,
-            ds.description,
-            ds.comment,
-            created_by.full_name AS created_by,
-            modified_by.full_name AS modified_by,
-            ds.designation_status,
-            ds.created_at,
-            ds.modified_at
+            ds.${TABLE_DESIGNATION_COLUMNS_NAME.ID},
+            ds.${TABLE_DESIGNATION_COLUMNS_NAME.DESIGNATION_ID},
+            ds.${TABLE_DESIGNATION_COLUMNS_NAME.DESIGNATION_CODE},
+            ds.${TABLE_DESIGNATION_COLUMNS_NAME.DESIGNATION_NAME},
+            ds.${TABLE_DESIGNATION_COLUMNS_NAME.COMMENT},
+            ds.${TABLE_DESIGNATION_COLUMNS_NAME.DESCRIPTION},
+            created_by.${TABLE_EMPLOYEES_COLUMNS_NAME.Full_NAME} AS created_by,
+            modified_by.${TABLE_EMPLOYEES_COLUMNS_NAME.Full_NAME} AS modified_by,
+            ds.${TABLE_DESIGNATION_COLUMNS_NAME.ACTIVE_STATUS},
+            ds.${TABLE_DESIGNATION_COLUMNS_NAME.CREATED_AT},
+            ds.${TABLE_DESIGNATION_COLUMNS_NAME.MODIFIED_AT}
         FROM
-            designation AS ds
+            ${TABLES.TBL_DESIGNATION} AS ds
         LEFT JOIN
-            employees AS created_by 
-        ON ds.created_by = created_by.employee_id
+            ${TABLES.TBL_Employees} AS created_by 
+        ON ds.${TABLE_DESIGNATION_COLUMNS_NAME.CREATED_BY} = created_by.${TABLE_EMPLOYEES_COLUMNS_NAME.EMPLOYEE_ID}
         LEFT JOIN
-            employees AS modified_by 
-        ON ds.modified_by = modified_by.id
-        ORDER BY ds.id DESC
+            ${TABLES.TBL_Employees} AS modified_by 
+        ON ds.${TABLE_DESIGNATION_COLUMNS_NAME.MODIFIED_BY} = modified_by.${TABLE_EMPLOYEES_COLUMNS_NAME.EMPLOYEE_ID}
+        ORDER BY ds.${TABLE_DESIGNATION_COLUMNS_NAME.ID} DESC
         LIMIT ? OFFSET ?;
     `;
 
@@ -75,9 +78,8 @@ const getDesignationDataQuery = async (paginationData) => {
  * @returns
  */
 const getDesignationData = async (paginationData) => {
-    let totalRows;
     try {
-        totalRows = await getNumberOfRowsQuery();
+        const totalRows = await getNumberOfRowsQuery();
         const departmentData = await getDesignationDataQuery(paginationData);
         const result = {
             metadata: {
