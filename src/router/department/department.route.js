@@ -74,7 +74,8 @@ departmentRoute.post("/add-department",
 */
 departmentRoute.post("/active",
     async (req, res) => {
-        activeDepartment(req.body.id)
+        const authData = req.auth;
+        activeDepartment(req.body.id, authData)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({
@@ -95,7 +96,8 @@ departmentRoute.post("/active",
 */
 departmentRoute.post("/inactive",
     async (req, res) => {
-        inactiveDepartment(req.body.id)
+        const authData = req.auth;
+        inactiveDepartment(req.body.id, authData)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({

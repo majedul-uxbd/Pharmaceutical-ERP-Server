@@ -12,20 +12,24 @@
 const { pool } = require("../../_DB/db");
 const { setServerResponse } = require("../../utilities/server-response");
 const { API_STATUS_CODE } = require("../../consts/error-status");
+const { TABLES } = require("../../_DB/DB-table-info/tables-name.const");
+const { TABLE_DEPARTMENT_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-department-column-name");
 
 const isDepartmentNameAlreadyExist = async (departmentData) => {
     const _query = `
         SELECT
-            department_name
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_NAME}
         FROM 
-            department
+            ${TABLES.TBL_DEPARTMENT}
         WHERE
-            department_name = ? OR department_id = ? OR department_code = ?;
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_ID} = ? OR 
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_CODE} = ? OR
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_NAME} = ?;
     `;
     const _values = [
-        departmentData.department_name,
         departmentData.department_id,
         departmentData.department_code,
+        departmentData.department_name
     ]
 
     try {
@@ -41,13 +45,13 @@ const isDepartmentNameAlreadyExist = async (departmentData) => {
 const addDepartmentDataQuery = async (authData, departmentData) => {
     const _query = `
         INSERT INTO
-            department
+            ${TABLES.TBL_DEPARTMENT}
             (
-                department_id,
-                department_code,
-                department_name,
-                comment,
-                created_by
+                ${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_ID},
+                ${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_CODE},
+                ${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_NAME},
+                ${TABLE_DEPARTMENT_COLUMNS_NAME.COMMENT},
+                ${TABLE_DEPARTMENT_COLUMNS_NAME.CREATED_BY}
             )
         VALUES (?, ?, ?, ?, ?);
     `;
