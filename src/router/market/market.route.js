@@ -56,7 +56,7 @@ marketRoute.post("/get-market-data",
 marketRoute.post("/add-market",
     marketDataValidator,
     async (req, res) => {
-        addMarketData(req.body.marketData)
+        addMarketData(req.body.marketData, req.auth)
             .then(data => {
                 return res.status(data.statusCode).send({
                     status: data.status,
@@ -76,7 +76,8 @@ marketRoute.post("/add-market",
 */
 marketRoute.post("/active",
     async (req, res) => {
-        activeMarket(req.body.id)
+        const authData = req.auth;
+        activeMarket(req.body.id, authData)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({
@@ -97,7 +98,8 @@ marketRoute.post("/active",
 */
 marketRoute.post("/inactive",
     async (req, res) => {
-        inactiveMarket(req.body.id)
+        const authData = req.auth;
+        inactiveMarket(req.body.id, authData)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({

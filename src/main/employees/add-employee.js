@@ -10,6 +10,8 @@
  */
 
 const { pool } = require("../../_DB/db");
+const { TABLE_EMPLOYEES_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-employee-column-name");
+const { TABLES } = require("../../_DB/DB-table-info/tables-name.const");
 const { API_STATUS_CODE } = require("../../consts/error-status");
 const { setServerResponse } = require("../../utilities/server-response");
 
@@ -17,12 +19,13 @@ const { setServerResponse } = require("../../utilities/server-response");
 const checkIsDataAlreadyExist = async (employeeData) => {
     const _query = `
         SELECT
-            employee_id
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.EMPLOYEE_ID}
         FROM 
-            employees
+            ${TABLES.TBL_EMPLOYEES}
         WHERE
-            employee_id = ? OR
-            email = ?;
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.EMPLOYEE_ID} = ? OR
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.USERNAME} = ? OR
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.EMAIL} = ?;
     `;
 
     const _values = [
@@ -42,32 +45,33 @@ const checkIsDataAlreadyExist = async (employeeData) => {
 
 const insertEmployeeData = async (authData, employeeData) => {
     const _query = `
-        INSERT
-        INTO
-            employees
+        INSERT  INTO
+            ${TABLES.TBL_EMPLOYEES}
         (
-            employee_id,
-            full_name,
-            email,
-            contact,
-            present_address,
-            permanent_address,
-            joining_date,
-            posting_place,
-            permanent_date,
-            module_id,
-            depot_id,
-            nid_no,
-            created_by,
-            designation_id,
-            department_id
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.EMPLOYEE_ID},
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.Full_NAME},
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.USERNAME},
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.EMAIL},
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.CONTACT},
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.PRESENT_ADDRESS},
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.PERMANENT_ADDRESS},
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.JOINING_DATE},
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.POSTING_PLACE},
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.PERMANENT_DATE},
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.MODULE_ID},
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.DEPORT_ID},
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.NID_NO},
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.CREATED_BY},
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.DESIGNATION_ID},
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.DEPARTMENT_ID}
         )
-        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
     `;
 
     const _values = [
         employeeData.employee_id,
         employeeData.full_name,
+        employeeData.username,
         employeeData.email,
         employeeData.contact,
         employeeData.present_address,
@@ -94,11 +98,27 @@ const insertEmployeeData = async (authData, employeeData) => {
 };
 
 /**
- * 
+ * @param {{ employee_id: string }} authData - Authenticated user data, must include employee_id of the creator.
  * @param {{
- * employee_id: string
- * }} authData 
- * @param {{Object}} employeeData 
+ *   employee_id: string,
+ *   full_name: string,
+ *   username: string,
+ *   email: string,
+ *   contact: string,
+ *   present_address: string,
+ *   permanent_address: string,
+ *   joining_date: string,
+ *   posting_place: string,
+ *   permanent_date: string,
+ *   module_id: string,
+ *   depot_id: string,
+ *   nid_no: string,
+ *   designation_id: string,
+ *   department_id: string
+ * }} employeeData - Employee details to be added.
+ * @description Adds a new employee to the database after checking for duplicate employee ID or username or email.
+ * Returns a server response indicating success or error status.
+ * @returns {Promise<Object>} - Resolves with a server response object on error, rejects with a server response object on success.
  */
 const addEmployee = async (authData, employeeData) => {
     try {

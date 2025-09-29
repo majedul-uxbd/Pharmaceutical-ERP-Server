@@ -13,16 +13,18 @@ const _ = require('lodash');
 const { format } = require('date-fns');
 const { pool } = require("../../_DB/db");
 const { API_STATUS_CODE } = require("../../consts/error-status")
-const { setServerResponse } = require("../../utilities/server-response")
+const { setServerResponse } = require("../../utilities/server-response");
+const { TABLE_MARKET_COLUMNS_NAME } = require('../../_DB/DB-table-info/table-market-column-name');
+const { TABLES } = require('../../_DB/DB-table-info/tables-name.const');
 
 const isMarketInactiveQuery = async (id) => {
     const _query = `
         SELECT
-            market_status
+            ${TABLE_MARKET_COLUMNS_NAME.ACTIVE_STATUS}
         FROM
-            market
+            ${TABLES.TBL_MARKET}
         WHERE
-            id = ?;
+            ${TABLE_MARKET_COLUMNS_NAME.ID} = ?;
     `;
     try {
         const [result] = await pool.query(_query, [id]);
@@ -42,14 +44,14 @@ const isMarketInactiveQuery = async (id) => {
 const updateMarketDataQuery = async (marketData) => {
     const _query = `
         UPDATE
-            market
+            ${TABLES.TBL_MARKET}
         SET
-            region_id = ?,
-            market_name = ?,
-            comment = ?,
-            modified_at = ?
+            ${TABLE_MARKET_COLUMNS_NAME.REGION_ID} = ?,
+            ${TABLE_MARKET_COLUMNS_NAME.MARKET_NAME} = ?,
+            ${TABLE_MARKET_COLUMNS_NAME.COMMENT} = ?,
+            ${TABLE_MARKET_COLUMNS_NAME.MODIFIED_BY} = ?
         WHERE
-            id = ?;
+            ${TABLE_MARKET_COLUMNS_NAME.ID} = ?;
     `;
     const _values = [
         marketData.region_id,

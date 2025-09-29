@@ -49,10 +49,10 @@ const getDepartmentDataQuery = async (paginationData) => {
         FROM
             ${TABLES.TBL_DEPARTMENT} AS dp
         LEFT JOIN
-            ${TABLES.TBL_Employees} AS created_by 
+            ${TABLES.TBL_EMPLOYEES} AS created_by 
         ON dp.${TABLE_DEPARTMENT_COLUMNS_NAME.CREATED_BY} = created_by.${TABLE_EMPLOYEES_COLUMNS_NAME.EMPLOYEE_ID}
         LEFT JOIN
-            ${TABLES.TBL_Employees} AS modified_by 
+            ${TABLES.TBL_EMPLOYEES} AS modified_by 
         ON dp.${TABLE_DEPARTMENT_COLUMNS_NAME.MODIFIED_BY} = modified_by.${TABLE_EMPLOYEES_COLUMNS_NAME.EMPLOYEE_ID}
         ORDER BY dp.${TABLE_DEPARTMENT_COLUMNS_NAME.ID} DESC
         LIMIT ? OFFSET ?;

@@ -12,16 +12,19 @@
 const _ = require('lodash');
 const { pool } = require("../../_DB/db");
 const { API_STATUS_CODE } = require("../../consts/error-status")
-const { setServerResponse } = require("../../utilities/server-response")
+const { setServerResponse } = require("../../utilities/server-response");
+const { TABLES } = require('../../_DB/DB-table-info/tables-name.const');
+const { TABLE_MARKET_COLUMNS_NAME } = require('../../_DB/DB-table-info/table-market-column-name');
+const { format } = require('date-fns');
 
 const isMarketAlreadyInactivated = async (id) => {
     const _query = `
         SELECT
-            market_status
+            ${TABLE_MARKET_COLUMNS_NAME.ACTIVE_STATUS}
         FROM
-            market
+            ${TABLES.TBL_MARKET}
         WHERE
-            id = ?;
+            ${TABLE_MARKET_COLUMNS_NAME.ID} = ?;
     `;
     try {
         const [result] = await pool.query(_query, [id]);
@@ -37,17 +40,24 @@ const isMarketAlreadyInactivated = async (id) => {
     }
 }
 
-const inactiveMarketStatusQuery = async (id) => {
+const inactiveMarketStatusQuery = async (id, authData, modifiedAt) => {
     const _query = `
         UPDATE
-            market
+            ${TABLES.TBL_MARKET}
         SET
-            market_status = ${0}
+            ${TABLE_MARKET_COLUMNS_NAME.ACTIVE_STATUS} = ${0},
+            ${TABLE_MARKET_COLUMNS_NAME.MODIFIED_BY} = ?,
+            ${TABLE_MARKET_COLUMNS_NAME.MODIFIED_AT} = ?
         WHERE
-            id = ?;
+            ${TABLE_MARKET_COLUMNS_NAME.ID} = ?;
     `;
+    const _values = [
+        authData.employee_id,
+        modifiedAt,
+        id
+    ];
     try {
-        const [result] = await pool.query(_query, [id]);
+        const [result] = await pool.query(_query, _values);
         if (result.affectedRows > 0) {
             return true;
         } return false;
@@ -62,7 +72,9 @@ const inactiveMarketStatusQuery = async (id) => {
  * @description This function is used to inactive market
  * @returns 
  */
-const inactiveMarket = async (id) => {
+const inactiveMarket = async (id, authData) => {
+    const modifiedAt = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
+
     if (_.isNil(id)) {
         return Promise.reject(
             setServerResponse(
@@ -89,7 +101,7 @@ const inactiveMarket = async (id) => {
                 )
             )
         }
-        const inactiveStatus = await inactiveMarketStatusQuery(id);
+        const inactiveStatus = await inactiveMarketStatusQuery(id, authData, modifiedAt);
 
         if (inactiveStatus === true) {
             return Promise.resolve(

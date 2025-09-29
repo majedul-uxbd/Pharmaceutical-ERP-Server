@@ -12,16 +12,18 @@
 const _ = require('lodash');
 const { pool } = require("../../_DB/db");
 const { API_STATUS_CODE } = require("../../consts/error-status")
-const { setServerResponse } = require("../../utilities/server-response")
+const { setServerResponse } = require("../../utilities/server-response");
+const { TABLE_EMPLOYEES_COLUMNS_NAME } = require('../../_DB/DB-table-info/table-employee-column-name');
+const { TABLES } = require('../../_DB/DB-table-info/tables-name.const');
 
 const isEmployeesAlreadyInactivated = async (id) => {
     const _query = `
         SELECT
-            employee_status
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.ACTIVE_STATUS}
         FROM
-            employees
+            ${TABLES.TBL_EMPLOYEES}
         WHERE
-            id = ?;
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.Id} = ?;
     `;
     try {
         const [result] = await pool.query(_query, [id]);
@@ -40,11 +42,11 @@ const isEmployeesAlreadyInactivated = async (id) => {
 const inactiveEmployeesStatusQuery = async (id) => {
     const _query = `
         UPDATE
-            employees
+            ${TABLES.TBL_EMPLOYEES}
         SET
-            employee_status = ${0}
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.ACTIVE_STATUS} = ${0}
         WHERE
-            id = ?;
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.ID} = ?;
     `;
     try {
         const [result] = await pool.query(_query, [id]);

@@ -13,7 +13,7 @@
  * @description This module defines the database table names used in the application.
  */
 const TABLES = Object.freeze({
-    TBL_Employees: 'employees',
+    TBL_EMPLOYEES: 'employees',
     TBL_BANK_INFORMATION: 'bank_information',
     TBL_DEPARTMENT: 'department',
     TBL_DEPORT_INFO: 'depot_info',

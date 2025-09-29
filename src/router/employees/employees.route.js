@@ -31,8 +31,8 @@ employeeRoute.post('/get-employees-data',
     paginationData,
     async (req, res) => {
         getEmployeesData(req.body.paginationData)
-            .then(data1 => {
-                const { statusCode, status, message, data } = data1;
+            .then(result => {
+                const { statusCode, status, message, data } = result;
                 return res.status(statusCode).send({
                     status: status,
                     message: message,
@@ -55,8 +55,8 @@ employeeRoute.post('/add-employee',
     employeeDataValidator,
     async (req, res) => {
         addEmployee(req.auth, req.body.employeeData)
-            .then(data1 => {
-                const { statusCode, status, message } = data1;
+            .then(result => {
+                const { statusCode, status, message } = result;
                 return res.status(statusCode).send({
                     status: status,
                     message: message

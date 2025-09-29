@@ -10,6 +10,13 @@
  */
 
 const { pool } = require("../../_DB/db");
+const { TABLE_DEPARTMENT_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-department-column-name");
+const { TABLE_DEPOT_INFO_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-depot-info-column-name");
+const { TABLE_DESIGNATION_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-designation-column-name");
+const { TABLE_EMPLOYEES_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-employee-column-name");
+const { TABLE_MODULE_INFORMATION_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-module-information-column-name");
+const { TABLE_POSTING_PLACE_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-posting-place-column-name");
+const { TABLES } = require("../../_DB/DB-table-info/tables-name.const");
 const { API_STATUS_CODE } = require("../../consts/error-status");
 const { setServerResponse } = require("../../utilities/server-response");
 
@@ -18,7 +25,7 @@ const getNumberOfRowsQuery = async () => {
     SELECT
         count(*) totalRows
     FROM
-        employees;
+        ${TABLES.TBL_EMPLOYEES};
     `;
 
     try {
@@ -32,43 +39,43 @@ const getNumberOfRowsQuery = async () => {
 
 const getEmployeesDataQuery = async (paginationData) => {
     const query = `
-        SELECT
-            em.id,
-            em.employee_id,
-            em.full_name,
-            em.username,
-            em.email,
-            em.contact,
-            em.present_address,
-            em.permanent_address,
-            em.joining_date,
-            ps.place_name,
-            em.permanent_date,
-            des.designation_name,
-            dept.department_name,
-            dep.depot_name,
-            modl.module_name,
-            em.employee_status,
-            em.created_at,
-            em.modified_at
+        SELECT DISTINCT 
+            em.${TABLE_EMPLOYEES_COLUMNS_NAME.ID},
+            em.${TABLE_EMPLOYEES_COLUMNS_NAME.EMPLOYEE_ID},
+            em.${TABLE_EMPLOYEES_COLUMNS_NAME.Full_NAME},
+            em.${TABLE_EMPLOYEES_COLUMNS_NAME.USERNAME},
+            em.${TABLE_EMPLOYEES_COLUMNS_NAME.EMAIL},
+            em.${TABLE_EMPLOYEES_COLUMNS_NAME.CONTACT},
+            em.${TABLE_EMPLOYEES_COLUMNS_NAME.PRESENT_ADDRESS},
+            em.${TABLE_EMPLOYEES_COLUMNS_NAME.PERMANENT_ADDRESS},
+            em.${TABLE_EMPLOYEES_COLUMNS_NAME.JOINING_DATE},
+            em.${TABLE_EMPLOYEES_COLUMNS_NAME.PERMANENT_DATE},
+            em.${TABLE_EMPLOYEES_COLUMNS_NAME.ACTIVE_STATUS},
+            em.${TABLE_EMPLOYEES_COLUMNS_NAME.CREATED_AT},
+            em.${TABLE_EMPLOYEES_COLUMNS_NAME.MODIFIED_AT},
+            ps.${TABLE_POSTING_PLACE_COLUMNS_NAME.PLACE_NAME},
+            des.${TABLE_DESIGNATION_COLUMNS_NAME.DESIGNATION_NAME},
+            dept.${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_NAME},
+            dep.${TABLE_DEPOT_INFO_COLUMNS_NAME.DEPOT_NAME},
+            module.${TABLE_MODULE_INFORMATION_COLUMNS_NAME.MODULE_NAME}
         FROM
-            employees as em 
+            ${TABLES.TBL_EMPLOYEES} as em 
         LEFT JOIN
-            designation des 
-        ON em.designation_id = des.designation_id
+            ${TABLES.TBL_DESIGNATION} des 
+        ON em.${TABLE_EMPLOYEES_COLUMNS_NAME.DESIGNATION_ID} = des.${TABLE_DESIGNATION_COLUMNS_NAME.DESIGNATION_ID}
         LEFT JOIN
-            department AS dept 
-        ON em.department_id = dept.department_id
+            ${TABLES.TBL_DEPARTMENT} AS dept 
+        ON em.${TABLE_EMPLOYEES_COLUMNS_NAME.DEPARTMENT_ID} = dept.${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_ID}
         LEFT JOIN
-            posting_place AS ps
-        ON em.posting_place = ps.place_id
+            ${TABLES.TBL_POSTING_INFO} AS ps
+        ON em.${TABLE_EMPLOYEES_COLUMNS_NAME.POSTING_PLACE} = ps.${TABLE_POSTING_PLACE_COLUMNS_NAME.PLACE_ID}
         LEFT JOIN
-            depot_info AS dep
-        ON em.depot_id = dep.depot_id
+            ${TABLES.TBL_DEPORT_INFO} AS dep
+        ON em.${TABLE_EMPLOYEES_COLUMNS_NAME.DEPORT_ID} = dep.${TABLE_DEPOT_INFO_COLUMNS_NAME.DEPOT_ID}
         LEFT JOIN
-            module_info AS modl
-        ON em.module_id = modl.module_id
-        ORDER BY em.created_at DESC
+            ${TABLES.TBL_MODULE_INFO} AS module
+        ON em.${TABLE_EMPLOYEES_COLUMNS_NAME.MODULE_ID} = module.${TABLE_MODULE_INFORMATION_COLUMNS_NAME.MODULE_ID}
+        ORDER BY em.${TABLE_EMPLOYEES_COLUMNS_NAME.CREATED_AT} DESC
         LIMIT ? OFFSET ?;
     `;
 
@@ -81,7 +88,7 @@ const getEmployeesDataQuery = async (paginationData) => {
         const [result] = await pool.query(query, values);
         return result;
     } catch (error) {
-        return error
+        return Promise.reject(error);
     }
 }
 

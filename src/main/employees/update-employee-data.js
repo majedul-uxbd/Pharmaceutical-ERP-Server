@@ -13,7 +13,8 @@ const _ = require('lodash');
 const { format } = require('date-fns');
 const { pool } = require("../../_DB/db");
 const { API_STATUS_CODE } = require("../../consts/error-status")
-const { setServerResponse } = require("../../utilities/server-response")
+const { setServerResponse } = require("../../utilities/server-response");
+const { TABLES } = require('../../_DB/DB-table-info/tables-name.const');
 
 const getDesignationDataQuery = async (id) => {
     const _query = `
@@ -22,7 +23,7 @@ const getDesignationDataQuery = async (id) => {
             designation_code,
             designation_name
         FROM 
-            designation
+            ${TABLES.TBL_DESIGNATION}
         WHERE
             id != ?;
     `;
@@ -41,7 +42,7 @@ const isDesignationInactiveQuery = async (id) => {
         SELECT
             designation_status
         FROM
-            designation
+            ${TABLES.TBL_DESIGNATION}
         WHERE
             id = ?;
     `;
@@ -63,7 +64,7 @@ const isDesignationInactiveQuery = async (id) => {
 const updateDesignationDataQuery = async (authData, designationData) => {
     const _query = `
         UPDATE
-            designation
+            ${TABLES.TBL_DESIGNATION}
         SET
             designation_id = ?,
             designation_code = ?,
