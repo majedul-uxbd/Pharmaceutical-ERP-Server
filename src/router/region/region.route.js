@@ -56,7 +56,7 @@ regionRoute.post("/get-region-data",
 regionRoute.post("/add-region",
     regionDataValidator,
     async (req, res) => {
-        addRegionData(req.body.regionData)
+        addRegionData(req.body.regionData, req.auth)
             .then(data => {
                 return res.status(data.statusCode).send({
                     status: data.status,
@@ -76,7 +76,7 @@ regionRoute.post("/add-region",
 */
 regionRoute.post("/active",
     async (req, res) => {
-        activeRegion(req.body.id)
+        activeRegion(req.body.id, req.auth)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({
@@ -97,7 +97,7 @@ regionRoute.post("/active",
 */
 regionRoute.post("/inactive",
     async (req, res) => {
-        inactiveRegion(req.body.id)
+        inactiveRegion(req.body.id, req.auth)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({
@@ -119,7 +119,7 @@ regionRoute.post("/inactive",
 regionRoute.post("/update",
     regionDataValidator,
     async (req, res) => {
-        updateRegionData(req.body.regionData)
+        updateRegionData(req.body.regionData, req.auth)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({
