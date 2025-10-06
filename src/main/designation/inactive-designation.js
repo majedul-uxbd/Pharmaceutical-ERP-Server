@@ -67,13 +67,11 @@ const inactiveDesignationStatusQuery = async (id, authData, modifiedAt) => {
 }
 
 /**
- * 
- * @param {number} id 
- * @param {{
- * employee_id: string,
- * }} authData  
- * @description This function is used to inactive designation
- * @returns 
+ * Inactivates a designation by its ID if it is not already inactive.
+ *
+ * @param {number} id - The unique identifier of the designation to inactivate.
+ * @param {{ employee_id: string }} authData - Authenticated user data, must include employee_id of the modifier.
+ * @returns {Promise<Object>} - Resolves with a server response object on success, rejects with a server response object on error or invalid state.
  */
 const inactiveDesignation = async (id, authData) => {
     const modifiedAt = format(new Date(), 'yyyy-MM-dd HH:mm:ss');

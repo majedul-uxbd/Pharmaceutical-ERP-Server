@@ -76,7 +76,7 @@ employeeRoute.post('/add-employee',
 */
 employeeRoute.post("/active",
     async (req, res) => {
-        activeEmployees(req.body.id)
+        activeEmployees(req.body.id, req.auth)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({
@@ -97,7 +97,7 @@ employeeRoute.post("/active",
 */
 employeeRoute.post("/inactive",
     async (req, res) => {
-        inactiveEmployees(req.body.id)
+        inactiveEmployees(req.body.id, req.auth)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({

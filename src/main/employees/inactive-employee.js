@@ -15,6 +15,7 @@ const { API_STATUS_CODE } = require("../../consts/error-status")
 const { setServerResponse } = require("../../utilities/server-response");
 const { TABLE_EMPLOYEES_COLUMNS_NAME } = require('../../_DB/DB-table-info/table-employee-column-name');
 const { TABLES } = require('../../_DB/DB-table-info/tables-name.const');
+const { format } = require('date-fns');
 
 const isEmployeesAlreadyInactivated = async (id) => {
     const _query = `
@@ -23,7 +24,7 @@ const isEmployeesAlreadyInactivated = async (id) => {
         FROM
             ${TABLES.TBL_EMPLOYEES}
         WHERE
-            ${TABLE_EMPLOYEES_COLUMNS_NAME.Id} = ?;
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.ID} = ?;
     `;
     try {
         const [result] = await pool.query(_query, [id]);
@@ -39,17 +40,24 @@ const isEmployeesAlreadyInactivated = async (id) => {
     }
 }
 
-const inactiveEmployeesStatusQuery = async (id) => {
+const inactiveEmployeesStatusQuery = async (id, authData, modifiedAt) => {
     const _query = `
         UPDATE
             ${TABLES.TBL_EMPLOYEES}
         SET
-            ${TABLE_EMPLOYEES_COLUMNS_NAME.ACTIVE_STATUS} = ${0}
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.ACTIVE_STATUS} = ${0},
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.MODIFIED_BY} = ?,
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.MODIFIED_AT} = ?
         WHERE
             ${TABLE_EMPLOYEES_COLUMNS_NAME.ID} = ?;
     `;
+    const _values = [
+        authData.employee_id,
+        modifiedAt,
+        id
+    ];
     try {
-        const [result] = await pool.query(_query, [id]);
+        const [result] = await pool.query(_query, _values);
         if (result.affectedRows > 0) {
             return true;
         } return false;
@@ -59,12 +67,15 @@ const inactiveEmployeesStatusQuery = async (id) => {
 }
 
 /**
- * 
- * @param {number} id 
- * @description This function is used to inactive employees
- * @returns 
+ * Inactivates a employee by his ID if he is not already inactive.
+ *
+ * @param {number} id - The unique identifier of the employee to inactivate.
+ * @param {{ employee_id: string }} authData - Authenticated user data, must include employee_id of the modifier.
+ * @returns {Promise<Object>} - Resolves with a server response object on success, rejects with a server response object on error or invalid state.
  */
-const inactiveEmployees = async (id) => {
+const inactiveEmployees = async (id, authData) => {
+    const modifiedAt = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
+
     if (_.isNil(id)) {
         return Promise.reject(
             setServerResponse(
@@ -91,7 +102,7 @@ const inactiveEmployees = async (id) => {
                 )
             )
         }
-        const inactiveStatus = await inactiveEmployeesStatusQuery(id);
+        const inactiveStatus = await inactiveEmployeesStatusQuery(id, authData, modifiedAt);
 
         if (inactiveStatus === true) {
             return Promise.resolve(
@@ -102,7 +113,7 @@ const inactiveEmployees = async (id) => {
             )
         }
     } catch (error) {
-        // console.warn('🚀 ~ inactiveEmployees ~ error:', error);
+        console.warn('🚀 ~ inactiveEmployees ~ error:', error);
         return Promise.resolve(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,

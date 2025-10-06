@@ -30,6 +30,7 @@ const checkIsDataAlreadyExist = async (employeeData) => {
 
     const _values = [
         employeeData.employee_id,
+        employeeData.username,
         employeeData.email
     ]
 
@@ -141,6 +142,9 @@ const addEmployee = async (authData, employeeData) => {
             )
         }
     } catch (error) {
+        console.log('🚀 ---------------------------------------🚀');
+        console.log('🚀 ~ :144 ~ addEmployee ~ error:', error);
+        console.log('🚀 ---------------------------------------🚀');
         return Promise.resolve(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,
