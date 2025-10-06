@@ -77,7 +77,7 @@ zoneRoute.post("/add-zone",
 */
 zoneRoute.post("/active",
     async (req, res) => {
-        activeZone(req.body.id)
+        activeZone(req.body.id, req.auth)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({
@@ -98,7 +98,7 @@ zoneRoute.post("/active",
 */
 zoneRoute.post("/inactive",
     async (req, res) => {
-        inactiveZone(req.body.id)
+        inactiveZone(req.body.id, req.auth)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({
@@ -120,7 +120,7 @@ zoneRoute.post("/inactive",
 zoneRoute.post("/update",
     zoneDataValidator,
     async (req, res) => {
-        updateZoneData(req.body.zoneData)
+        updateZoneData(req.body.zoneData, req.auth)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({

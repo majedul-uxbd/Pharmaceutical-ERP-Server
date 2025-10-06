@@ -12,21 +12,24 @@
 const _ = require('lodash');
 const { pool } = require("../../_DB/db");
 const { API_STATUS_CODE } = require("../../consts/error-status")
-const { setServerResponse } = require("../../utilities/server-response")
+const { setServerResponse } = require("../../utilities/server-response");
+const { TABLES } = require('../../_DB/DB-table-info/tables-name.const');
+const { TABLE_DESIGNATION_COLUMNS_NAME } = require('../../_DB/DB-table-info/table-designation-column-name');
+const { format } = require('date-fns');
 
 const isDesignationAlreadyInactivated = async (id) => {
     const _query = `
         SELECT
-            designation_status
+            ${TABLE_DESIGNATION_COLUMNS_NAME.ACTIVE_STATUS}
         FROM
-            designation
+            ${TABLES.TBL_DESIGNATION}
         WHERE
-            id = ?;
+            ${TABLE_DESIGNATION_COLUMNS_NAME.ID} = ?;
     `;
     try {
         const [result] = await pool.query(_query, [id]);
         if (result.length > 0) {
-            if (result[0].designation_status === 0) {
+            if (result[0].active_status === 0) {
                 return true;
             } else {
                 return false;
@@ -37,17 +40,24 @@ const isDesignationAlreadyInactivated = async (id) => {
     }
 }
 
-const inactiveDesignationStatusQuery = async (id) => {
+const inactiveDesignationStatusQuery = async (id, authData, modifiedAt) => {
     const _query = `
         UPDATE
-            designation
+            ${TABLES.TBL_DESIGNATION}
         SET
-            designation_status = ${0}
+            ${TABLE_DESIGNATION_COLUMNS_NAME.ACTIVE_STATUS} = ${0},
+            ${TABLE_DESIGNATION_COLUMNS_NAME.MODIFIED_BY} = ?,
+            ${TABLE_DESIGNATION_COLUMNS_NAME.MODIFIED_AT} = ?
         WHERE
-            id = ?;
+            ${TABLE_DESIGNATION_COLUMNS_NAME.ID} = ?;
     `;
+    const _values = [
+        authData.employee_id,
+        modifiedAt,
+        id
+    ];
     try {
-        const [result] = await pool.query(_query, [id]);
+        const [result] = await pool.query(_query, _values);
         if (result.affectedRows > 0) {
             return true;
         } return false;
@@ -59,10 +69,14 @@ const inactiveDesignationStatusQuery = async (id) => {
 /**
  * 
  * @param {number} id 
+ * @param {{
+ * employee_id: string,
+ * }} authData  
  * @description This function is used to inactive designation
  * @returns 
  */
-const inactiveDesignation = async (id) => {
+const inactiveDesignation = async (id, authData) => {
+    const modifiedAt = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
     if (_.isNil(id)) {
         return Promise.reject(
             setServerResponse(
@@ -89,7 +103,7 @@ const inactiveDesignation = async (id) => {
                 )
             )
         }
-        const inactiveStatus = await inactiveDesignationStatusQuery(id);
+        const inactiveStatus = await inactiveDesignationStatusQuery(id, authData, modifiedAt);
 
         if (inactiveStatus === true) {
             return Promise.resolve(

@@ -21,7 +21,7 @@ const getZoneIdAndCodeCountQuery = async () => {
         FROM 
             zone
         ORDER BY 
-            zone_id DESC
+            CAST(zone_id AS UNSIGNED) DESC
         LIMIT 1;
     `;
 

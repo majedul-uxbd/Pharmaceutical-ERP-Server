@@ -10,6 +10,10 @@
  */
 
 const { pool } = require("../../_DB/db");
+const { TABLE_EMPLOYEES_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-employee-column-name");
+const { TABLE_REGION_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-region-column-name");
+const { TABLE_ZONE_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-zone-column-name");
+const { TABLES } = require("../../_DB/DB-table-info/tables-name.const");
 const { API_STATUS_CODE } = require("../../consts/error-status");
 const { setServerResponse } = require("../../utilities/server-response");
 
@@ -18,7 +22,7 @@ const getNumberOfRowsQuery = async () => {
     SELECT
         count(*) totalRows
     FROM
-        region;
+        ${TABLES.TBL_REGION};
     `;
 
     try {
@@ -33,22 +37,33 @@ const getNumberOfRowsQuery = async () => {
 const getRegionDataQuery = async (paginationData) => {
     const query = `
         SELECT
-            re.id,
-            re.region_id,
-            re.region_code,
-            re.region_name,
-            re.comment,
-            re.region_status,
-            zone.zone_name,
-            re.created_at,
-            re.modified_at
+            region.${TABLE_REGION_COLUMNS_NAME.ID},
+            region.${TABLE_REGION_COLUMNS_NAME.REGION_ID},
+            region.${TABLE_REGION_COLUMNS_NAME.REGION_CODE},
+            region.${TABLE_REGION_COLUMNS_NAME.REGION_NAME},
+            region.${TABLE_REGION_COLUMNS_NAME.COMMENT},
+            region.${TABLE_REGION_COLUMNS_NAME.ACTIVE_STATUS},
+            region.${TABLE_REGION_COLUMNS_NAME.CREATED_AT},
+            region.${TABLE_REGION_COLUMNS_NAME.MODIFIED_AT},
+            created_by.${TABLE_EMPLOYEES_COLUMNS_NAME.Full_NAME} AS created_by,
+            modified_by.${TABLE_EMPLOYEES_COLUMNS_NAME.Full_NAME} AS modified_by,
+            zone.${TABLE_ZONE_COLUMNS_NAME.ZONE_NAME}
         FROM
-            region AS re
-        LEFT JOIN zone
+            ${TABLES.TBL_REGION} AS region
+        LEFT JOIN
+            ${TABLES.TBL_ZONE} AS zone
         ON
-            re.zone_id = zone.zone_id
+            region.${TABLE_REGION_COLUMNS_NAME.ZONE_ID} = zone.${TABLE_ZONE_COLUMNS_NAME.ZONE_ID}
+        LEFT JOIN
+            ${TABLES.TBL_EMPLOYEES} AS created_by
+        ON
+            region.${TABLE_REGION_COLUMNS_NAME.CREATED_BY} = created_by.${TABLE_EMPLOYEES_COLUMNS_NAME.EMPLOYEE_ID}
+        LEFT JOIN
+            ${TABLES.TBL_EMPLOYEES} AS modified_by
+        ON
+            region.${TABLE_REGION_COLUMNS_NAME.MODIFIED_BY} = modified_by.${TABLE_EMPLOYEES_COLUMNS_NAME.EMPLOYEE_ID}
         ORDER BY
-            re.id
+            region.${TABLE_REGION_COLUMNS_NAME.ID}
         DESC
         LIMIT ? OFFSET ?;
     `;

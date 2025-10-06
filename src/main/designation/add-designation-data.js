@@ -13,15 +13,19 @@ const { reject } = require("lodash");
 const { pool } = require("../../_DB/db");
 const { setServerResponse } = require("../../utilities/server-response");
 const { API_STATUS_CODE } = require("../../consts/error-status");
+const { TABLE_DESIGNATION_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-designation-column-name");
+const { TABLES } = require("../../_DB/DB-table-info/tables-name.const");
 
 const isDesignationNameAlreadyExist = async (designationData) => {
     const _query = `
         SELECT
-            designation_name
+            ${TABLE_DESIGNATION_COLUMNS_NAME.DESIGNATION_NAME}
         FROM 
-            designation
+            ${TABLES.TBL_DESIGNATION}
         WHERE
-            designation_name = ? OR designation_id = ? OR designation_code = ?;
+            ${TABLE_DESIGNATION_COLUMNS_NAME.ID} = ? OR 
+            ${TABLE_DESIGNATION_COLUMNS_NAME.DESIGNATION_CODE} = ? OR
+            ${TABLE_DESIGNATION_COLUMNS_NAME.DESIGNATION_NAME} = ?;
     `;
     const _values = [
         designationData.designation_name,
@@ -42,14 +46,14 @@ const isDesignationNameAlreadyExist = async (designationData) => {
 const addDesignationDataQuery = async (authData, designationData) => {
     const _query = `
         INSERT INTO
-            designation
+            ${TABLES.TBL_DESIGNATION}
             (
-                designation_id,
-                designation_code,
-                designation_name,
-                description,
-                comment,
-                created_by
+                ${TABLE_DESIGNATION_COLUMNS_NAME.ID},
+                ${TABLE_DESIGNATION_COLUMNS_NAME.DESIGNATION_CODE},
+                ${TABLE_DESIGNATION_COLUMNS_NAME.DESIGNATION_NAME},
+                ${TABLE_DESIGNATION_COLUMNS_NAME.DESCRIPTION},
+                ${TABLE_DESIGNATION_COLUMNS_NAME.COMMENT},
+                ${TABLE_DESIGNATION_COLUMNS_NAME.CREATED_BY}
             )
         VALUES (?, ?, ?, ?, ?, ?);
     `;

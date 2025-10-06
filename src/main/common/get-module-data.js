@@ -10,6 +10,8 @@
  */
 
 const { pool } = require("../../_DB/db");
+const { TABLE_MODULE_INFORMATION_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-module-information-column-name");
+const { TABLES } = require("../../_DB/DB-table-info/tables-name.const");
 const { API_STATUS_CODE } = require("../../consts/error-status");
 const { setServerResponse } = require("../../utilities/server-response");
 
@@ -17,15 +19,15 @@ const { setServerResponse } = require("../../utilities/server-response");
 const getModuleDataQuery = async () => {
     const query = `
         SELECT
-            id,
-            module_name,
-            module_id,
-            description,
-            created_at
+            ${TABLE_MODULE_INFORMATION_COLUMNS_NAME.ID},
+            ${TABLE_MODULE_INFORMATION_COLUMNS_NAME.MODULE_ID},
+            ${TABLE_MODULE_INFORMATION_COLUMNS_NAME.MODULE_NAME},
+            ${TABLE_MODULE_INFORMATION_COLUMNS_NAME.DESCRIPTION},
+            ${TABLE_MODULE_INFORMATION_COLUMNS_NAME.CREATED_AT}
         FROM
-            module_info
+            ${TABLES.TBL_MODULE_INFO}
         WHERE
-            module_status = ${1};
+            ${TABLE_MODULE_INFORMATION_COLUMNS_NAME.ACTIVE_STATUS} = ${1};
     `;
     try {
         const [result] = await pool.query(query);
@@ -52,7 +54,7 @@ const getModuleData = async () => {
             )
         );
     } catch (error) {
-        console.warn('🚀 ~ getModuleData ~ error:', error);
+        // console.warn('🚀 ~ getModuleData ~ error:', error);
         return Promise.reject(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,

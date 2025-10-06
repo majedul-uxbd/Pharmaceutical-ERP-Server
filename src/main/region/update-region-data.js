@@ -13,16 +13,18 @@ const _ = require('lodash');
 const { format } = require('date-fns');
 const { pool } = require("../../_DB/db");
 const { API_STATUS_CODE } = require("../../consts/error-status")
-const { setServerResponse } = require("../../utilities/server-response")
+const { setServerResponse } = require("../../utilities/server-response");
+const { TABLE_REGION_COLUMNS_NAME } = require('../../_DB/DB-table-info/table-region-column-name');
+const { TABLES } = require('../../_DB/DB-table-info/tables-name.const');
 
 const isRegionInactiveQuery = async (id) => {
     const _query = `
         SELECT
-            region_status
+            ${TABLE_REGION_COLUMNS_NAME.ACTIVE_STATUS}
         FROM
-            region
+            ${TABLES.TBL_REGION}
         WHERE
-            id = ?;
+            ${TABLE_REGION_COLUMNS_NAME.ID} = ?;
     `;
     try {
         const [result] = await pool.query(_query, [id]);
@@ -39,22 +41,24 @@ const isRegionInactiveQuery = async (id) => {
     }
 }
 
-const updateRegionDataQuery = async (regionData) => {
+const updateRegionDataQuery = async (regionData, authData) => {
     const _query = `
         UPDATE
-            region
+            ${TABLES.TBL_REGION}
         SET
-            zone_id = ?,
-            region_name = ?,
-            comment = ?,
-            modified_at = ?
+            ${TABLE_REGION_COLUMNS_NAME.ZONE_ID} = ?,
+            ${TABLE_REGION_COLUMNS_NAME.REGION_NAME} = ?,
+            ${TABLE_REGION_COLUMNS_NAME.COMMENT} = ?,
+            ${TABLE_REGION_COLUMNS_NAME.MODIFIED_BY} = ?,
+            ${TABLE_REGION_COLUMNS_NAME.MODIFIED_AT} = ?
         WHERE
-            id = ?;
+            ${TABLE_REGION_COLUMNS_NAME.ID} = ?;
     `;
     const _values = [
         regionData.zone_id,
         regionData.region_name,
         regionData.comment,
+        authData.employee_id,
         regionData.modifiedAt,
         regionData.id
     ]
@@ -78,7 +82,7 @@ const updateRegionDataQuery = async (regionData) => {
  * @description This function is used to update region data
  * @returns 
  */
-const updateRegionData = async (regionData) => {
+const updateRegionData = async (regionData, authData) => {
     const modifiedAt = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
     regionData = { ...regionData, modifiedAt: modifiedAt };
 
@@ -100,7 +104,7 @@ const updateRegionData = async (regionData) => {
                 )
             )
         }
-        const isUpdated = await updateRegionDataQuery(regionData);
+        const isUpdated = await updateRegionDataQuery(regionData, authData);
 
         if (isUpdated === true) {
             return Promise.resolve(

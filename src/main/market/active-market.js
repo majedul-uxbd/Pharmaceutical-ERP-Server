@@ -13,15 +13,18 @@ const _ = require('lodash');
 const { setServerResponse } = require('../../utilities/server-response');
 const { API_STATUS_CODE } = require('../../consts/error-status');
 const { pool } = require('../../_DB/db');
+const { TABLES } = require('../../_DB/DB-table-info/tables-name.const');
+const { format } = require('date-fns');
+const { TABLE_MARKET_COLUMNS_NAME } = require('../../_DB/DB-table-info/table-market-column-name');
 
 const isMarketStatusActive = async (id) => {
     const _query = `
         SELECT
-            market_status
+            ${TABLE_MARKET_COLUMNS_NAME.ACTIVE_STATUS}
         FROM
-            market
+            ${TABLES.TBL_MARKET}
         WHERE
-            id = ?;
+            ${TABLE_MARKET_COLUMNS_NAME.ID} = ?;
     `;
     try {
         const [result] = await pool.query(_query, [id]);
@@ -38,17 +41,24 @@ const isMarketStatusActive = async (id) => {
 }
 
 
-const activeMarketStatus = async (id) => {
+const activeMarketStatus = async (id, authData, modifiedAt) => {
     const _query = `
         UPDATE
-            market
+            ${TABLES.TBL_MARKET}
         SET
-            market_status = ${1}
+            ${TABLE_MARKET_COLUMNS_NAME.ACTIVE_STATUS} = ${1},
+            ${TABLE_MARKET_COLUMNS_NAME.MODIFIED_BY} = ?,
+            ${TABLE_MARKET_COLUMNS_NAME.MODIFIED_AT} = ?
         WHERE
-            id = ?;
+            ${TABLE_MARKET_COLUMNS_NAME.ID} = ?;
     `;
+    const _values = [
+        authData.employee_id,
+        modifiedAt,
+        id
+    ];
     try {
-        const [result] = await pool.query(_query, [id]);
+        const [result] = await pool.query(_query, _values);
         if (result.affectedRows > 0) {
             return true;
         } return false;
@@ -58,12 +68,17 @@ const activeMarketStatus = async (id) => {
 }
 
 /**
- * 
- * @param {number} id 
- * @description This function is used to active market
- * @returns 
+ * Activates a market by its ID if it is not already active.
+ * Updates the market's status, modified by, and modified at fields.
+ * Returns a server response indicating the result (success, already active, not found, or error).
+ *
+ * @param {number} id - The unique identifier of the market to activate.
+ * @param {{ employee_id: string }} authData - Authenticated user data, must include employee_id of the modifier.
+ * @returns {Promise<Object>} - Resolves with a server response object on success, rejects with a server response object on error or invalid state.
  */
-const activeMarket = async (id) => {
+const activeMarket = async (id, authData) => {
+    const modifiedAt = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
+
     if (_.isNil(id)) {
         return Promise.reject(
             setServerResponse(
@@ -91,7 +106,7 @@ const activeMarket = async (id) => {
             )
         }
 
-        const isUpdated = await activeMarketStatus(id);
+        const isUpdated = await activeMarketStatus(id, authData, modifiedAt);
         if (isUpdated === true) {
             return Promise.resolve(
                 setServerResponse(

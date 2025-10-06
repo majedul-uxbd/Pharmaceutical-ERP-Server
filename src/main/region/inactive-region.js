@@ -12,16 +12,19 @@
 const _ = require('lodash');
 const { pool } = require("../../_DB/db");
 const { API_STATUS_CODE } = require("../../consts/error-status")
-const { setServerResponse } = require("../../utilities/server-response")
+const { setServerResponse } = require("../../utilities/server-response");
+const { TABLE_REGION_COLUMNS_NAME } = require('../../_DB/DB-table-info/table-region-column-name');
+const { TABLES } = require('../../_DB/DB-table-info/tables-name.const');
+const { format } = require('date-fns');
 
 const isRegionAlreadyInactivated = async (id) => {
     const _query = `
         SELECT
-            region_status
+            ${TABLE_REGION_COLUMNS_NAME.ACTIVE_STATUS}
         FROM
-            region
+            ${TABLES.TBL_REGION}
         WHERE
-            id = ?;
+            ${TABLE_REGION_COLUMNS_NAME.ID} = ?;
     `;
     try {
         const [result] = await pool.query(_query, [id]);
@@ -37,17 +40,24 @@ const isRegionAlreadyInactivated = async (id) => {
     }
 }
 
-const inactiveRegionStatusQuery = async (id) => {
+const inactiveRegionStatusQuery = async (id, authData, modifiedAt) => {
     const _query = `
         UPDATE
-            region
+            ${TABLES.TBL_REGION}
         SET
-            region_status = ${0}
+            ${TABLE_REGION_COLUMNS_NAME.ACTIVE_STATUS} = ${0},
+            ${TABLE_REGION_COLUMNS_NAME.MODIFIED_BY} = ?,
+            ${TABLE_REGION_COLUMNS_NAME.MODIFIED_AT} = ?
         WHERE
-            id = ?;
+            ${TABLE_REGION_COLUMNS_NAME.ID} = ?;
     `;
+    const _values = [
+        authData.employee_id,
+        modifiedAt,
+        id
+    ];
     try {
-        const [result] = await pool.query(_query, [id]);
+        const [result] = await pool.query(_query, _values);
         if (result.affectedRows > 0) {
             return true;
         } return false;
@@ -57,12 +67,17 @@ const inactiveRegionStatusQuery = async (id) => {
 }
 
 /**
- * 
- * @param {number} id 
- * @description This function is used to inactive region
- * @returns 
+ * Inactivates a region by its ID if it is not already inactive.
+ * Updates the region's status, modified by, and modified at fields.
+ * Returns a server response indicating the result (success, already inactive, not found, or error).
+ *
+ * @param {number} id - The unique identifier of the region to inactivate.
+ * @param {{ employee_id: string }} authData - Authenticated user data, must include employee_id of the modifier.
+ * @returns {Promise<Object>} - Resolves with a server response object on success, rejects with a server response object on error or invalid state.
  */
-const inactiveRegion = async (id) => {
+const inactiveRegion = async (id, authData) => {
+    const modifiedAt = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
+
     if (_.isNil(id)) {
         return Promise.reject(
             setServerResponse(
@@ -89,7 +104,7 @@ const inactiveRegion = async (id) => {
                 )
             )
         }
-        const inactiveStatus = await inactiveRegionStatusQuery(id);
+        const inactiveStatus = await inactiveRegionStatusQuery(id, authData, modifiedAt);
 
         if (inactiveStatus === true) {
             return Promise.resolve(
@@ -100,7 +115,6 @@ const inactiveRegion = async (id) => {
             )
         }
     } catch (error) {
-        console.warn('🚀 ~ inactiveRegion ~ error:', error);
         return Promise.resolve(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,

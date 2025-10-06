@@ -77,7 +77,8 @@ designationRoute.post("/add-designation",
 */
 designationRoute.post("/active",
     async (req, res) => {
-        activeDesignation(req.body.id)
+        const authData = req.auth;
+        activeDesignation(req.body.id, authData)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({
@@ -98,7 +99,8 @@ designationRoute.post("/active",
 */
 designationRoute.post("/inactive",
     async (req, res) => {
-        inactiveDesignation(req.body.id)
+        const authData = req.auth;
+        inactiveDesignation(req.body.id, authData)
             .then(data => {
                 const { statusCode, status, message } = data;
                 return res.status(statusCode).send({

@@ -13,18 +13,20 @@ const _ = require('lodash');
 const { format } = require('date-fns');
 const { pool } = require("../../_DB/db");
 const { API_STATUS_CODE } = require("../../consts/error-status")
-const { setServerResponse } = require("../../utilities/server-response")
+const { setServerResponse } = require("../../utilities/server-response");
+const { TABLES } = require('../../_DB/DB-table-info/tables-name.const');
+const { TABLE_DEPARTMENT_COLUMNS_NAME } = require('../../_DB/DB-table-info/table-department-column-name');
 
 const getDepartmentDataQuery = async (id) => {
     const _query = `
         SELECT
-            department_id,
-            department_code,
-            department_name
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_ID},
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_CODE},
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_NAME}
         FROM 
-            department
+            ${TABLES.TBL_DEPARTMENT} 
         WHERE
-            id != ?;
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.ID} != ?;
     `;
     try {
         const [result] = await pool.query(_query, id);
@@ -39,16 +41,16 @@ const getDepartmentDataQuery = async (id) => {
 const isDepartmentInactiveQuery = async (id) => {
     const _query = `
         SELECT
-            department_status
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.ACTIVE_STATUS}
         FROM
-            department
+            ${TABLES.TBL_DEPARTMENT}
         WHERE
-            id = ?;
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.ID} = ?;
     `;
     try {
         const [result] = await pool.query(_query, [id]);
         if (result.length > 0) {
-            if (result[0].department_status === 0) {
+            if (result[0].active_status === 0) {
                 return true;
             } else {
                 return false;
@@ -62,19 +64,18 @@ const isDepartmentInactiveQuery = async (id) => {
 const updateDepartmentDataQuery = async (authData, departmentData) => {
     const _query = `
         UPDATE
-            department
+            ${TABLES.TBL_DEPARTMENT}
         SET
-            department_id = ?,
-            department_code = ?,
-            department_name = ?,
-            comment = ?,
-            modified_by= ?,
-            modified_at = ?
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_CODE} = ?,
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_NAME} = ?,
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.COMMENT} = ?,
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.MODIFIED_BY}= ?,
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.MODIFIED_AT} = ?
         WHERE
-            id = ?;
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.ID} = ?;
     `;
     const _values = [
-        departmentData.department_id,
+        // departmentData.department_id,
         departmentData.department_code,
         departmentData.department_name,
         departmentData.comment,
@@ -105,7 +106,6 @@ const updateDepartmentDataQuery = async (authData, departmentData) => {
  * comment:string
  * }} departmentData }
  * @description This function is used to update department data
- * @returns 
  */
 const updateDepartmentData = async (authData, departmentData) => {
     const modifiedAt = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
@@ -152,9 +152,9 @@ const updateDepartmentData = async (authData, departmentData) => {
                 )
             )
         }
-        const inactiveStatus = await updateDepartmentDataQuery(authData, departmentData);
+        const isUpdated = await updateDepartmentDataQuery(authData, departmentData);
 
-        if (inactiveStatus === true) {
+        if (isUpdated === true) {
             return Promise.resolve(
                 setServerResponse(
                     API_STATUS_CODE.OK,

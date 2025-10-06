@@ -10,6 +10,9 @@
  */
 
 const { pool } = require("../../_DB/db");
+const { TABLE_DEPARTMENT_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-department-column-name");
+const { TABLE_EMPLOYEES_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-employee-column-name");
+const { TABLES } = require("../../_DB/DB-table-info/tables-name.const");
 const { API_STATUS_CODE } = require("../../consts/error-status");
 const { setServerResponse } = require("../../utilities/server-response");
 
@@ -18,7 +21,7 @@ const getNumberOfRowsQuery = async () => {
     SELECT
         count(*) totalRows
     FROM
-        department;
+        ${TABLES.TBL_DEPARTMENT};
     `;
 
     try {
@@ -33,25 +36,25 @@ const getNumberOfRowsQuery = async () => {
 const getDepartmentDataQuery = async (paginationData) => {
     const query = `
         SELECT
-            dp.id,
-            dp.department_id,
-            dp.department_code,
-            dp.department_name,
-            dp.comment,
-            created_by.full_name AS created_by,
-            modified_by.full_name AS modified_by,
-            dp.department_status,
-            dp.created_at,
-            dp.modified_at
+            dp.${TABLE_DEPARTMENT_COLUMNS_NAME.ID},
+            dp.${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_ID},
+            dp.${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_CODE},
+            dp.${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_NAME},
+            dp.${TABLE_DEPARTMENT_COLUMNS_NAME.COMMENT},
+            created_by.${TABLE_EMPLOYEES_COLUMNS_NAME.Full_NAME} AS created_by,
+            modified_by.${TABLE_EMPLOYEES_COLUMNS_NAME.Full_NAME} AS modified_by,
+            dp.${TABLE_DEPARTMENT_COLUMNS_NAME.ACTIVE_STATUS},
+            dp.${TABLE_DEPARTMENT_COLUMNS_NAME.CREATED_AT},
+            dp.${TABLE_DEPARTMENT_COLUMNS_NAME.MODIFIED_AT}
         FROM
-            department AS dp
+            ${TABLES.TBL_DEPARTMENT} AS dp
         LEFT JOIN
-            employees AS created_by 
-        ON dp.created_by = created_by.id
+            ${TABLES.TBL_EMPLOYEES} AS created_by 
+        ON dp.${TABLE_DEPARTMENT_COLUMNS_NAME.CREATED_BY} = created_by.${TABLE_EMPLOYEES_COLUMNS_NAME.EMPLOYEE_ID}
         LEFT JOIN
-            employees AS modified_by 
-        ON dp.modified_by = modified_by.id
-        ORDER BY dp.id DESC
+            ${TABLES.TBL_EMPLOYEES} AS modified_by 
+        ON dp.${TABLE_DEPARTMENT_COLUMNS_NAME.MODIFIED_BY} = modified_by.${TABLE_EMPLOYEES_COLUMNS_NAME.EMPLOYEE_ID}
+        ORDER BY dp.${TABLE_DEPARTMENT_COLUMNS_NAME.ID} DESC
         LIMIT ? OFFSET ?;
     `;
 
@@ -71,7 +74,6 @@ const getDepartmentDataQuery = async (paginationData) => {
 /**
  * @param {Object} paginationData - An object containing the pagination details.
  * @description This function will return the Department Information
- * @returns
  */
 const getDepartmentData = async (paginationData) => {
     let totalRows;

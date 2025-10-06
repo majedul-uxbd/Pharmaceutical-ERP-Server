@@ -1,12 +1,12 @@
 /**
- * @author Md. Majedul Islam <https://github.com/majedul-uxbd>
+ * @author Md. Majedul Islam <https://github.com/majedul-uxbd> 
  * Software Engineer,
  * Ultra-X BD Ltd.
  *
- * @copyright All right reserved Ultra-X Asia Pacific
- *
- * @description This file is used for username, email and password validation.
- *
+ * @copyright All right reserved Md. Majedul Islam
+ * 
+ * @description 
+ * 
  */
 
 const _ = require("lodash");
@@ -15,6 +15,7 @@ const VALID_USER_ROLE_TYPE = Object.freeze({
 	Admin: "admin",
 	User: "user"
 });
+
 
 
 /**
@@ -46,7 +47,7 @@ const isValidUsername = (username) => {
  */
 const isValidUserFullName = (fullName) => {
 	const FULLNAME_MAX_LENGTH = 100;
-	const FULLNAME_MIN_LENGTH = 4;
+	const FULLNAME_MIN_LENGTH = 2;
 	if (_.isEmpty(fullName)) {
 		return false;
 	} else {
@@ -151,24 +152,33 @@ const isValidUserContact = (contact) => {
  * @description Validate user address
  */
 const isValidUserAddress = (address) => {
+	const ADDRESS_MIN_LENGTH = 7;
+	const ADDRESS_MAX_LENGTH = 15;
 	if (_.isEmpty(address)) {
 		return false;
 	} else {
 		if (!_.isString(address)) {
 			return false;
+		} else {
+			if (
+				address.length > ADDRESS_MAX_LENGTH ||
+				address.length < ADDRESS_MIN_LENGTH
+			) {
+				return false;
+			}
 		}
 	}
 	return true;
 }
 
 /**
- * @description Validate user Occupation
+ * @description Validate common required string data
  */
-const isValidUserOccupation = (occupation) => {
-	if (_.isEmpty(occupation)) {
+const isValidCommonDate = (commonDate) => {
+	if (_.isEmpty(commonDate)) {
 		return false;
 	} else {
-		if (!_.isString(occupation)) {
+		if (!_.isString(commonDate)) {
 			return false;
 		}
 	}
@@ -204,21 +214,21 @@ const isValidDepartmentName = (department_name) => {
 }
 
 /**
- * @description Validate short name
+ * @description Validate NID No
  */
-const isValidDesignationShortName = (short_name) => {
-	const SHORT_NAME_MIN_LENGTH = 1;
-	const SHORT_NAME_MAX_LENGTH = 45;
-	if (_.isEmpty(short_name)) {
+const isValidNidNo = (nid_no) => {
+	const NID_NO_MIN_LENGTH = 10;
+	const NID_NO_MAX_LENGTH = 17;
+	if (_.isEmpty(nid_no)) {
 		return false;
 	} else {
-		if (!_.isString(short_name)) {
+		if (!_.isString(nid_no)) {
 			return false;
 		} else {
-			if (short_name.length >= SHORT_NAME_MIN_LENGTH) {
+			if (nid_no.length >= NID_NO_MIN_LENGTH) {
 				return true;
 			}
-			else if (short_name.length > SHORT_NAME_MAX_LENGTH) {
+			else if (nid_no.length > NID_NO_MAX_LENGTH) {
 				return false;
 			}
 		}
@@ -257,9 +267,9 @@ module.exports = {
 	isValidUserAddress,
 	isValidPassword,
 	isValidUserContact,
-	isValidUserOccupation,
+	isValidCommonDate,
 	isValidDepartmentId,
 	isValidDepartmentName,
-	isValidDesignationShortName,
+	isValidDesignationShortName: isValidNidNo,
 	isValidComment,
 };

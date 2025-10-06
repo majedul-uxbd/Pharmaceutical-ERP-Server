@@ -10,51 +10,57 @@
  */
 
 const { pool } = require("../../_DB/db");
+const { TABLE_DEPARTMENT_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-department-column-name");
+const { TABLE_DEPOT_INFO_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-depot-info-column-name");
+const { TABLE_DESIGNATION_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-designation-column-name");
+const { TABLE_EMPLOYEES_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-employee-column-name");
+const { TABLE_MODULE_INFORMATION_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-module-information-column-name");
+const { TABLES } = require("../../_DB/DB-table-info/tables-name.const");
 const { API_STATUS_CODE } = require("../../consts/error-status");
 const { setServerResponse } = require("../../utilities/server-response");
 
 const getUserDataQuery = async (authData) => {
     const query = `
     SELECT
-        e.id,
-        e.employee_id,
-        e.full_name,
-        e.username,
-        e.email,
-        e.contact,
-        e.present_address,
-        e.permanent_address,
-        e.joining_date,
-        e.posting_place,
-        e.permanent_date,
-        e.nid_no,
-        e.department_id,
-        dept.department_name,
-        e.depot_id,
-        df.depot_name,
-        e.module_id,
-        mf.module_name,
-        e.designation_id,
-        d.designation_name,
-        e.profile_pic
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.ID},
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.EMPLOYEE_ID},
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.Full_NAME},
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.USERNAME},
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.EMAIL},
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.CONTACT},
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.PERMANENT_ADDRESS},
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.PERMANENT_ADDRESS},
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.JOINING_DATE},
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.POSTING_PLACE},
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.PERMANENT_DATE},
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.NID_NO},
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.DEPARTMENT_ID},
+        dept.${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_NAME},
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.DEPORT_ID},
+        df.${TABLE_DEPOT_INFO_COLUMNS_NAME.DEPOT_NAME},
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.MODULE_ID},
+        mf.${TABLE_MODULE_INFORMATION_COLUMNS_NAME.MODULE_NAME},
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.DESIGNATION_ID},
+        d.${TABLE_DESIGNATION_COLUMNS_NAME.DESIGNATION_NAME},
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.PROFILE_PIC}
     FROM
-        employees AS e
-    LEFT JOIN department AS dept
+        ${TABLES.TBL_EMPLOYEES} AS e
+    LEFT JOIN ${TABLES.TBL_DEPARTMENT} AS dept
     ON
-        e.department_id = dept.department_id
-    LEFT JOIN designation AS d
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.DEPARTMENT_ID} = dept.${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_ID}
+    LEFT JOIN ${TABLES.TBL_DESIGNATION} AS d
     ON
-        e.designation_id = d.designation_id
-    LEFT JOIN depot_info AS df
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.DESIGNATION_ID} = d.${TABLE_DESIGNATION_COLUMNS_NAME.DESIGNATION_ID}
+    LEFT JOIN ${TABLES.TBL_DEPORT_INFO} AS df
     ON
-        e.depot_id = df.depot_id
-    LEFT JOIN module_info AS mf
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.DEPORT_ID} = df.${TABLE_DEPOT_INFO_COLUMNS_NAME.DEPOT_ID}
+    LEFT JOIN ${TABLES.TBL_MODULE_INFO} AS mf
     ON
-        e.module_id = mf.module_id
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.MODULE_ID} = mf.${TABLE_MODULE_INFORMATION_COLUMNS_NAME.MODULE_ID}
     WHERE
-        e.employee_id = ? AND
-        e.designation_id = ? AND
-        e.depot_id = ?;
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.EMPLOYEE_ID} = ? AND
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.DESIGNATION_ID} = ? AND
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.DEPORT_ID} = ?;
     `;
 
     const values = [
@@ -80,6 +86,7 @@ const getUserDataQuery = async (authData) => {
 * designation_id: string,
 * depot_id: string,
 * }} authData 
+@description This function retrieves user data based on the provided authentication data.
  */
 const getUserData = async (authData) => {
     try {

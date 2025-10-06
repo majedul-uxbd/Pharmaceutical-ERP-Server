@@ -9,20 +9,22 @@
  * 
  */
 
-const { reject } = require("lodash");
 const { pool } = require("../../_DB/db");
 const { setServerResponse } = require("../../utilities/server-response");
 const { API_STATUS_CODE } = require("../../consts/error-status");
+const { TABLES } = require("../../_DB/DB-table-info/tables-name.const");
+const { TABLE_REGION_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-region-column-name");
+const { TABLE_ZONE_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-zone-column-name");
 
 
 const isZoneExistQuery = async (regionData) => {
     const _query = `
         SELECT
-            zone_id
+            ${TABLE_ZONE_COLUMNS_NAME.ZONE_ID}
         FROM 
-            zone
+            ${TABLES.TBL_ZONE}
         WHERE
-            zone_id = ?;
+            ${TABLE_ZONE_COLUMNS_NAME.ZONE_ID} = ?;
     `;
     const _values = [
         regionData.zone_id,
@@ -42,11 +44,13 @@ const isZoneExistQuery = async (regionData) => {
 const isRegionNameAlreadyExist = async (regionData) => {
     const _query = `
         SELECT
-            region_name
+            ${TABLE_REGION_COLUMNS_NAME.REGION_NAME}
         FROM 
-            region
+            ${TABLES.TBL_REGION}
         WHERE
-            region_name = ? OR region_code = ? OR region_id = ?;
+            ${TABLE_REGION_COLUMNS_NAME.REGION_NAME} = ? OR 
+            ${TABLE_REGION_COLUMNS_NAME.REGION_CODE} = ? OR 
+            ${TABLE_REGION_COLUMNS_NAME.REGION_ID} = ?;
     `;
     const _values = [
         regionData.region_name,
@@ -64,23 +68,25 @@ const isRegionNameAlreadyExist = async (regionData) => {
     }
 }
 
-const addRegionDataQuery = async (regionData) => {
+const addRegionDataQuery = async (regionData, authData) => {
     const _query = `
         INSERT INTO
-            region
+            ${TABLES.TBL_REGION}
             (
-                region_id,
-                region_code,
-                region_name,
-                zone_id,
-                comment
+                ${TABLE_REGION_COLUMNS_NAME.REGION_ID},
+                ${TABLE_REGION_COLUMNS_NAME.REGION_CODE},
+                ${TABLE_REGION_COLUMNS_NAME.REGION_NAME},
+                ${TABLE_REGION_COLUMNS_NAME.CREATED_BY},
+                ${TABLE_REGION_COLUMNS_NAME.ZONE_ID},
+                ${TABLE_REGION_COLUMNS_NAME.COMMENT}
             )
-        VALUES (?, ?, ?, ?, ?);
+        VALUES (?, ?, ?, ?, ?, ?);
     `;
     const _values = [
         regionData.region_id,
         regionData.region_code,
         regionData.region_name,
+        authData.employee_id,
         regionData.zone_id,
         regionData.comment,
     ]
@@ -97,18 +103,20 @@ const addRegionDataQuery = async (regionData) => {
 }
 
 /**
- * 
+ * Creates a new region entry in the database after validating zone existence and region uniqueness.
+ * Returns a server response indicating the result (success, already exists, zone not found, or error).
+ *
  * @param {{
- * region_id:string,
- * region_code:string,
- * region_name:string,
- * zone_id:string,
- * comment:string
- * }} regionData 
- * @description This function is used to create a new region
- * @returns 
+ *   region_id: string,
+ *   region_code: string,
+ *   region_name: string,
+ *   zone_id: string,
+ *   comment: string
+ * }} regionData - The region details to be added.
+ * @param {{ employee_id: string }} authData - Authenticated user data, must include employee_id of the creator.
+ * @returns {Promise<Object>} - Rejects with a server response object indicating the result (success, error, or conflict).
  */
-const addRegionData = async (regionData) => {
+const addRegionData = async (regionData, authData) => {
     try {
         const isZoneExist = await isZoneExistQuery(regionData);
         if (isZoneExist === false) {
@@ -120,7 +128,6 @@ const addRegionData = async (regionData) => {
             )
         }
         const isExist = await isRegionNameAlreadyExist(regionData);
-
         if (isExist === true) {
             return Promise.reject(
                 setServerResponse(
@@ -129,7 +136,7 @@ const addRegionData = async (regionData) => {
                 )
             )
         }
-        const isAdded = await addRegionDataQuery(regionData);
+        const isAdded = await addRegionDataQuery(regionData, authData);
         if (isAdded === true) {
             return Promise.reject(
                 setServerResponse(

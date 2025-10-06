@@ -14,38 +14,43 @@ const jwt = require("jsonwebtoken");
 const { pool } = require('../../_DB/db');
 const { setServerResponse } = require("../../utilities/server-response");
 const { API_STATUS_CODE } = require("../../consts/error-status");
+const { TABLES } = require("../../_DB/DB-table-info/tables-name.const");
+const { TABLE_EMPLOYEES_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-employee-column-name");
+const { TABLE_DESIGNATION_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-designation-column-name");
+const { TABLE_MODULE_INFORMATION_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-module-information-column-name");
+const { TABLE_DEPOT_INFO_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-depot-info-column-name");
 
 
 const userLoginQuery = async (user) => {
     const query = `
 	SELECT
-        e.id,
-        e.employee_id,
-        e.full_name,
-        e.joining_date,
-        e.depot_id,
-        df.depot_name,
-        e.module_id,
-        mf.module_name,
-        e.designation_id,
-        d.designation_name,
-        e.password,
-        e.profile_pic
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.ID},
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.EMPLOYEE_ID},
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.Full_NAME},
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.JOINING_DATE},
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.DEPORT_ID},
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.MODULE_ID},
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.DESIGNATION_ID},
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.PASSWORD},
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.PROFILE_PIC},
+        d.${TABLE_DESIGNATION_COLUMNS_NAME.DESIGNATION_NAME},
+        mf.${TABLE_MODULE_INFORMATION_COLUMNS_NAME.MODULE_NAME},
+        df.${TABLE_DEPOT_INFO_COLUMNS_NAME.DEPOT_NAME}
     FROM
-        employees AS e
+        ${TABLES.TBL_EMPLOYEES} AS e
     LEFT JOIN
-        designation AS d  
-    ON e.designation_id = d.designation_id
+         ${TABLES.TBL_DESIGNATION} AS d  
+    ON e.${TABLE_EMPLOYEES_COLUMNS_NAME.DESIGNATION_ID} = d.${TABLE_DESIGNATION_COLUMNS_NAME.DESIGNATION_ID}
     LEFT JOIN
-        module_info AS mf
-    ON e.module_id = mf.module_id
+        ${TABLES.TBL_MODULE_INFO} AS mf
+    ON e.${TABLE_EMPLOYEES_COLUMNS_NAME.MODULE_ID} = mf.${TABLE_MODULE_INFORMATION_COLUMNS_NAME.MODULE_ID}
     LEFT JOIN
-        depot_info AS df
-    ON e.depot_id = df.depot_id
+        ${TABLES.TBL_DEPORT_INFO} AS df
+    ON e.${TABLE_EMPLOYEES_COLUMNS_NAME.DEPORT_ID} = df.${TABLE_DEPOT_INFO_COLUMNS_NAME.DEPOT_ID}
     WHERE
-        e.username = ? AND
-        e.module_id = ? AND
-        e.employee_status = ${1};
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.USERNAME} = ? AND
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.MODULE_ID} = ? AND
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.ACTIVE_STATUS} = ${1};
 	`;
     const values = [
         user.username,
@@ -84,7 +89,6 @@ const generateToken = (userInfo) => {
  * password: string
  * }} user 
  * @description This function is used to get user data and token
- * @returns 
  */
 const userLogin = async (user) => {
     let userInfo;
@@ -110,7 +114,7 @@ const userLogin = async (user) => {
     try {
         isPasswordCorrect = await bcrypt.compare(user.password, userInfo.password);  //compare user passwords
     } catch (error) {
-        // console.log("🚀 ~ userLogin ~ error:", error)
+        console.log("🚀 ~ userLogin ~ error:", error)
         return Promise.reject(
             setServerResponse(API_STATUS_CODE.BAD_REQUEST, 'invalid_password')
         );

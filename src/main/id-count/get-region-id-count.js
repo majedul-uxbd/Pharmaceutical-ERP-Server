@@ -21,7 +21,7 @@ const getRegionIdAndCodeCountQuery = async () => {
         FROM 
             region
         ORDER BY 
-            region_id DESC
+            CAST(region_id AS UNSIGNED) DESC
         LIMIT 1;
     `;
 

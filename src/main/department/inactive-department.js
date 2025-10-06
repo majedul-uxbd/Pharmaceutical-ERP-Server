@@ -12,21 +12,24 @@
 const _ = require('lodash');
 const { pool } = require("../../_DB/db");
 const { API_STATUS_CODE } = require("../../consts/error-status")
-const { setServerResponse } = require("../../utilities/server-response")
+const { setServerResponse } = require("../../utilities/server-response");
+const { TABLE_DEPARTMENT_COLUMNS_NAME } = require('../../_DB/DB-table-info/table-department-column-name');
+const { TABLES } = require('../../_DB/DB-table-info/tables-name.const');
+const { format } = require('date-fns');
 
 const isDepartmentAlreadyInactivated = async (id) => {
     const _query = `
         SELECT
-            department_status
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.ACTIVE_STATUS}
         FROM
-            department
+            ${TABLES.TBL_DEPARTMENT} 
         WHERE
-            id = ?;
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.ID} = ?;
     `;
     try {
         const [result] = await pool.query(_query, [id]);
         if (result.length > 0) {
-            if (result[0].department_status === 0) {
+            if (result[0].active_status === 0) {
                 return true;
             } else {
                 return false;
@@ -37,17 +40,19 @@ const isDepartmentAlreadyInactivated = async (id) => {
     }
 }
 
-const inactiveDepartmentStatusQuery = async (id) => {
+const inactiveDepartmentStatusQuery = async (id, authData, modifiedAt) => {
     const _query = `
         UPDATE
-            department
+            ${TABLES.TBL_DEPARTMENT} 
         SET
-            department_status = ${0}
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.ACTIVE_STATUS} = ${0},
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.MODIFIED_BY} = ?,
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.MODIFIED_AT} = ?
         WHERE
-            id = ?;
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.ID} = ?;
     `;
     try {
-        const [result] = await pool.query(_query, [id]);
+        const [result] = await pool.query(_query, [authData.employee_id, modifiedAt, id]);
         if (result.affectedRows > 0) {
             return true;
         } return false;
@@ -59,10 +64,14 @@ const inactiveDepartmentStatusQuery = async (id) => {
 /**
  * 
  * @param {number} id 
+ * @param {{
+ * employee_id: string,
+ * }} authData 
  * @description This function is used to inactive department
  * @returns 
  */
-const inactiveDepartment = async (id) => {
+const inactiveDepartment = async (id, authData) => {
+    const modifiedAt = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
     if (_.isNil(id)) {
         return Promise.reject(
             setServerResponse(
@@ -89,7 +98,7 @@ const inactiveDepartment = async (id) => {
                 )
             )
         }
-        const inactiveStatus = await inactiveDepartmentStatusQuery(id);
+        const inactiveStatus = await inactiveDepartmentStatusQuery(id, authData, modifiedAt);
 
         if (inactiveStatus === true) {
             return Promise.resolve(
@@ -100,7 +109,7 @@ const inactiveDepartment = async (id) => {
             )
         }
     } catch (error) {
-        console.warn('🚀 ~ inactiveDepartment ~ error:', error);
+        // console.warn('🚀 ~ inactiveDepartment ~ error:', error);
         return Promise.resolve(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,
@@ -110,4 +119,6 @@ const inactiveDepartment = async (id) => {
     }
 }
 
-module.exports = { inactiveDepartment }
+module.exports = {
+    inactiveDepartment
+}

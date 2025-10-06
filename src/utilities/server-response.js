@@ -21,7 +21,6 @@ const setServerResponse = (code, msgKey, result = null) => {
     // Path to the JSON file containing translations
     const filePath = path.join(__dirname, './server-response-key.json');
 
-
     let messages;
     try {
         const fileContent = fs.readFileSync(filePath, 'utf-8');

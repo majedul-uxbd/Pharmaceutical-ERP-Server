@@ -13,15 +13,18 @@ const _ = require('lodash');
 const { setServerResponse } = require('../../utilities/server-response');
 const { API_STATUS_CODE } = require('../../consts/error-status');
 const { pool } = require('../../_DB/db');
+const { TABLE_DEPARTMENT_COLUMNS_NAME } = require('../../_DB/DB-table-info/table-department-column-name');
+const { TABLES } = require('../../_DB/DB-table-info/tables-name.const');
+const { format } = require('date-fns');
 
 const isDepartmentStatusActive = async (id) => {
     const _query = `
         SELECT
-            department_status
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.ACTIVE_STATUS}
         FROM
-            department
+            ${TABLES.TBL_DEPARTMENT} 
         WHERE
-            id = ?;
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.ID} = ?;
     `;
     try {
         const [result] = await pool.query(_query, [id]);
@@ -39,17 +42,19 @@ const isDepartmentStatusActive = async (id) => {
 }
 
 
-const activeDepartmentStatus = async (id) => {
+const activeDepartmentStatus = async (id, authData, modifiedAt) => {
     const _query = `
         UPDATE
-            department
+            ${TABLES.TBL_DEPARTMENT} 
         SET
-            department_status = ${1}
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.ACTIVE_STATUS} = ${1},
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.MODIFIED_BY} = ?,
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.MODIFIED_AT} = ?
         WHERE
-            id = ?;
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.ID} = ?;
     `;
     try {
-        const [result] = await pool.query(_query, [id]);
+        const [result] = await pool.query(_query, [authData.employee_id, modifiedAt, id]);
         if (result.affectedRows > 0) {
             return true;
         } return false;
@@ -59,12 +64,14 @@ const activeDepartmentStatus = async (id) => {
 }
 
 /**
- * 
  * @param {number} id 
+ * @param {{
+ * employee_id: string,
+ * }} authData 
  * @description This function is used to active department
- * @returns 
  */
-const activeDepartment = async (id) => {
+const activeDepartment = async (id, authData) => {
+    const modifiedAt = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
     if (_.isNil(id)) {
         return Promise.reject(
             setServerResponse(
@@ -92,7 +99,7 @@ const activeDepartment = async (id) => {
             )
         }
 
-        const isUpdated = await activeDepartmentStatus(id);
+        const isUpdated = await activeDepartmentStatus(id, authData, modifiedAt);
         if (isUpdated === true) {
             return Promise.resolve(
                 setServerResponse(
