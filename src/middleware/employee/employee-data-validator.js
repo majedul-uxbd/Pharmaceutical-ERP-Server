@@ -12,7 +12,7 @@
 const _ = require('lodash');
 const { API_STATUS_CODE } = require("../../consts/error-status");
 const { setServerResponse } = require("../../utilities/server-response");
-const { isValidCommonDate, isValidUserFullName, isValidEmail, isValidUserContact } = require("../../utilities/user-data-validator");
+const { isValidCommonDate, isValidUserFullName, isValidEmail, isValidUserContact, isValidUsername } = require("../../utilities/user-data-validator");
 
 
 const employeeDataValidator = async (req, res, next) => {
@@ -20,6 +20,7 @@ const employeeDataValidator = async (req, res, next) => {
         id: req.body.id,
         employee_id: req.body.employee_id,
         full_name: req.body.full_name,
+        username: req.body.username,
         email: req.body.email,
         contact: req.body.contact,
         present_address: req.body.present_address,
@@ -61,6 +62,15 @@ const employeeDataValidator = async (req, res, next) => {
             setServerResponse(
                 API_STATUS_CODE.BAD_REQUEST,
                 "invalid_employee_fullname"
+            )
+        );
+    }
+
+    if (!isValidUsername(employeeData.username)) {
+        return res.status(API_STATUS_CODE.BAD_REQUEST).send(
+            setServerResponse(
+                API_STATUS_CODE.BAD_REQUEST,
+                "invalid_employee_username"
             )
         );
     }

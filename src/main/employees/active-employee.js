@@ -15,6 +15,7 @@ const { API_STATUS_CODE } = require('../../consts/error-status');
 const { pool } = require('../../_DB/db');
 const { TABLES } = require('../../_DB/DB-table-info/tables-name.const');
 const { TABLE_EMPLOYEES_COLUMNS_NAME } = require('../../_DB/DB-table-info/table-employee-column-name');
+const { format } = require('date-fns');
 
 const isEmployeesStatusActive = async (id) => {
     const _query = `
@@ -41,17 +42,24 @@ const isEmployeesStatusActive = async (id) => {
 }
 
 
-const activeEmployeesStatus = async (id) => {
+const activeEmployeesStatus = async (id, authData, modifiedAt) => {
     const _query = `
         UPDATE
             ${TABLES.TBL_EMPLOYEES}
         SET
-            ${TABLE_EMPLOYEES_COLUMNS_NAME.ACTIVE_STATUS} = ${1}
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.ACTIVE_STATUS} = ${1},
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.MODIFIED_BY} = ?,
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.MODIFIED_AT} = ?
         WHERE
             ${TABLE_EMPLOYEES_COLUMNS_NAME.ID} = ?;
     `;
+    const _values = [
+        authData.employee_id,
+        modifiedAt,
+        id
+    ];
     try {
-        const [result] = await pool.query(_query, [id]);
+        const [result] = await pool.query(_query, _values);
         if (result.affectedRows > 0) {
             return true;
         } return false;
@@ -61,14 +69,15 @@ const activeEmployeesStatus = async (id) => {
 }
 
 /**
- * Activates an employee by their ID if they are not already active.
- * Checks if the employee exists and is not already active, then updates their status to active.
- * Returns a server response indicating the result (success, already active, not found, or error).
+ * Activate a employee by his ID if he is not already active.
  *
  * @param {number} id - The unique identifier of the employee to activate.
+ * @param {{ employee_id: string }} authData - Authenticated user data, must include employee_id of the modifier.
  * @returns {Promise<Object>} - Resolves with a server response object on success, rejects with a server response object on error or invalid state.
  */
-const activeEmployees = async (id) => {
+const activeEmployees = async (id, authData) => {
+    const modifiedAt = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
+
     if (_.isNil(id)) {
         return Promise.reject(
             setServerResponse(
@@ -96,7 +105,7 @@ const activeEmployees = async (id) => {
             )
         }
 
-        const isUpdated = await activeEmployeesStatus(id);
+        const isUpdated = await activeEmployeesStatus(id, authData, modifiedAt);
         if (isUpdated === true) {
             return Promise.resolve(
                 setServerResponse(
@@ -106,6 +115,9 @@ const activeEmployees = async (id) => {
             )
         }
     } catch (error) {
+        console.log('🚀 -------------------------------------------🚀');
+        console.log('🚀 ~ :109 ~ activeEmployees ~ error:', error);
+        console.log('🚀 -------------------------------------------🚀');
         return Promise.resolve(
             setServerResponse(
                 API_STATUS_CODE.INTERNAL_SERVER_ERROR,
