@@ -32,7 +32,8 @@ const employeeDataValidator = async (req, res, next) => {
         designation_id: req.body.designation_name,
         department_id: req.body.department_name,
         depot_id: req.body.depot_name,
-        module_id: req.body.module_name
+        module_id: req.body.module_name,
+        password: req.body.password
     }
 
     if (req.originalUrl === '/employees/update') {

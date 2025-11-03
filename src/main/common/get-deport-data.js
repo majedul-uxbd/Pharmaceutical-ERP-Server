@@ -18,7 +18,7 @@ const { setServerResponse } = require("../../utilities/server-response");
 
 const getDepotDataQuery = async () => {
     const query = `
-        SELECT
+        SELECT DISTINCT
             ${TABLE_DEPOT_INFO_COLUMNS_NAME.ID},
             ${TABLE_DEPOT_INFO_COLUMNS_NAME.DEPOT_ID},
             ${TABLE_DEPOT_INFO_COLUMNS_NAME.DEPOT_NAME}
