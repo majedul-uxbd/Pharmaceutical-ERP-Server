@@ -17,7 +17,7 @@
 const TABLE_EMPLOYEES_COLUMNS_NAME = Object.freeze({
     ID: 'id ',
     EMPLOYEE_ID: 'employee_id ',
-    Full_NAME: 'full_name',
+    FULL_NAME: 'full_name',
     USERNAME: 'username',
     EMAIL: 'email',
     CONTACT: 'contact',

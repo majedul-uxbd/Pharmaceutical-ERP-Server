@@ -26,7 +26,7 @@ const userLoginQuery = async (user) => {
 	SELECT
         e.${TABLE_EMPLOYEES_COLUMNS_NAME.ID},
         e.${TABLE_EMPLOYEES_COLUMNS_NAME.EMPLOYEE_ID},
-        e.${TABLE_EMPLOYEES_COLUMNS_NAME.Full_NAME},
+        e.${TABLE_EMPLOYEES_COLUMNS_NAME.FULL_NAME},
         e.${TABLE_EMPLOYEES_COLUMNS_NAME.JOINING_DATE},
         e.${TABLE_EMPLOYEES_COLUMNS_NAME.DEPORT_ID},
         e.${TABLE_EMPLOYEES_COLUMNS_NAME.MODULE_ID},
@@ -114,7 +114,6 @@ const userLogin = async (user) => {
     try {
         isPasswordCorrect = await bcrypt.compare(user.password, userInfo.password);  //compare user passwords
     } catch (error) {
-        console.log("🚀 ~ userLogin ~ error:", error)
         return Promise.reject(
             setServerResponse(API_STATUS_CODE.BAD_REQUEST, 'invalid_password')
         );

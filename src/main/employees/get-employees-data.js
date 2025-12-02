@@ -42,7 +42,7 @@ const getEmployeesDataQuery = async (paginationData) => {
         SELECT DISTINCT 
             em.${TABLE_EMPLOYEES_COLUMNS_NAME.ID},
             em.${TABLE_EMPLOYEES_COLUMNS_NAME.EMPLOYEE_ID},
-            em.${TABLE_EMPLOYEES_COLUMNS_NAME.Full_NAME},
+            em.${TABLE_EMPLOYEES_COLUMNS_NAME.FULL_NAME},
             em.${TABLE_EMPLOYEES_COLUMNS_NAME.USERNAME},
             em.${TABLE_EMPLOYEES_COLUMNS_NAME.EMAIL},
             em.${TABLE_EMPLOYEES_COLUMNS_NAME.CONTACT},

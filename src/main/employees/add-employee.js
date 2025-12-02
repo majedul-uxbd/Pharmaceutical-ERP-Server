@@ -50,7 +50,7 @@ const insertEmployeeData = async (authData, employeeData) => {
             ${TABLES.TBL_EMPLOYEES}
         (
             ${TABLE_EMPLOYEES_COLUMNS_NAME.EMPLOYEE_ID},
-            ${TABLE_EMPLOYEES_COLUMNS_NAME.Full_NAME},
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.FULL_NAME},
             ${TABLE_EMPLOYEES_COLUMNS_NAME.USERNAME},
             ${TABLE_EMPLOYEES_COLUMNS_NAME.EMAIL},
             ${TABLE_EMPLOYEES_COLUMNS_NAME.CONTACT},

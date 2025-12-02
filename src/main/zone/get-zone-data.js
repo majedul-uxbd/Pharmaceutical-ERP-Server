@@ -45,8 +45,8 @@ const getZoneDataQuery = async (paginationData) => {
             zone.${TABLE_ZONE_COLUMNS_NAME.ACTIVE_STATUS},
             zone.${TABLE_ZONE_COLUMNS_NAME.CREATED_AT},
             zone.${TABLE_ZONE_COLUMNS_NAME.MODIFIED_AT},
-            created_by.${TABLE_EMPLOYEES_COLUMNS_NAME.Full_NAME} AS created_by,
-            modified_by.${TABLE_EMPLOYEES_COLUMNS_NAME.Full_NAME} AS modified_by,
+            created_by.${TABLE_EMPLOYEES_COLUMNS_NAME.FULL_NAME} AS created_by,
+            modified_by.${TABLE_EMPLOYEES_COLUMNS_NAME.FULL_NAME} AS modified_by,
             depot.${TABLE_DEPOT_INFO_COLUMNS_NAME.DEPOT_NAME}
         FROM
             ${TABLES.TBL_ZONE} AS zone

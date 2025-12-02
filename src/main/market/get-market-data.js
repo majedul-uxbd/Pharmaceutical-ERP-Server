@@ -45,8 +45,8 @@ const getMarketDataQuery = async (paginationData) => {
             market.${TABLE_MARKET_COLUMNS_NAME.ACTIVE_STATUS},
             market.${TABLE_MARKET_COLUMNS_NAME.CREATED_AT},
             market.${TABLE_MARKET_COLUMNS_NAME.MODIFIED_AT},
-            created_by.${TABLE_EMPLOYEES_COLUMNS_NAME.Full_NAME} AS created_by,
-            modified_by.${TABLE_EMPLOYEES_COLUMNS_NAME.Full_NAME} AS modified_by,
+            created_by.${TABLE_EMPLOYEES_COLUMNS_NAME.FULL_NAME} AS created_by,
+            modified_by.${TABLE_EMPLOYEES_COLUMNS_NAME.FULL_NAME} AS modified_by,
             region.${TABLE_REGION_COLUMNS_NAME.REGION_NAME}
         FROM
             ${TABLES.TBL_MARKET} AS market

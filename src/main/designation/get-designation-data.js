@@ -42,8 +42,8 @@ const getDesignationDataQuery = async (paginationData) => {
             ds.${TABLE_DESIGNATION_COLUMNS_NAME.DESIGNATION_NAME},
             ds.${TABLE_DESIGNATION_COLUMNS_NAME.COMMENT},
             ds.${TABLE_DESIGNATION_COLUMNS_NAME.DESCRIPTION},
-            created_by.${TABLE_EMPLOYEES_COLUMNS_NAME.Full_NAME} AS created_by,
-            modified_by.${TABLE_EMPLOYEES_COLUMNS_NAME.Full_NAME} AS modified_by,
+            created_by.${TABLE_EMPLOYEES_COLUMNS_NAME.FULL_NAME} AS created_by,
+            modified_by.${TABLE_EMPLOYEES_COLUMNS_NAME.FULL_NAME} AS modified_by,
             ds.${TABLE_DESIGNATION_COLUMNS_NAME.ACTIVE_STATUS},
             ds.${TABLE_DESIGNATION_COLUMNS_NAME.CREATED_AT},
             ds.${TABLE_DESIGNATION_COLUMNS_NAME.MODIFIED_AT}

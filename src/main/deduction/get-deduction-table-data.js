@@ -37,8 +37,8 @@ const getDeductionTableDataQuery = async (paginationData) => {
             deduction.${TABLE_SALARY_DEDUCTION_ELEMENT_COLUMNS_NAME.ID},
             deduction.${TABLE_SALARY_DEDUCTION_ELEMENT_COLUMNS_NAME.DEDUCTION_ID},
             deduction.${TABLE_SALARY_DEDUCTION_ELEMENT_COLUMNS_NAME.DEDUCTION_NAME},
-            created_by.${TABLE_EMPLOYEES_COLUMNS_NAME.Full_NAME} AS created_by,
-            modified_by.${TABLE_EMPLOYEES_COLUMNS_NAME.Full_NAME} AS modified_by,
+            created_by.${TABLE_EMPLOYEES_COLUMNS_NAME.FULL_NAME} AS created_by,
+            modified_by.${TABLE_EMPLOYEES_COLUMNS_NAME.FULL_NAME} AS modified_by,
             deduction.${TABLE_SALARY_DEDUCTION_ELEMENT_COLUMNS_NAME.CREATED_AT},
             deduction.${TABLE_SALARY_DEDUCTION_ELEMENT_COLUMNS_NAME.MODIFIED_AT}
         FROM

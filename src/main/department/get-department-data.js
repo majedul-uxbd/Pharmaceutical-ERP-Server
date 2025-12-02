@@ -41,8 +41,8 @@ const getDepartmentDataQuery = async (paginationData) => {
             dp.${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_CODE},
             dp.${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_NAME},
             dp.${TABLE_DEPARTMENT_COLUMNS_NAME.COMMENT},
-            created_by.${TABLE_EMPLOYEES_COLUMNS_NAME.Full_NAME} AS created_by,
-            modified_by.${TABLE_EMPLOYEES_COLUMNS_NAME.Full_NAME} AS modified_by,
+            created_by.${TABLE_EMPLOYEES_COLUMNS_NAME.FULL_NAME} AS created_by,
+            modified_by.${TABLE_EMPLOYEES_COLUMNS_NAME.FULL_NAME} AS modified_by,
             dp.${TABLE_DEPARTMENT_COLUMNS_NAME.ACTIVE_STATUS},
             dp.${TABLE_DEPARTMENT_COLUMNS_NAME.CREATED_AT},
             dp.${TABLE_DEPARTMENT_COLUMNS_NAME.MODIFIED_AT}

@@ -45,8 +45,8 @@ const getRegionDataQuery = async (paginationData) => {
             region.${TABLE_REGION_COLUMNS_NAME.ACTIVE_STATUS},
             region.${TABLE_REGION_COLUMNS_NAME.CREATED_AT},
             region.${TABLE_REGION_COLUMNS_NAME.MODIFIED_AT},
-            created_by.${TABLE_EMPLOYEES_COLUMNS_NAME.Full_NAME} AS created_by,
-            modified_by.${TABLE_EMPLOYEES_COLUMNS_NAME.Full_NAME} AS modified_by,
+            created_by.${TABLE_EMPLOYEES_COLUMNS_NAME.FULL_NAME} AS created_by,
+            modified_by.${TABLE_EMPLOYEES_COLUMNS_NAME.FULL_NAME} AS modified_by,
             zone.${TABLE_ZONE_COLUMNS_NAME.ZONE_NAME}
         FROM
             ${TABLES.TBL_REGION} AS region

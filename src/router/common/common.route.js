@@ -21,6 +21,7 @@ const { getMarketData } = require("../../main/common/get-market-data");
 const { getPostingData } = require("../../main/common/get-posting-data");
 const { getDepartmentData } = require("../../main/common/get-department-data");
 const { getDesignationData } = require("../../main/common/get-designation-data");
+const { getEmployeeInformation } = require("../../main/common/get-emoloyee-information");
 
 // commonRoute.use(authenticateToken);
 
@@ -187,7 +188,6 @@ commonRoute.get("/get-region",
 commonRoute.get("/get-market",
     authenticateToken,
     async (req, res) => {
-
         getMarketData()
             .then(data => {
                 return res.status(data.statusCode).send({
@@ -203,6 +203,29 @@ commonRoute.get("/get-market",
                 })
             })
     });
+
+/**
+* @description This API is used to get employee information
+*/
+commonRoute.get("/employee_info",
+    authenticateToken,
+    async (req, res) => {
+        getEmployeeInformation(req.body.employeeId)
+            .then(data => {
+                return res.status(data.statusCode).send({
+                    status: data.status,
+                    message: data.message,
+                    data: data.data
+                })
+            })
+            .catch(error => {
+                return res.status(error.statusCode).send({
+                    status: error.status,
+                    message: error.message,
+                })
+            })
+    }
+);
 
 module.exports = {
     commonRoute
