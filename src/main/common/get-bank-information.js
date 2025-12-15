@@ -42,7 +42,7 @@ const getEmployeeInformationQuery = async (employeeId) => {
  * @param {string} employeeId 
  * @description This function will return employee information
  */
-const getEmployeeInformation = async (employeeId) => {
+const bankInformation = async (employeeId) => {
     try {
         const employeeData = await getEmployeeInformationQuery();
     } catch (error) {
@@ -51,5 +51,5 @@ const getEmployeeInformation = async (employeeId) => {
 }
 
 module.exports = {
-    getEmployeeInformation
+    bankInformation
 }

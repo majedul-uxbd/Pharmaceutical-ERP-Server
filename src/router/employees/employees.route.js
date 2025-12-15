@@ -20,6 +20,7 @@ const { authenticateToken } = require("../../middleware/auth-token/authenticate-
 const { employeeDataValidator } = require("../../middleware/employee/employee-data-validator");
 const { addEmployee } = require("../../main/employees/add-employee");
 const { updateEmployeeData } = require("../../main/employees/update-employee-data");
+const { employeeListData } = require("../../main/employees/employee-list-data");
 
 employeeRoute.use(authenticateToken);
 
@@ -27,7 +28,7 @@ employeeRoute.use(authenticateToken);
 /**
 * @description This API is used to get Employee information
 */
-employeeRoute.post('/get-employees-data',
+employeeRoute.post('/table-data',
     paginationData,
     async (req, res) => {
         getEmployeesData(req.body.paginationData)
@@ -125,6 +126,29 @@ employeeRoute.post("/update",
                 return res.status(statusCode).send({
                     status: status,
                     message: message
+                })
+            })
+            .catch(error => {
+                return res.status(error.statusCode).send({
+                    status: error.status,
+                    message: error.message,
+                })
+            })
+    });
+
+
+/**
+* @description This API is used to update Employee information
+*/
+employeeRoute.post("/list",
+    async (req, res) => {
+        employeeListData(req.body.employeeId)
+            .then(result => {
+                const { statusCode, status, message, data } = result;
+                return res.status(statusCode).send({
+                    status: status,
+                    message: message,
+                    data: data
                 })
             })
             .catch(error => {
