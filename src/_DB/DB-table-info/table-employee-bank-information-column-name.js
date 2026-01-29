@@ -16,8 +16,8 @@
  */
 const TABLE_EMPLOYEE_BANK_INFORMATION_COLUMNS_NAME = Object.freeze({
     ID: 'id ',
-    BANK_NAME: 'employee_id ',
-    SHORT_NAME: 'bank_id',
+    EMPLOYEE_ID: 'employee_id ',
+    BANK_ID: 'bank_id',
     ACCOUNT_NUMBER: 'account_number',
     BRANCH_NAME: 'branch_name',
     BRANCH_CODE: 'branch_code',

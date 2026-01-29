@@ -41,7 +41,7 @@ const getEmployeeListQuery = async (employeeId) => {
         LEFT JOIN
             ${TABLES.TBL_DEPARTMENT} AS department
         ON
-             employee.${TABLE_EMPLOYEES_COLUMNS_NAME.DEPARTMENT_ID} = department.${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_ID}
+            employee.${TABLE_EMPLOYEES_COLUMNS_NAME.DEPARTMENT_ID} = department.${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_ID}
         WHERE
             employee.${TABLE_EMPLOYEES_COLUMNS_NAME.EMPLOYEE_ID} = ? AND
             employee.${TABLE_EMPLOYEES_COLUMNS_NAME.ACTIVE_STATUS} = 1;
@@ -50,9 +50,6 @@ const getEmployeeListQuery = async (employeeId) => {
         const [result] = await pool.query(_query, [employeeId]);
         return Promise.resolve(result[0]);
     } catch (error) {
-        console.log('🚀 -----------------------------------------------🚀');
-        console.log('🚀 ~ :53 ~ getEmployeeListQuery ~ error:', error);
-        console.log('🚀 -----------------------------------------------🚀');
         return Promise.reject(error);
     }
 }

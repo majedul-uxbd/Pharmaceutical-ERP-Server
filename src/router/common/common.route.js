@@ -207,10 +207,10 @@ commonRoute.get("/get-market",
 /**
 * @description This API is used to get employee information
 */
-commonRoute.get("/bank_info",
+commonRoute.post("/bank-info",
     authenticateToken,
     async (req, res) => {
-        bankInformation(req.body.employeeId)
+        bankInformation(req.body.accountNo)
             .then(data => {
                 return res.status(data.statusCode).send({
                     status: data.status,

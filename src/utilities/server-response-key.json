@@ -103,5 +103,6 @@
     "employee_already_exist": "Employee already exist",
     "employee_is_created_successfully": "Employee is created successfully",
     "user_role_is_not_defined": "User role is not defined",
-    "access_denied_insufficient_permissions": "Access denied. Insufficient permissions"
+    "access_denied_insufficient_permissions": "Access denied. Insufficient permissions",
+    "bank_information_is_not_found": "Bank information is not found"
 }
