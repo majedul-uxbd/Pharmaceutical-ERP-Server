@@ -15,14 +15,17 @@ const { pool } = require("../../_DB/db");
 const { API_STATUS_CODE } = require("../../consts/error-status")
 const { setServerResponse } = require("../../utilities/server-response")
 
+const { TABLES } = require("../../_DB/DB-table-info/tables-name.const");
+const { TABLE_ZONE_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-zone-column-name");
+
 const isZoneInactiveQuery = async (id) => {
     const _query = `
         SELECT
-            zone_status
+            ${TABLE_ZONE_COLUMNS_NAME.ACTIVE_STATUS}
         FROM
-            zone
+            ${TABLES.TBL_ZONE}
         WHERE
-            id = ?;
+            ${TABLE_ZONE_COLUMNS_NAME.ID} = ?;
     `;
     try {
         const [result] = await pool.query(_query, [id]);
@@ -42,14 +45,14 @@ const isZoneInactiveQuery = async (id) => {
 const updateZoneDataQuery = async (zoneData) => {
     const _query = `
         UPDATE
-            zone
+            ${TABLES.TBL_ZONE}
         SET
-            depot_id = ?,
-            zone_name = ?,
-            comment = ?,
-            modified_at = ?
+            ${TABLE_ZONE_COLUMNS_NAME.DEPOT_ID} = ?,
+            ${TABLE_ZONE_COLUMNS_NAME.ZONE_NAME} = ?,
+            ${TABLE_ZONE_COLUMNS_NAME.COMMENT} = ?,
+            ${TABLE_ZONE_COLUMNS_NAME.MODIFIED_AT} = ?
         WHERE
-            id = ?;
+            ${TABLE_ZONE_COLUMNS_NAME.ID} = ?;
     `;
     const _values = [
         zoneData.depot_id,

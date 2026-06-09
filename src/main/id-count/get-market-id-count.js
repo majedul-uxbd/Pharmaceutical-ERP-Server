@@ -12,16 +12,18 @@
 const { pool } = require("../../_DB/db");
 const { API_STATUS_CODE } = require("../../consts/error-status");
 const { setServerResponse } = require("../../utilities/server-response");
+const { TABLES } = require("../../_DB/DB-table-info/tables-name.const");
+const { TABLE_MARKET_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-market-column-name");
 
 const getMarketIdAndCodeCountQuery = async () => {
     const _query = `
         SELECT 
-            market_id, 
-            market_code
+            ${TABLE_MARKET_COLUMNS_NAME.MARKET_ID}, 
+            ${TABLE_MARKET_COLUMNS_NAME.MARKET_CODE}
         FROM 
-            market
+            ${TABLES.TBL_MARKET}
         ORDER BY 
-            CAST(market_id AS UNSIGNED) DESC
+            CAST(${TABLE_MARKET_COLUMNS_NAME.MARKET_ID} AS UNSIGNED) DESC
         LIMIT 1;
     `;
 

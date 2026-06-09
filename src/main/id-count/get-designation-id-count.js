@@ -12,15 +12,17 @@
 const { pool } = require("../../_DB/db");
 const { API_STATUS_CODE } = require("../../consts/error-status");
 const { setServerResponse } = require("../../utilities/server-response");
+const { TABLES } = require("../../_DB/DB-table-info/tables-name.const");
+const { TABLE_DESIGNATION_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-designation-column-name");
 
 const getDesignationIdAndCodeCountQuery = async () => {
     const _query = `
         SELECT 
-            designation_id
+            ${TABLE_DESIGNATION_COLUMNS_NAME.DESIGNATION_ID}
         FROM 
-            designation
+            ${TABLES.TBL_DESIGNATION}
         ORDER BY 
-            CAST(designation_id AS UNSIGNED) DESC
+            CAST(${TABLE_DESIGNATION_COLUMNS_NAME.DESIGNATION_ID} AS UNSIGNED) DESC
         LIMIT 1;
     `;
 
@@ -43,9 +45,6 @@ const getDesignationIdAndCodeCountQuery = async () => {
             return ({ designation_id: designationId });
         }
     } catch (error) {
-        console.log('🚀 ------------------------------------------------------------🚀');
-        console.log('🚀 ~ :46 ~ getDesignationIdAndCodeCountQuery ~ error:', error);
-        console.log('🚀 ------------------------------------------------------------🚀');
         return Promise.reject(error);
     }
 }

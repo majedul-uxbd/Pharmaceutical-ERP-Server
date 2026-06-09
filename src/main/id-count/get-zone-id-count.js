@@ -10,18 +10,19 @@
  */
 
 const { pool } = require("../../_DB/db");
+const { TABLE_ZONE_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-zone-column-name");
 const { API_STATUS_CODE } = require("../../consts/error-status");
 const { setServerResponse } = require("../../utilities/server-response");
 
 const getZoneIdAndCodeCountQuery = async () => {
     const _query = `
         SELECT 
-            zone_id, 
-            zone_code
+            ${TABLE_ZONE_COLUMNS_NAME.ZONE_ID}, 
+            ${TABLE_ZONE_COLUMNS_NAME.ZONE_CODE}
         FROM 
-            zone
+            ${TABLES.TBL_ZONE}
         ORDER BY 
-            CAST(zone_id AS UNSIGNED) DESC
+            CAST(${TABLE_ZONE_COLUMNS_NAME.ZONE_ID} AS UNSIGNED) DESC
         LIMIT 1;
     `;
 

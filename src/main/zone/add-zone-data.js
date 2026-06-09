@@ -9,19 +9,22 @@
  * 
  */
 
-const { reject } = require("lodash");
 const { pool } = require("../../_DB/db");
 const { setServerResponse } = require("../../utilities/server-response");
 const { API_STATUS_CODE } = require("../../consts/error-status");
+const { TABLES } = require("../../_DB/DB-table-info/tables-name.const");
+const { TABLE_ZONE_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-zone-column-name");
 
 const isZoneNameAlreadyExist = async (zoneData) => {
     const _query = `
         SELECT
-            zone_name
+            ${TABLE_ZONE_COLUMNS_NAME.ZONE_NAME}
         FROM 
-            zone
+            ${TABLES.TBL_ZONE}
         WHERE
-            zone_name = ? OR zone_code = ? OR zone_id = ?;
+            ${TABLE_ZONE_COLUMNS_NAME.ZONE_NAME} = ? 
+            OR ${TABLE_ZONE_COLUMNS_NAME.ZONE_CODE} = ? 
+            OR ${TABLE_ZONE_COLUMNS_NAME.ID} = ?;
     `;
     const _values = [
         zoneData.zone_name,
@@ -35,22 +38,23 @@ const isZoneNameAlreadyExist = async (zoneData) => {
             return true;
         } return false;
     } catch (error) {
-        return Promise / reject(error);
+        return Promise.reject(error);
     }
 }
 
 const addZoneDataQuery = async (authData, zoneData) => {
     const _query = `
         INSERT INTO
-            zone
+            ${TABLES.TBL_ZONE}
             (
-                zone_id,
-                zone_code,
-                zone_name,
-                depot_id,
-                comment
+                ${TABLE_ZONE_COLUMNS_NAME.ID},
+                ${TABLE_ZONE_COLUMNS_NAME.ZONE_CODE},
+                ${TABLE_ZONE_COLUMNS_NAME.ZONE_NAME},
+                ${TABLE_ZONE_COLUMNS_NAME.DEPOT_ID},
+                ${TABLE_ZONE_COLUMNS_NAME.COMMENT},
+                ${TABLE_ZONE_COLUMNS_NAME.CREATED_BY}
             )
-        VALUES (?, ?, ?, ?, ?);
+        VALUES (?, ?, ?, ?, ?, ?);
     `;
     const _values = [
         zoneData.zone_id,
@@ -58,6 +62,7 @@ const addZoneDataQuery = async (authData, zoneData) => {
         zoneData.zone_name,
         zoneData.depot_id,
         zoneData.comment,
+        authData.employee_id
     ]
 
     try {

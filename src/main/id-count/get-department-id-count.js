@@ -12,15 +12,16 @@
 const { pool } = require("../../_DB/db");
 const { API_STATUS_CODE } = require("../../consts/error-status");
 const { setServerResponse } = require("../../utilities/server-response");
+const { TABLE_DEPARTMENT_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-department-column-name");
 
 const getDepartmentIdAndCodeCountQuery = async () => {
     const _query = `
         SELECT 
-            department_id
+            ${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_ID}
         FROM 
-            department
+            ${TABLES.TBL_DEPARTMENT}
         ORDER BY 
-            CAST(department_id AS UNSIGNED) DESC
+            CAST(${TABLE_DEPARTMENT_COLUMNS_NAME.DEPARTMENT_ID} AS UNSIGNED) DESC
         LIMIT 1;
     `;
 

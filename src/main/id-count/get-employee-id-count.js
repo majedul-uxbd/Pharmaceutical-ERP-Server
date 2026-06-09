@@ -12,15 +12,17 @@
 const { pool } = require("../../_DB/db");
 const { API_STATUS_CODE } = require("../../consts/error-status");
 const { setServerResponse } = require("../../utilities/server-response");
+const { TABLES } = require("../../_DB/DB-table-info/tables-name.const");
+const { TABLE_EMPLOYEES_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-employee-column-name");
 
 const getEmployeeIdAndCodeCountQuery = async () => {
     const _query = `
         SELECT 
-            employee_id
+            ${TABLE_EMPLOYEES_COLUMNS_NAME.EMPLOYEE_ID}
         FROM 
-            employees
+            ${TABLES.TBL_EMPLOYEES}
         ORDER BY 
-            CAST(id AS UNSIGNED) DESC
+            CAST(${TABLE_EMPLOYEES_COLUMNS_NAME.ID} AS UNSIGNED) DESC
         LIMIT 5;
     `;
 

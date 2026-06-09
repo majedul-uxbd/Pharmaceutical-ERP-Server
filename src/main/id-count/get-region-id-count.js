@@ -12,16 +12,18 @@
 const { pool } = require("../../_DB/db");
 const { API_STATUS_CODE } = require("../../consts/error-status");
 const { setServerResponse } = require("../../utilities/server-response");
+const { TABLES } = require("../../_DB/DB-table-info/tables-name.const");
+const { TABLE_REGION_COLUMNS_NAME } = require("../../_DB/DB-table-info/table-region-column-name");
 
 const getRegionIdAndCodeCountQuery = async () => {
     const _query = `
         SELECT 
-            region_id, 
-            region_code
+            ${TABLE_REGION_COLUMNS_NAME.REGION_ID}, 
+            ${TABLE_REGION_COLUMNS_NAME.REGION_CODE}
         FROM 
-            region
+            ${TABLES.TBL_REGION}
         ORDER BY 
-            CAST(region_id AS UNSIGNED) DESC
+            CAST(${TABLE_REGION_COLUMNS_NAME.REGION_ID} AS UNSIGNED) DESC
         LIMIT 1;
     `;
 

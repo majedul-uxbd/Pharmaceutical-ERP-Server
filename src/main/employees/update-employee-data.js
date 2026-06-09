@@ -15,17 +15,18 @@ const { pool } = require("../../_DB/db");
 const { API_STATUS_CODE } = require("../../consts/error-status")
 const { setServerResponse } = require("../../utilities/server-response");
 const { TABLES } = require('../../_DB/DB-table-info/tables-name.const');
+const { TABLE_DESIGNATION_COLUMNS_NAME } = require('../../_DB/DB-table-info/table-designation-column-name');
 
 const getDesignationDataQuery = async (id) => {
     const _query = `
         SELECT
-            designation_id,
-            designation_code,
-            designation_name
+            ${TABLE_DESIGNATION_COLUMNS_NAME.DESIGNATION_ID},
+            ${TABLE_DESIGNATION_COLUMNS_NAME.DESIGNATION_CODE},
+            ${TABLE_DESIGNATION_COLUMNS_NAME.DESIGNATION_NAME}
         FROM 
             ${TABLES.TBL_DESIGNATION}
         WHERE
-            id != ?;
+            ${TABLE_DESIGNATION_COLUMNS_NAME.ID} != ?;
     `;
     try {
         const [result] = await pool.query(_query, id);
@@ -40,11 +41,11 @@ const getDesignationDataQuery = async (id) => {
 const isDesignationInactiveQuery = async (id) => {
     const _query = `
         SELECT
-            designation_status
+            ${TABLE_DESIGNATION_COLUMNS_NAME.ACTIVE_STATUS}
         FROM
             ${TABLES.TBL_DESIGNATION}
         WHERE
-            id = ?;
+            ${TABLE_DESIGNATION_COLUMNS_NAME.ID} = ?;
     `;
     try {
         const [result] = await pool.query(_query, [id]);
@@ -66,15 +67,15 @@ const updateDesignationDataQuery = async (authData, designationData) => {
         UPDATE
             ${TABLES.TBL_DESIGNATION}
         SET
-            designation_id = ?,
-            designation_code = ?,
-            designation_name = ?,
-            description = ?,
-            comment = ?,
-            modified_by= ?,
-            modified_at = ?
+            ${TABLE_DESIGNATION_COLUMNS_NAME.DESIGNATION_ID} = ?,
+            ${TABLE_DESIGNATION_COLUMNS_NAME.DESIGNATION_CODE} = ?,
+            ${TABLE_DESIGNATION_COLUMNS_NAME.DESIGNATION_NAME} = ?,
+            ${TABLE_DESIGNATION_COLUMNS_NAME.DESCRIPTION} = ?,
+            ${TABLE_DESIGNATION_COLUMNS_NAME.COMMENT} = ?,
+            ${TABLE_DESIGNATION_COLUMNS_NAME.MODIFIED_BY}= ?,
+            ${TABLE_DESIGNATION_COLUMNS_NAME.MODIFIED_AT} = ?
         WHERE
-            id = ?;
+            ${TABLE_DESIGNATION_COLUMNS_NAME.ID} = ?;
     `;
     const _values = [
         designationData.designation_id,
