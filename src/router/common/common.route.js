@@ -22,6 +22,8 @@ const { getPostingData } = require("../../main/common/get-posting-data");
 const { getDepartmentData } = require("../../main/common/get-department-data");
 const { getDesignationData } = require("../../main/common/get-designation-data");
 const { bankInformation } = require("../../main/common/get-bank-information");
+const { salaryGroupInformation } = require("../../main/common/get-salary-group");
+const { salaryHeadInformation } = require("../../main/common/get-salary-head");
 
 // commonRoute.use(authenticateToken);
 
@@ -211,6 +213,54 @@ commonRoute.post("/bank-info",
     authenticateToken,
     async (req, res) => {
         bankInformation(req.body.accountNo)
+            .then(data => {
+                return res.status(data.statusCode).send({
+                    status: data.status,
+                    message: data.message,
+                    data: data.data
+                })
+            })
+            .catch(error => {
+                return res.status(error.statusCode).send({
+                    status: error.status,
+                    message: error.message,
+                })
+            })
+    }
+);
+
+
+/**
+* @description This API is used to get Salary Group information
+*/
+commonRoute.get("/salary-group",
+    authenticateToken,
+    async (req, res) => {
+        salaryGroupInformation()
+            .then(data => {
+                return res.status(data.statusCode).send({
+                    status: data.status,
+                    message: data.message,
+                    data: data.data
+                })
+            })
+            .catch(error => {
+                return res.status(error.statusCode).send({
+                    status: error.status,
+                    message: error.message,
+                })
+            })
+    }
+);
+
+
+/**
+* @description This API is used to get Salary Head information
+*/
+commonRoute.get("/salary-head",
+    authenticateToken,
+    async (req, res) => {
+        salaryHeadInformation()
             .then(data => {
                 return res.status(data.statusCode).send({
                     status: data.status,

@@ -17,6 +17,8 @@ const { regionRoute } = require("./router/region/region.route");
 const { marketRoute } = require("./router/market/market.route");
 const { idCountRoute } = require("./router/id-count/id-count.route");
 const { employeeRoute } = require("./router/employees/employees.route");
+const { deductionRouter } = require("./router/deduction/deduction.route");
+const { breakupRouter } = require("./router/breakup/breakup.route");
 
 // Common Middlewares
 app.use(express.urlencoded({ extended: true }));
@@ -33,6 +35,8 @@ app.use("/region", regionRoute);
 app.use("/market", marketRoute);
 app.use("/id-count", idCountRoute);
 app.use("/employees", employeeRoute);
+app.use("/deduction", deductionRouter);
+app.use("/breakup", breakupRouter);
 
 // app.get("/status", (req, res) => {
 //   res.json({

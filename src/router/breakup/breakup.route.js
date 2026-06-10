@@ -12,20 +12,20 @@
 const express = require('express');
 const { authenticateToken } = require('../../middleware/auth-token/authenticate-token');
 const { paginationData } = require('../../middleware/pagination-data');
-const { getDeductionTableData } = require('../../main/deduction/get-deduction-table-data');
-const { getDeductionList } = require('../../main/deduction/get-deduction-list');
-const deductionRouter = express.Router();
+const { getBreakupTableData } = require('../../main/breakup/get-breakup-table-data');
+const { getBreakupList } = require('../../main/breakup/get-breakup-list');
+const breakupRouter = express.Router();
 
-deductionRouter.use(authenticateToken);
+breakupRouter.use(authenticateToken);
 
 
 /**
-* @description This API is used to get Deduction element table data
+* @description This API is used to get Breakup element table data
 */
-deductionRouter.post('/table-data',
+breakupRouter.post('/table-data',
     paginationData,
     async (req, res) => {
-        getDeductionTableData(req.body.paginationData)
+        getBreakupTableData(req.body.paginationData)
             .then(result => {
                 const { statusCode, status, message, data } = result;
                 return res.status(statusCode).send({
@@ -45,11 +45,11 @@ deductionRouter.post('/table-data',
 
 
 /**
-* @description This API is used to get Deduction list (ID and name)
+* @description This API is used to get Breakup list (ID and name)
 */
-deductionRouter.get('/deduction-list',
+breakupRouter.get('/breakup-list',
     async (req, res) => {
-        getDeductionList()
+        getBreakupList()
             .then(result => {
                 const { statusCode, status, message, data } = result;
                 return res.status(statusCode).send({
@@ -67,5 +67,5 @@ deductionRouter.get('/deduction-list',
     });
 
 module.exports = {
-    deductionRouter
+    breakupRouter
 }
